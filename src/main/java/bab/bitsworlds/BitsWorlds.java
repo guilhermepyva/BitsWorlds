@@ -7,6 +7,7 @@ import bab.bitsworlds.gui.GUIHandler;
 import bab.bitsworlds.multilanguage.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,8 +17,12 @@ public class BitsWorlds extends JavaPlugin {
 
     public static Logger logger;
 
+    public static Plugin plugin;
+
     @Override
     public void onEnable() {
+        plugin = this;
+
         logger = Logger.getLogger("BitsWorlds");
 
         logger.info("Enabling BitsWorlds V" + this.getDescription().getVersion());
@@ -42,7 +47,6 @@ public class BitsWorlds extends JavaPlugin {
 
     private void loadConfigs() {
         saveDefaultConfig();
-
 
         getConfig().getKeys(false).forEach( key -> BWConfig.loadConfig(key, getConfig().get(key)) );
     }

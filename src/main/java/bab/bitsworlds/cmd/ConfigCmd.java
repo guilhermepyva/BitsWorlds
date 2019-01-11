@@ -1,5 +1,6 @@
 package bab.bitsworlds.cmd;
 
+import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPlayer;
@@ -64,16 +65,13 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             case 0:
                 //Define the new Lang
                 LangCore.lang = LangCore.lang.ordinal() + 2 > Lang.values().length ? Lang.values()[0] : Lang.values()[LangCore.lang.ordinal() + 1];
+                BitsWorlds.plugin.getConfig().set("language", LangCore.lang.name());
+                BitsWorlds.plugin.saveConfig();
 
-                LangCore.getClassMessage(this.getClass(), "language-updated").setKey("%%lang", ChatColor.BOLD + LangCore.lang.title).replaceKeys();
-
-                LangCore.getClassMessage(this.getClass(), "language-updated").setKey("%%lang", ChatColor.BOLD + LangCore.lang.title);
-                System.out.println(LangCore.getClassMessage(this.getClass(), "language-updated").getTranslatedMessage().message);
+                player.openGUI(getGUIs().get(0));
 
                 player.sendMessage(PrefixMessage.info.getPrefix(),
                         LangCore.getClassMessage(this.getClass(), "language-updated").setKey("%%lang", ChatColor.BOLD + LangCore.lang.title));
-
-                updateCountryBannerItem(gui);
 
                 break;
         }
