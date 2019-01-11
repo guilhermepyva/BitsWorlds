@@ -40,7 +40,7 @@ public class GUIHandler implements Listener {
             e.setCancelled(true);
         }
 
-        gui.getGUIClass().clickEvent(e);
+        gui.getGUIClass().clickEvent(e, player, gui);
     }
 
     @EventHandler
