@@ -4,22 +4,16 @@ import bab.bitsworlds.cmd.BitsWorldsCmd;
 import bab.bitsworlds.cmd.ConfigCmd;
 import bab.bitsworlds.config.BWConfig;
 import bab.bitsworlds.gui.GUIHandler;
-import bab.bitsworlds.gui.ImplGUI;
 import bab.bitsworlds.multilanguage.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class BitsWorlds extends JavaPlugin {
 
-    /**
-     * The current language of the plugin
-     */
-    public static Lang lang;
     public static Logger logger;
 
     @Override
@@ -64,7 +58,7 @@ public class BitsWorlds extends JavaPlugin {
     }
 
     private void loadCmd() {
-        if (lang != Lang.EN) {
+        if (LangCore.lang != Lang.EN) {
             getCommand("BitsWorlds").setDescription(
                     LangCore.getClassMessage(getClass(), "cmd_description").getTranslatedMessage().message);
             getCommand("BitsWorlds").setUsage(
