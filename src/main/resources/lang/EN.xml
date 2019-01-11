@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<bitsWorldsTranslationFile>
+    <package path="bab.bitsworlds">
+        <class name="BitsWorlds">
+            <message key="permission_message">You do not have sufficient permissions to run this command</message>
+        </class>
+        <package path="cmd">
+            <class name="BitsWorldsCmd">
+                <message key="must_insert_argument">You must insert an argument using: %%cmd &lt;argument&gt;%%prefixColor\nUse: %%cmdhelp for more information and help</message>
+                <message key="not_valid_argument">%%arg isn't a valid argument\n%%prefixUse: %%cmd for help</message>
+            </class>
+            <class name="ConfigCmd">
+                <message key="cmdsender-cant-run-cmd">You can't execute this command without being a player because will it will open a window</message>
+                <message key="gui-title">%%name Settings</message>
+            </class>
+        </package>
+    </package>
+    <utils>
+    </utils>
+</bitsWorldsTranslationFile>

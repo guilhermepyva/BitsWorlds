@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<bitsWorldsTranslationFile>
+    <package path="bab.bitsworlds">
+        <class name="BitsWorlds">
+            <message key="permission_message">Você não tem permissões suficientes para usar este comando</message>
+            <message key="cmd_description">Comando principal</message>
+            <message key="cmd_usage">%%cmd &lt;argumentos...&gt;</message>
+        </class>
+        <package path="cmd">
+            <class name="BitsWorldsCmd">
+                <message key="must_insert_argument">Você deve inserir um argumento usando: %%cmd &lt;argumento&gt;%%prefixColor\nUse: %%cmdhelp para mais informações e ajuda</message>
+                <message key="not_valid_argument">%%arg não é um argumento válido\nUse: %%cmd para ajuda</message>
+            </class>
+            <class name="ConfigCmd">
+                <message key="cmdsender-cant-run-cmd">Você não pode executar este comando sem ser um jogador pois abrirá uma janela</message>
+                <message key="gui-title">Configurações de %%name</message>
+            </class>
+        </package>
+    </package>
+    <utils>
+    </utils>
+</bitsWorldsTranslationFile>

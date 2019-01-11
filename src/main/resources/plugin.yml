@@ -1,0 +1,12 @@
+name: BitsWorlds
+main: bab.bitsworlds.BitsWorlds
+description: A world manager for Minecraft
+version: 1.0.0
+author: [MrPiva, iHusky_, Mr_Bilbis]
+commands:
+  BitsWorlds:
+    description: Main command
+    aliases: bw
+    permission: bitsworlds.maincmd
+    permission-message: You do not have sufficient permissions to run this command
+    usage: /BitsWorlds <arguments...>
