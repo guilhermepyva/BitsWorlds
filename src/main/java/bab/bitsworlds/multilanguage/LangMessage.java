@@ -7,7 +7,7 @@ import java.util.Objects;
  * @see MLMessage
  * @see Lang
  */
-public class LangMessage {
+public class LangMessage implements Cloneable {
     /**
      * The language of the message
      */
@@ -39,5 +39,10 @@ public class LangMessage {
     @Override
     public int hashCode() {
         return Objects.hash(lang, message);
+    }
+
+    @Override
+    protected LangMessage clone() throws CloneNotSupportedException {
+        return (LangMessage) super.clone();
     }
 }

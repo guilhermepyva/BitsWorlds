@@ -14,9 +14,14 @@ import java.util.*;
 public class LangCore {
 
     /**
+     * The current language of the plugin
+     */
+    public static Lang lang;
+
+    /**
      * Store all messages in the server Language
      */
-    public static HashMap<String, ConjuntMessages> messages;
+    public static Map<String, ConjuntMessages> messages;
 
     /**
      * Store all util messages
