@@ -12,6 +12,7 @@
             <class name="ConfigCmd">
                 <message key="cmdsender-cant-run-cmd">You can't execute this command without being a player because will it will open a window</message>
                 <message key="gui-title">%%name Settings</message>
+                <message key="language-updated">The Plugin language is now %%lang</message>
             </class>
         </package>
     </package>

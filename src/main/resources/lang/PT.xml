@@ -14,6 +14,7 @@
             <class name="ConfigCmd">
                 <message key="cmdsender-cant-run-cmd">Você não pode executar este comando sem ser um jogador pois abrirá uma janela</message>
                 <message key="gui-title">Configurações de %%name</message>
+                <message key="language-updated">A linguagem do Plugin agora é %%lang</message>
             </class>
         </package>
     </package>
