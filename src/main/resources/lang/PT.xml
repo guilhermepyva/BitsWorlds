@@ -8,7 +8,7 @@
         </class>
         <package path="cmd">
             <class name="BitsWorldsCmd">
-                <message key="must_insert_argument">Você deve inserir um argumento usando: %%cmd &lt;argumento&gt;%%prefixColor\nUse: %%cmdhelp para mais informações e ajuda</message>
+                <message key="must_insert_argument">Você deve inserir um argumento usando: %%cmd &lt;argumento&gt;%%prefixColor\nUse: %%cmd §ohelp%%prefixColor para mais informações e ajuda</message>
                 <message key="not_valid_argument">%%arg não é um argumento válido\nUse: %%cmd para ajuda</message>
             </class>
             <class name="ConfigCmd">
