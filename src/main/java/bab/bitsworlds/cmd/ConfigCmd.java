@@ -27,6 +27,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.*;
 
 public class ConfigCmd implements BWCommand, ImplGUI {
+
+    @Override
+    public String getPermission() {
+        return "bitsworlds.maincmd.config";
+    }
+
     public void run(BWCommandSender commandSender, Command command, String s, String[] strings) {
         if (strings.length == 1) {
             if (!(commandSender instanceof BWPlayer)) {
@@ -145,5 +151,22 @@ public class ConfigCmd implements BWCommand, ImplGUI {
         countryBanner.setItemMeta(countryBannerMeta);
 
         gui.setItem(0, countryBanner);
+    }
+
+    @Override
+    public List<String> tabComplete(BWCommandSender sender, Command cmd, String alias, String[] args) {
+        List<String> list = null;
+
+        if (args.length == 2) {
+            list = Arrays.asList("language");
+        }
+
+        else if (args.length == 3) {
+            if (args[1].equalsIgnoreCase("language")) {
+                list = Arrays.asList("EN", "PT", "SP", "FR");
+            }
+        }
+
+        return list;
     }
 }
