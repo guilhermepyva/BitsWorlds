@@ -5,7 +5,7 @@ import bab.bitsworlds.task.responses.DefaultResponse;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class BWTask {
+public abstract class BWTask {
     public BWTask() {
         TasksCore.queue.add(this);
     }
@@ -29,9 +29,7 @@ public class BWTask {
         }
     }
 
-    protected BWTaskResponse run() throws IllegalAccessException {
-        throw new IllegalAccessException("The method is not for use");
-    }
+    abstract protected BWTaskResponse run();
 
     public class BWExceptionResponse extends DefaultResponse {
         public Exception exception;
