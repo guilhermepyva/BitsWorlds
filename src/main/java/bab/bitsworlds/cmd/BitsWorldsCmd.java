@@ -35,7 +35,6 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
             bwSender.sendMessage(
                     PrefixMessage.warn.getPrefix(),
                     LangCore.getClassMessage(getClass(), "must_insert_argument")
-                            .setKey("%%cmdhelp", ChatColor.BOLD + "/BitsWorlds " + ChatColor.ITALIC + "help" + PrefixMessage.warn.getDefaultChatColor())
                             .setKey("%%cmd", ChatColor.BOLD + "/BitsWorlds" + ChatColor.ITALIC)
                             .setKey("%%prefixColor", PrefixMessage.warn.getDefaultChatColor().toString())
             );
@@ -52,8 +51,8 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
                         PrefixMessage.warn.getPrefix(),
                         LangCore.getClassMessage(getClass(), "not_valid_argument")
                                 .setKey("%%arg", ChatColor.ITALIC + args[0] + PrefixMessage.warn.getDefaultChatColor())
-                                .setKey("%%cmd", ChatColor.BOLD + "/BitsWorlds " + ChatColor.ITALIC + "help" + PrefixMessage.warn.getDefaultChatColor())
-                                .setKey("%%prefix", PrefixMessage.warn.getPrefix())
+                                .setKey("%%cmd", ChatColor.BOLD + "/BitsWorlds" + ChatColor.ITALIC)
+                                .setKey("%%prefixColor", PrefixMessage.warn.getDefaultChatColor().toString())
                 );
                 return true;
         }

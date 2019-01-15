@@ -46,6 +46,45 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             BWPlayer player = (BWPlayer) commandSender;
 
             player.openGUI(getGUIs().get(0));
+            return;
+        }
+
+        if (strings[1].equalsIgnoreCase("language")) {
+            if (strings.length == 2) {
+                commandSender.sendMessage(PrefixMessage.warn.getPrefix(),
+                        LangCore.getClassMessage(getClass(), "language-config-use")
+                        .setKey("%%cmd", ChatColor.BOLD + "/BitsWorlds" + ChatColor.ITALIC)
+                        .setKey("%%args", "<EN|PT|SP|FR>"));
+                return;
+            }
+
+            Lang lang;
+
+            try {
+                lang = Lang.valueOf(strings[2]);
+            } catch (IllegalArgumentException e) {
+                commandSender.sendMessage(PrefixMessage.error.getPrefix(),
+                        LangCore.getClassMessage(getClass(), "language-config-invalid-arg")
+                        .setKey("%%arg", ChatColor.ITALIC + strings[2])
+                        .setKey("%%args", "<EN|PT|SP|FR>")
+                        .setKey("%%prefixColor", PrefixMessage.error.getDefaultChatColor().toString()));
+                return;
+            }
+
+            System.out.println(LangCore.lang.name());
+
+            if (LangCore.lang == lang) {
+                commandSender.sendMessage(PrefixMessage.warn.getPrefix(),
+                        LangCore.getClassMessage(getClass(), "language-config-already")
+                        .setKey("%%lang", ChatColor.ITALIC + LangCore.lang.name())
+                        .setKey("%%prefixColor", PrefixMessage.warn.getDefaultChatColor().toString()));
+                return;
+            }
+
+            setNewLanguage(lang);
+
+            commandSender.sendMessage(PrefixMessage.info.getPrefix(),
+                    LangCore.getClassMessage(this.getClass(), "language-updated").setKey("%%lang", ChatColor.BOLD + LangCore.lang.title));
         }
     }
 
@@ -69,10 +108,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
     public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
         switch (event.getSlot()) {
             case 0:
-                //Define the new Lang
-                LangCore.lang = LangCore.lang.ordinal() + 2 > Lang.values().length ? Lang.values()[0] : Lang.values()[LangCore.lang.ordinal() + 1];
-                BitsWorlds.plugin.getConfig().set("language", LangCore.lang.name());
-                BitsWorlds.plugin.saveConfig();
+                setNewLanguage(LangCore.lang.ordinal() + 2 > Lang.values().length ? Lang.values()[0] : Lang.values()[LangCore.lang.ordinal() + 1]);
 
                 player.openGUI(getGUIs().get(0));
 
@@ -81,6 +117,12 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
                 break;
         }
+    }
+
+    private void setNewLanguage(Lang lang) {
+        LangCore.lang = lang;
+        BitsWorlds.plugin.getConfig().set("language", LangCore.lang.name());
+        BitsWorlds.plugin.saveConfig();
     }
 
     public ItemStack getCountryBanner(Lang lang) {
