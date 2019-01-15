@@ -90,8 +90,6 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                 return;
             }
 
-            setNewLanguage(lang);
-
             commandSender.sendMessage(PrefixMessage.info.getPrefix(),
                     LangCore.getClassMessage(this.getClass(), "language-updated").setKey("%%lang", ChatColor.BOLD + LangCore.lang.title));
         }
@@ -131,12 +129,6 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
                 break;
         }
-    }
-
-    private void setNewLanguage(Lang lang) {
-        LangCore.lang = lang;
-        BitsWorlds.plugin.getConfig().set("language", LangCore.lang.name());
-        BitsWorlds.plugin.saveConfig();
     }
 
     public ItemStack getCountryBanner(Lang lang) {
