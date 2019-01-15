@@ -129,8 +129,6 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                 player.sendMessage(PrefixMessage.info.getPrefix(),
                         LangCore.getClassMessage(this.getClass(), "language-updated").setKey("%%lang", ChatColor.BOLD + LangCore.lang.title));
 
-                player.reportExceptionResponse((BWTask.BWExceptionResponse) new BWTask().execute());
-
                 break;
         }
     }
