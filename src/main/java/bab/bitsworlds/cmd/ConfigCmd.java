@@ -10,6 +10,10 @@ import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.LangMessage;
 import bab.bitsworlds.multilanguage.PrefixMessage;
+import bab.bitsworlds.task.BWTask;
+import bab.bitsworlds.task.BWTaskResponse;
+import bab.bitsworlds.task.responses.DefaultResponse;
+import bab.bitsworlds.task.tasks.BWConfigTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -71,9 +75,14 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                 return;
             }
 
-            System.out.println(LangCore.lang.name());
+            BWTaskResponse response = new BWConfigTask(BWConfigTask.ConfigTask.LanguageSet, lang).execute();
 
-            if (LangCore.lang == lang) {
+            if (response.getCode() == 0 && response instanceof BWTask.BWExceptionResponse) {
+                commandSender.reportExceptionResponse((BWTask.BWExceptionResponse) response);
+                return;
+            }
+
+            if (response.getCode() == 1) {
                 commandSender.sendMessage(PrefixMessage.warn.getPrefix(),
                         LangCore.getClassMessage(getClass(), "language-config-already")
                         .setKey("%%lang", ChatColor.ITALIC + LangCore.lang.name())
@@ -108,12 +117,19 @@ public class ConfigCmd implements BWCommand, ImplGUI {
     public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
         switch (event.getSlot()) {
             case 0:
-                setNewLanguage(LangCore.lang.ordinal() + 2 > Lang.values().length ? Lang.values()[0] : Lang.values()[LangCore.lang.ordinal() + 1]);
+                BWTaskResponse response = new BWConfigTask(BWConfigTask.ConfigTask.LanguageSet, LangCore.lang.ordinal() + 2 > Lang.values().length ? Lang.values()[0] : Lang.values()[LangCore.lang.ordinal() + 1]).execute();
+
+                if (response.getCode() == 0 && response instanceof BWTask.BWExceptionResponse) {
+                    player.reportExceptionResponse((BWTask.BWExceptionResponse) response);
+                    return;
+                }
 
                 player.openGUI(getGUIs().get(0));
 
                 player.sendMessage(PrefixMessage.info.getPrefix(),
                         LangCore.getClassMessage(this.getClass(), "language-updated").setKey("%%lang", ChatColor.BOLD + LangCore.lang.title));
+
+                player.reportExceptionResponse((BWTask.BWExceptionResponse) new BWTask().execute());
 
                 break;
         }

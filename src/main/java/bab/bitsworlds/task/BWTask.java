@@ -16,6 +16,7 @@ public class BWTask {
                 while (true) {
                     if (TasksCore.queue.peek().equals(this)) {
                         TasksCore.queue.remove();
+
                         return run();
                     }
 
@@ -23,12 +24,13 @@ public class BWTask {
                 }
             }).get();
         } catch (Exception e) {
+            e.printStackTrace();
             return new BWExceptionResponse(0, e);
         }
     }
 
-    protected BWTaskResponse run() throws Exception {
-        throw new IllegalAccessException("This method is not for use");
+    protected BWTaskResponse run() throws IllegalAccessException {
+        throw new IllegalAccessException("The method is not for use");
     }
 
     public class BWExceptionResponse extends DefaultResponse {

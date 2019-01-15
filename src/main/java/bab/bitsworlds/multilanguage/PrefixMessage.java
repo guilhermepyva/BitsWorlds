@@ -60,4 +60,9 @@ public class PrefixMessage {
      * The permission error message
      */
     public static String permission_message;
+
+    /**
+     * The error message
+     */
+    public static String error_message;
 }

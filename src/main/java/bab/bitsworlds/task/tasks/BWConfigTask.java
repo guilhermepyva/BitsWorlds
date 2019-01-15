@@ -12,8 +12,9 @@ public class BWConfigTask extends BWTask {
     public ConfigTask task;
     public Object data;
 
-    public BWConfigTask() {
+    public BWConfigTask(ConfigTask task, Lang lang) {
         this.task = task;
+        this.data = lang;
     }
 
     @Override

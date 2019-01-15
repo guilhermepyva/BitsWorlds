@@ -20,6 +20,11 @@
                 <message key="language-config-already">A linguagem %%lang %%prefixColorjá está setada</message>
             </class>
         </package>
+        <package path="extensions">
+            <class name="BWCommandSender">
+                <message key="exception-response">Infelizmente um erro ocorreu enquanto a tarefa era executada\n\n%%exc</message>
+            </class>
+        </package>
     </package>
     <utils>
     </utils>
