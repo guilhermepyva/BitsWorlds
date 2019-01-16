@@ -5,6 +5,7 @@ import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.BWGUI;
+import bab.bitsworlds.gui.GUIHandler;
 import bab.bitsworlds.gui.ImplGUI;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
@@ -49,7 +50,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
             BWPlayer player = (BWPlayer) commandSender;
 
-            player.openGUI(getGUIs().get(0));
+            player.openGUI(getGUI("config_main"));
             return;
         }
 
@@ -95,20 +96,31 @@ public class ConfigCmd implements BWCommand, ImplGUI {
         }
     }
 
-    public Map<Integer, BWGUI> getGUIs() {
-        Map<Integer, BWGUI> guis = new HashMap<>();
+    public BWGUI getGUI(String code) {
 
-        BWGUI mainGui = new BWGUI(
-                4*9,
-                ChatColor.AQUA + LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").getTranslatedMessage().message,
-                this
-        );
+        switch (code) {
+            case "config_main":
+                return new BWGUI(
+                        "config_main",
+                        4*9,
+                        ChatColor.AQUA + LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").getTranslatedMessage().message,
+                        this
+                ) {
+                    @Override
+                    public void update() {
+                        init();
+                    }
 
-        updateCountryBannerItem(mainGui);
+                    @Override
+                    public BWGUI init() {
+                        updateCountryBannerItem(this);
 
-        guis.put(0, mainGui);
+                        return this;
+                    }
+                }.init();
+        }
 
-        return guis;
+        throw new NullPointerException("No GUI with id " + code + " found");
     }
 
     @Override
@@ -122,7 +134,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                     return;
                 }
 
-                player.openGUI(getGUIs().get(0));
+                GUIHandler.updateGUI("config_main");
 
                 player.sendMessage(PrefixMessage.info.getPrefix(),
                         LangCore.getClassMessage(this.getClass(), "language-updated").setKey("%%lang", ChatColor.BOLD + LangCore.lang.title));

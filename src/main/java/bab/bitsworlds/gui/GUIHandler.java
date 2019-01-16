@@ -54,4 +54,8 @@ public class GUIHandler implements Listener {
     private boolean check(HumanEntity whoClicked) {
         return whoClicked instanceof Player && GUIHandler.openGUIs.containsKey(new BWPlayer((Player) whoClicked));
     }
+
+    public static void updateGUI(String id) {
+        openGUIs.values().forEach(BWGUI::update);
+    }
 }
