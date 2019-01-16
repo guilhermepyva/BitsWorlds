@@ -2,20 +2,29 @@ package bab.bitsworlds.task;
 
 import bab.bitsworlds.task.responses.DefaultResponse;
 
+import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public abstract class BWTask {
-    public BWTask() {
-        TasksCore.queue.add(this);
+    public Queue<BWTask> queue;
+
+    protected BWTask() {
+        queue = TasksCore.globalQueue;
+        this.queue.add(this);
+    }
+
+    public BWTask(Queue<BWTask> queue) {
+        this.queue = queue;
+        this.queue.add(this);
     }
 
     public BWTaskResponse execute() {
         try {
             return Executors.newSingleThreadExecutor().submit(() -> {
                 while (true) {
-                    if (TasksCore.queue.peek().equals(this)) {
-                        TasksCore.queue.remove();
+                    if (this.queue.peek().equals(this)) {
+                        this.queue.remove();
 
                         return run();
                     }

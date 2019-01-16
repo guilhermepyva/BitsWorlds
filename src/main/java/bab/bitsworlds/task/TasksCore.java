@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class TasksCore {
-    public static Queue<BWTask> queue;
+    public static Queue<BWTask> globalQueue;
 
     public static void init() {
-        queue = new LinkedList<>();
+        globalQueue = new LinkedList<>();
     }
 }
