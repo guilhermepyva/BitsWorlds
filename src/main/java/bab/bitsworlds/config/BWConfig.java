@@ -1,7 +1,7 @@
 package bab.bitsworlds.config;
 
-import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.multilanguage.Lang;
+import bab.bitsworlds.multilanguage.LangCore;
 
 public class BWConfig {
 
@@ -13,7 +13,7 @@ public class BWConfig {
     public static void loadConfig(String key, Object value) {
         switch(key) {
             case "language":
-                BitsWorlds.lang = Lang.valueOf(value.toString());
+                LangCore.lang = Lang.valueOf(value.toString());
 
                 break;
         }

@@ -6,8 +6,13 @@ package bab.bitsworlds.multilanguage;
  * @see MLMessage
  */
 public enum Lang {
-    EN,
-    PT,
-    SP,
-    FR
+    EN("English"),
+    PT("Português"),
+    SP("Español"),
+    FR("Français");
+
+    public String title;
+    Lang(String title) {
+        this.title = title;
+    }
 }

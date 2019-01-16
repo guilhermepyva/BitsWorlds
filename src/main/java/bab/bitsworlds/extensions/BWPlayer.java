@@ -32,8 +32,8 @@ public class BWPlayer extends BWCommandSender {
     }
 
     public void openGUI(BWGUI gui) {
-        GUIHandler.openGUIs.put(this, gui);
         this.getBukkitPlayer().openInventory(gui);
+        GUIHandler.openGUIs.put(this, gui);
     }
 
     @Override

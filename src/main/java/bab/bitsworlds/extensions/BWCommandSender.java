@@ -1,7 +1,11 @@
 package bab.bitsworlds.extensions;
 
+import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.LangMessage;
 import bab.bitsworlds.multilanguage.MLMessage;
+import bab.bitsworlds.multilanguage.PrefixMessage;
+import bab.bitsworlds.task.BWTask;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -58,6 +62,12 @@ public class BWCommandSender {
         }
 
         this.getCommandSender().sendMessage(finalString.toString());
+    }
+
+    public void reportExceptionResponse(BWTask.BWExceptionResponse response) {
+        sendMessage(PrefixMessage.error.getPrefix(),
+                LangCore.getClassMessage(BWCommandSender.class, "exception-response")
+                .setKey("%%exc", ChatColor.DARK_RED + response.exception.getMessage()));
     }
 
     /**

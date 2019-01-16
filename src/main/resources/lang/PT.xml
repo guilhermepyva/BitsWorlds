@@ -8,12 +8,21 @@
         </class>
         <package path="cmd">
             <class name="BitsWorldsCmd">
-                <message key="must_insert_argument">Você deve inserir um argumento usando: %%cmd &lt;argumento&gt;%%prefixColor\nUse: %%cmdhelp para mais informações e ajuda</message>
-                <message key="not_valid_argument">%%arg não é um argumento válido\nUse: %%cmd para ajuda</message>
+                <message key="must_insert_argument">Você deve inserir um argumento usando: %%cmd &lt;argumento&gt;%%prefixColor\nUse: %%cmd ajuda%%prefixColor para mais informações e ajuda</message>
+                <message key="not_valid_argument">%%arg não é um argumento válido\nUse: %%cmd ajuda %%prefixColorpara ajuda</message>
             </class>
             <class name="ConfigCmd">
                 <message key="cmdsender-cant-run-cmd">Você não pode executar este comando sem ser um jogador pois abrirá uma janela</message>
                 <message key="gui-title">Configurações de %%name</message>
+                <message key="language-updated">A linguagem do Plugin agora é %%lang</message>
+                <message key="language-config-use">Use %%cmd linguagem %%args</message>
+                <message key="language-config-invalid-arg">%%arg %%prefixColoré um argumento inválido, os argumentos válidos são %%args</message>
+                <message key="language-config-already">A linguagem %%lang %%prefixColorjá está setada</message>
+            </class>
+        </package>
+        <package path="extensions">
+            <class name="BWCommandSender">
+                <message key="exception-response">Infelizmente um erro ocorreu enquanto a tarefa era executada\n\n%%exc</message>
             </class>
         </package>
     </package>

@@ -8,8 +8,9 @@ import java.util.Map;
 /**
  * Class to work with Bukkit windows
  */
-public class BWGUI extends CraftInventoryCustom {
+public abstract class BWGUI extends CraftInventoryCustom {
 
+    public String id;
     public Map<Property, Object> properties;
     private ImplGUI guiClass;
 
@@ -23,19 +24,26 @@ public class BWGUI extends CraftInventoryCustom {
         }
     }
 
-    public BWGUI(int size, String title, ImplGUI guiClass) {
+    public BWGUI(String id, int size, String title, ImplGUI guiClass) {
         super(null, size, title);
         this.properties = new HashMap<>();
         this.guiClass = guiClass;
+        this.id = id;
 
         for (Property property : Property.values()) {
             properties.put(property, property.defaultProperty);
         }
+
+        init();
     }
 
     public void setProperty(Property property, Object value) {
         properties.put(property, value);
     }
+
+    public abstract void update();
+
+    public abstract BWGUI init();
 
     public ImplGUI getGUIClass() {
         return guiClass;

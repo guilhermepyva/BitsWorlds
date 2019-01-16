@@ -2,10 +2,12 @@ package bab.bitsworlds.gui;
 
 import bab.bitsworlds.extensions.BWPlayer;
 import org.bukkit.Sound;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +26,7 @@ public class GUIHandler implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (!(e.getWhoClicked() instanceof Player && GUIHandler.openGUIs.containsKey(new BWPlayer((Player) e.getWhoClicked()))))
+        if (!check(e.getWhoClicked()))
             return;
 
         BWPlayer player = new BWPlayer((Player) e.getWhoClicked());
@@ -38,6 +40,22 @@ public class GUIHandler implements Listener {
             e.setCancelled(true);
         }
 
-        gui.getGUIClass().clickEvent(e);
+        gui.getGUIClass().clickEvent(e, player, gui);
+    }
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent e) {
+        if (!check(e.getPlayer()))
+            return;
+
+        GUIHandler.openGUIs.remove(new BWPlayer((Player) e.getPlayer()));
+    }
+
+    private boolean check(HumanEntity whoClicked) {
+        return whoClicked instanceof Player && GUIHandler.openGUIs.containsKey(new BWPlayer((Player) whoClicked));
+    }
+
+    public static void updateGUI(String id) {
+        openGUIs.values().forEach(BWGUI::update);
     }
 }

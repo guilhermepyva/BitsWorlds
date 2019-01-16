@@ -13,6 +13,7 @@ import java.util.*;
  */
 public class MLMessage {
     private List<LangMessage> messages;
+    private Map<String, String> keys;
 
     /**
      * Return the messages of this Multi-Language Message
@@ -27,6 +28,8 @@ public class MLMessage {
      * @param messages the {@link LangMessage}'s to storage in this Multi-Language Message
      */
     public MLMessage(LangMessage... messages) {
+        keys = new HashMap<>();
+
         boolean anyMatch = Arrays.stream(messages).anyMatch(langMessage -> {
             for (LangMessage message : messages) {
                 if (langMessage.checkLang(message) && !langMessage.equals(message)) {
@@ -65,7 +68,7 @@ public class MLMessage {
      * if the message in that {@link Lang} don't exists here, then will return {@code null}
      */
     public LangMessage getLangMessage(Lang lang) {
-        Optional<LangMessage> oplangMessage = messages.stream().filter(langMessage -> langMessage.lang == lang).findFirst();
+        Optional<LangMessage> oplangMessage = replaceKeys().stream().filter(langMessage -> langMessage.lang == lang).findFirst();
 
         if (oplangMessage.isPresent())
             return oplangMessage.get();
@@ -84,10 +87,45 @@ public class MLMessage {
      * @param value The value that the key will assume in each of the {@link LangMessage}'s
      */
     public MLMessage setKey(String key, String value) {
-        for (LangMessage langMessage : messages) {
-            langMessage.message = langMessage.message.replace(key, value);
-        }
+        keys.put(key, value);
         return this;
+    }
+
+    public List<LangMessage> replaceKeys() {
+        List<LangMessage> langMessages = new ArrayList<>();
+
+        /*keys.keySet().forEach(key -> {
+            messages.forEach(message -> {
+                LangMessage newLangMessage = null;
+                try {
+                    newLangMessage = message.clone();
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
+
+                newLangMessage.message = newLangMessage.message.replace(key, keys.get(key));
+
+                langMessages.add(newLangMessage);
+            });
+        });*/
+
+        messages.forEach(message -> {
+            LangMessage newLangMessage = null;
+
+            try {
+                newLangMessage = message.clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+
+            for (String key : keys.keySet()) {
+                newLangMessage.message = newLangMessage.message.replace(key, keys.get(key));
+            }
+
+            langMessages.add(newLangMessage);
+        });
+
+        return langMessages;
     }
 
     /**
@@ -99,13 +137,14 @@ public class MLMessage {
      */
     public LangMessage getTranslatedMessage() {
         //Try to get the server language first
-        Optional<LangMessage> oplangMessage =  this.messages.stream().filter(langMessage -> langMessage.lang == BitsWorlds.lang).findFirst();
+        List<LangMessage> listReplacedKeys = replaceKeys();
+        Optional<LangMessage> oplangMessage =  listReplacedKeys.stream().filter(langMessage -> langMessage.lang == LangCore.lang).findFirst();
 
         if (oplangMessage.isPresent())
             return oplangMessage.get();
 
         //If goes wrong, try to get EN language
-        if (BitsWorlds.lang != Lang.EN) {
+        if (LangCore.lang != Lang.EN) {
             LangMessage enLangMessage = getLangMessage(Lang.EN);
 
             if (enLangMessage != null)
@@ -114,7 +153,7 @@ public class MLMessage {
 
         //If goes wrong, try to get any language
 
-        Optional<LangMessage> oplangMessage1 = this.messages.stream().filter(langMessage -> langMessage.lang != Lang.EN || langMessage.lang != BitsWorlds.lang).findFirst();
+        Optional<LangMessage> oplangMessage1 = listReplacedKeys.stream().filter(langMessage -> langMessage.lang != Lang.EN || langMessage.lang != LangCore.lang).findFirst();
 
         if (oplangMessage1.isPresent())
             return oplangMessage1.get();
