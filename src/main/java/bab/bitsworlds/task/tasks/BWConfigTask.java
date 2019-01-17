@@ -3,6 +3,7 @@ package bab.bitsworlds.task.tasks;
 import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
+import bab.bitsworlds.multilanguage.PrefixMessage;
 import bab.bitsworlds.task.BWTask;
 import bab.bitsworlds.task.BWTaskResponse;
 import bab.bitsworlds.task.responses.DefaultResponse;
@@ -30,6 +31,11 @@ public class BWConfigTask extends BWTask {
                 LangCore.lang = lang;
                 BitsWorlds.plugin.getConfig().set("language", LangCore.lang.name());
                 BitsWorlds.plugin.saveConfig();
+
+                PrefixMessage.permission_message =
+                        PrefixMessage.error.getPrefix() +
+                                PrefixMessage.error.getDefaultChatColor() +
+                                LangCore.getClassMessage(BitsWorlds.class, "permission_message").getTranslatedMessage().message;
 
                 return new DefaultResponse(2);
         }

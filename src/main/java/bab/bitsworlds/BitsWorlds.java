@@ -3,10 +3,9 @@ package bab.bitsworlds;
 import bab.bitsworlds.cmd.BitsWorldsCmd;
 import bab.bitsworlds.cmd.ConfigCmd;
 import bab.bitsworlds.config.BWConfig;
-import bab.bitsworlds.gui.GUIHandler;
+import bab.bitsworlds.gui.GUICore;
 import bab.bitsworlds.multilanguage.*;
 import bab.bitsworlds.task.TasksCore;
-import javafx.concurrent.Task;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
@@ -36,7 +35,7 @@ public class BitsWorlds extends JavaPlugin {
             throw new RuntimeException("[BitsWorlds] Couldn't load the Translation Files, report this for a Developer");
         }
 
-        GUIHandler.init();
+        GUICore.init();
 
         loadListeners();
         loadCmd();
@@ -80,8 +79,8 @@ public class BitsWorlds extends JavaPlugin {
     private void loadListeners() {
         PluginManager pm = Bukkit.getPluginManager();
 
-        pm.registerEvents(new GUIHandler(), this);
+        pm.registerEvents(new GUICore(), this);
 
-        GUIHandler.listeners.add(new ConfigCmd());
+        GUICore.listeners.add(new ConfigCmd());
     }
 }

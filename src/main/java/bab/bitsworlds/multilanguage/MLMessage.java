@@ -91,6 +91,14 @@ public class MLMessage {
         return this;
     }
 
+    /**
+     * Shortcut to {@link MLMessage#setKey(String, String)} with MLMessages
+     * @return
+     */
+    public MLMessage setKey(String key, MLMessage message) {
+        return setKey(key, message.getTranslatedMessage().message);
+    }
+
     public List<LangMessage> replaceKeys() {
         List<LangMessage> langMessages = new ArrayList<>();
 

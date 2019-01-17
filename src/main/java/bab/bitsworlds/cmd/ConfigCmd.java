@@ -1,25 +1,21 @@
 package bab.bitsworlds.cmd;
 
-import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.BWGUI;
-import bab.bitsworlds.gui.GUIHandler;
+import bab.bitsworlds.gui.GUICore;
 import bab.bitsworlds.gui.ImplGUI;
+import bab.bitsworlds.gui.MainGUI;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
-import bab.bitsworlds.multilanguage.LangMessage;
 import bab.bitsworlds.multilanguage.PrefixMessage;
 import bab.bitsworlds.task.BWTask;
 import bab.bitsworlds.task.BWTaskResponse;
-import bab.bitsworlds.task.responses.DefaultResponse;
 import bab.bitsworlds.task.tasks.BWConfigTask;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.Command;
@@ -43,14 +39,14 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             if (!(commandSender instanceof BWPlayer)) {
                 commandSender.sendMessage(
                         PrefixMessage.error.getPrefix(),
-                        LangCore.getClassMessage(this.getClass(), "cmdsender-cant-run-cmd")
+                        LangCore.getClassMessage(BitsWorldsCmd.class, "cmdsender-cant-run-cmd")
                 );
                 return;
             }
 
             BWPlayer player = (BWPlayer) commandSender;
 
-            player.openGUI(getGUI("config_main"));
+            player.openGUI(getGUI("config_main", player));
             return;
         }
 
@@ -58,8 +54,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             if (strings.length == 2) {
                 commandSender.sendMessage(PrefixMessage.warn.getPrefix(),
                         LangCore.getClassMessage(getClass(), "language-config-use")
-                        .setKey("%%cmd", ChatColor.BOLD + "/BitsWorlds" + ChatColor.ITALIC)
-                        .setKey("%%args", "<EN|PT|SP|FR>"));
+                        .setKey("%%cmd", ChatColor.BOLD + "/BitsWorlds" + ChatColor.ITALIC + " language <EN|PT|SP|FR>"));
                 return;
             }
 
@@ -96,24 +91,47 @@ public class ConfigCmd implements BWCommand, ImplGUI {
         }
     }
 
-    public BWGUI getGUI(String code) {
+    public BWGUI getGUI(String code, BWPlayer player) {
 
         switch (code) {
             case "config_main":
                 return new BWGUI(
                         "config_main",
                         4*9,
-                        ChatColor.AQUA + LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").getTranslatedMessage().message,
+                        ChatColor.DARK_AQUA + LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").getTranslatedMessage().message,
                         this
                 ) {
                     @Override
-                    public void update() {
-                        init();
+                    public void setupItem(int item) {
+                        switch (item) {
+                            case 0:
+                                updateCountryBannerItem(this, player);
+                                break;
+                            case 27:
+                                //BACK ITEM
+                                ItemStack backItem = new ItemStack(Material.SIGN);
+
+                                ItemMeta backItemMeta = backItem.getItemMeta();
+
+                                backItemMeta.setDisplayName(ChatColor.GOLD + LangCore.getClassMessage(ConfigCmd.class, "back-item-title").getTranslatedMessage().message);
+
+                                List<String> backItemLore = new ArrayList<>();
+
+                                GUICore.addGuideLore(LangCore.getClassMessage(ConfigCmd.class, "back-item-guide-mode"), player, backItemLore);
+
+                                backItemMeta.setLore(backItemLore);
+
+                                backItem.setItemMeta(backItemMeta);
+
+                                this.setItem(27, backItem);
+
+                                break;
+                        }
                     }
 
                     @Override
                     public BWGUI init() {
-                        updateCountryBannerItem(this);
+                        genItems(0);
 
                         return this;
                     }
@@ -134,12 +152,20 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                     return;
                 }
 
-                GUIHandler.updateGUI("config_main");
+                GUICore.updateAllGUIs();
+
+                if (gui.getItem(27) != null) {
+                    GUICore.openGUIs.get(player).genItems(27);
+                }
 
                 player.sendMessage(PrefixMessage.info.getPrefix(),
                         LangCore.getClassMessage(this.getClass(), "language-updated").setKey("%%lang", ChatColor.BOLD + LangCore.lang.title));
 
                 break;
+            case 27:
+                if (gui.getItem(27) != null) {
+                    player.openGUI(new MainGUI().getGUI("main", player));
+                }
         }
     }
 
@@ -188,7 +214,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
         return banner;
     }
 
-    private void updateCountryBannerItem(BWGUI gui) {
+    private void updateCountryBannerItem(BWGUI gui, BWPlayer player) {
         ItemStack countryBanner = getCountryBanner(LangCore.lang);
         ItemMeta countryBannerMeta = countryBanner.getItemMeta();
 
@@ -206,6 +232,8 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             sb.append(lang.title);
             countryBannerLore.add(sb.toString());
         }
+
+        GUICore.addGuideLore(LangCore.getClassMessage(ConfigCmd.class, "language-config-guide-mode"), player, countryBannerLore);
 
         countryBannerMeta.setLore(countryBannerLore);
         countryBanner.setItemMeta(countryBannerMeta);

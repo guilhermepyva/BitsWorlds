@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Class to work with Bukkit windows
  */
-public abstract class BWGUI extends CraftInventoryCustom {
+public abstract class BWGUI extends CraftInventoryCustom implements Cloneable {
 
     public String id;
     public Map<Property, Object> properties;
@@ -41,11 +41,27 @@ public abstract class BWGUI extends CraftInventoryCustom {
         properties.put(property, value);
     }
 
-    public abstract void update();
+    public abstract void setupItem(int item);
+
+    public void genItems(int... items) {
+        for (int item : items) {
+            setupItem(item);
+        }
+    }
 
     public abstract BWGUI init();
 
     public ImplGUI getGUIClass() {
         return guiClass;
+    }
+
+    @Override
+    protected BWGUI clone() {
+        try {
+            return (BWGUI) super.clone();
+        } catch(CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

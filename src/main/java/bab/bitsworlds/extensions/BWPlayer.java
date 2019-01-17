@@ -1,7 +1,7 @@
 package bab.bitsworlds.extensions;
 
 import bab.bitsworlds.gui.BWGUI;
-import bab.bitsworlds.gui.GUIHandler;
+import bab.bitsworlds.gui.GUICore;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -33,7 +33,7 @@ public class BWPlayer extends BWCommandSender {
 
     public void openGUI(BWGUI gui) {
         this.getBukkitPlayer().openInventory(gui);
-        GUIHandler.openGUIs.put(this, gui);
+        GUICore.openGUIs.put(this, gui);
     }
 
     @Override
