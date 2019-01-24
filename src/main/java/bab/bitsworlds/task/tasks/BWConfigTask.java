@@ -1,6 +1,9 @@
 package bab.bitsworlds.task.tasks;
 
 import bab.bitsworlds.BitsWorlds;
+import bab.bitsworlds.logger.LogAction;
+import bab.bitsworlds.logger.LogController;
+import bab.bitsworlds.logger.LogRecorder;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
@@ -8,14 +11,19 @@ import bab.bitsworlds.task.BWTask;
 import bab.bitsworlds.task.BWTaskResponse;
 import bab.bitsworlds.task.responses.DefaultResponse;
 
+import java.sql.Timestamp;
+import java.util.UUID;
+
 public class BWConfigTask extends BWTask {
 
-    public ConfigTask task;
-    public Object data;
+    private ConfigTask task;
+    private Object data;
+    private UUID player;
 
-    public BWConfigTask(ConfigTask task, Lang lang) {
+    public BWConfigTask(ConfigTask task, Lang lang, UUID player) {
         this.task = task;
         this.data = lang;
+        this.player = player;
     }
 
     @Override
@@ -32,10 +40,7 @@ public class BWConfigTask extends BWTask {
                 BitsWorlds.plugin.getConfig().set("language", LangCore.lang.name());
                 BitsWorlds.plugin.saveConfig();
 
-                PrefixMessage.permission_message =
-                        PrefixMessage.error.getPrefix() +
-                                PrefixMessage.error.getDefaultChatColor() +
-                                LangCore.getClassMessage(BitsWorlds.class, "permission_message").toString();
+                LogController.addLog(LogAction.GLOBAL_CONFIG_LANGUAGESET, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
 
                 return new DefaultResponse(2);
         }

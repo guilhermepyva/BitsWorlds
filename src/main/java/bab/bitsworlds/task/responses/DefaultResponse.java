@@ -11,6 +11,6 @@ public class DefaultResponse implements BWTaskResponse {
 
     @Override
     public int getCode() {
-        return 0;
+        return code;
     }
 }

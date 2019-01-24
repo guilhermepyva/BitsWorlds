@@ -11,7 +11,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class BitsWorlds extends JavaPlugin {
@@ -30,9 +29,8 @@ public class BitsWorlds extends JavaPlugin {
 
         loadConfigs();
 
-        //getConfig().addDefault();
-
         BWSQL.connect();
+        BWSQL.setupDB();
 
         if (LangCore.load()) {
             throw new RuntimeException("[BitsWorlds] Couldn't load the Translation Files, report this for a Developer");

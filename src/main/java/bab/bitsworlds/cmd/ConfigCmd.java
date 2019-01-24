@@ -58,7 +58,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             Lang lang;
 
             try {
-                lang = Lang.valueOf(strings[2]);
+                lang = Lang.valueOf(strings[2].toUpperCase());
             } catch (IllegalArgumentException e) {
                 commandSender.sendMessage(PrefixMessage.error.getPrefix(),
                         LangCore.getClassMessage(getClass(), "language-config-invalid-arg")
@@ -68,7 +68,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                 return;
             }
 
-            BWTaskResponse response = new BWConfigTask(BWConfigTask.ConfigTask.LanguageSet, lang).execute();
+            BWTaskResponse response = new BWConfigTask(BWConfigTask.ConfigTask.LanguageSet, lang, commandSender instanceof BWPlayer ? ((BWPlayer) commandSender).getBukkitPlayer().getUniqueId() : null).execute();
 
             if (response.getCode() == 0 && response instanceof BWTask.BWExceptionResponse) {
                 commandSender.reportExceptionResponse((BWTask.BWExceptionResponse) response);
@@ -150,7 +150,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
     public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
         switch (event.getSlot()) {
             case 0:
-                BWTaskResponse response = new BWConfigTask(BWConfigTask.ConfigTask.LanguageSet, LangCore.lang.ordinal() + 2 > Lang.values().length ? Lang.values()[0] : Lang.values()[LangCore.lang.ordinal() + 1]).execute();
+                BWTaskResponse response = new BWConfigTask(BWConfigTask.ConfigTask.LanguageSet, LangCore.lang.ordinal() + 2 > Lang.values().length ? Lang.values()[0] : Lang.values()[LangCore.lang.ordinal() + 1], player.getBukkitPlayer().getUniqueId()).execute();
 
                 if (response.getCode() == 0 && response instanceof BWTask.BWExceptionResponse) {
                     player.reportExceptionResponse((BWTask.BWExceptionResponse) response);
