@@ -4,6 +4,7 @@ import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.MLMessage;
 import bab.bitsworlds.utils.StringUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -16,16 +17,9 @@ import java.util.*;
 
 public class GUICore implements Listener {
 
-    public static List<ImplGUI> listeners;
-    public static HashMap<BWPlayer, BWGUI> openGUIs;
+    public static HashMap<BWPlayer, BWGUI> openGUIs = new HashMap<>();
 
-    public static List<BWPlayer> guideMode;
-
-    public static void init() {
-        listeners = new ArrayList<>();
-        guideMode = new ArrayList<>();
-        openGUIs = new HashMap<>();
-    }
+    public static List<BWPlayer> guideMode = new ArrayList<>();
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
@@ -105,13 +99,14 @@ public class GUICore implements Listener {
     }
 
     public static List<String> getGuideModeAsList(MLMessage message) {
-        return StringUtils.getDescriptionFromMessage(message.getTranslatedMessage().message, "", LangCore.getClassMessage(GUICore.class, "guide-mode-words").getTranslatedMessage().message + ": ");
+        return StringUtils.getDescriptionFromMessage(message.toString(), "", ChatColor.BOLD + LangCore.getClassMessage(GUICore.class, "guide-mode-words").toString() + ": " + ChatColor.DARK_PURPLE + ChatColor.ITALIC);
     }
 
-    public static void addGuideLore(MLMessage message, BWPlayer player, List<String> list) {
+    public static List<String> addGuideLore(MLMessage message, BWPlayer player, List<String> list) {
         if (GUICore.guideMode(player)) {
             list.add("");
             list.addAll(GUICore.getGuideModeAsList(message));
         }
+        return list;
     }
 }

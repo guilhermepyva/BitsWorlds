@@ -3,10 +3,7 @@ package bab.bitsworlds.cmd;
 import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPlayer;
-import bab.bitsworlds.gui.BWGUI;
-import bab.bitsworlds.gui.GUICore;
-import bab.bitsworlds.gui.ImplGUI;
-import bab.bitsworlds.gui.MainGUI;
+import bab.bitsworlds.gui.*;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
@@ -98,7 +95,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                 return new BWGUI(
                         "config_main",
                         4*9,
-                        ChatColor.DARK_AQUA + LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").getTranslatedMessage().message,
+                        ChatColor.DARK_AQUA + LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").toString(),
                         this
                 ) {
                     @Override
@@ -109,11 +106,11 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                                 break;
                             case 27:
                                 //BACK ITEM
-                                ItemStack backItem = new ItemStack(Material.SIGN);
+                                /*ItemStack backItem = new ItemStack(Material.SIGN);
 
                                 ItemMeta backItemMeta = backItem.getItemMeta();
 
-                                backItemMeta.setDisplayName(ChatColor.GOLD + LangCore.getClassMessage(ConfigCmd.class, "back-item-title").getTranslatedMessage().message);
+                                backItemMeta.setDisplayName(ChatColor.GOLD + LangCore.getClassMessage(ConfigCmd.class, "back-item-title").toString());
 
                                 List<String> backItemLore = new ArrayList<>();
 
@@ -123,7 +120,15 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
                                 backItem.setItemMeta(backItemMeta);
 
-                                this.setItem(27, backItem);
+                                this.setItem(27, backItem);*/
+
+                                this.setItem(27, new GUIItem(
+                                        Material.SIGN,
+                                        ChatColor.GOLD + LangCore.getClassMessage(ConfigCmd.class, "back-item-title").toString(),
+                                        Collections.emptyList(),
+                                        LangCore.getClassMessage(ConfigCmd.class, "back-item-guide-mode"),
+                                        player
+                                ));
 
                                 break;
                         }
@@ -169,9 +174,8 @@ public class ConfigCmd implements BWCommand, ImplGUI {
         }
     }
 
-    public ItemStack getCountryBanner(Lang lang) {
-        ItemStack banner = new ItemStack(Material.BANNER);
-        BannerMeta bannerMeta = (BannerMeta) banner.getItemMeta();
+    public ItemStack setCountryBanner(Lang lang, GUIItem item) {
+        BannerMeta bannerMeta = (BannerMeta) item.getItemMeta();
 
         switch (lang) {
             case EN:
@@ -210,12 +214,12 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
         bannerMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 
-        banner.setItemMeta(bannerMeta);
-        return banner;
+        item.setItemMeta(bannerMeta);
+        return item;
     }
 
     private void updateCountryBannerItem(BWGUI gui, BWPlayer player) {
-        ItemStack countryBanner = getCountryBanner(LangCore.lang);
+        /*ItemStack countryBanner = getCountryBanner(LangCore.lang);
         ItemMeta countryBannerMeta = countryBanner.getItemMeta();
 
         countryBannerMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + LangCore.lang.title);
@@ -238,7 +242,29 @@ public class ConfigCmd implements BWCommand, ImplGUI {
         countryBannerMeta.setLore(countryBannerLore);
         countryBanner.setItemMeta(countryBannerMeta);
 
-        gui.setItem(0, countryBanner);
+        gui.setItem(0, countryBanner);*/
+
+        List<String> countryBannerLore = new ArrayList<>();
+
+        for (Lang lang: Lang.values()) {
+            StringBuilder sb = new StringBuilder();
+
+            if (lang == LangCore.lang)
+                sb.append(ChatColor.AQUA);
+            else
+                sb.append(ChatColor.BLUE);
+
+            sb.append(lang.title);
+            countryBannerLore.add(sb.toString());
+        }
+
+        gui.setItem(0, setCountryBanner(LangCore.lang, new GUIItem(
+                Material.BANNER,
+                ChatColor.AQUA + "" + ChatColor.BOLD + LangCore.lang.title,
+                countryBannerLore,
+                LangCore.getClassMessage(ConfigCmd.class, "language-config-guide-mode"),
+                player
+        )));
     }
 
     @Override
