@@ -5,6 +5,7 @@ import bab.bitsworlds.BitsWorlds;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class BWSQL {
     public static boolean sqlite;
@@ -23,7 +24,7 @@ public class BWSQL {
             if (sqlite) {
                 Class.forName("org.sqlite.JDBC");
 
-                DriverManager.getConnection("jdbc:sqlite:" + BitsWorlds.plugin.getDataFolder().getAbsolutePath() + "/bwdb.db");
+                dbCon = DriverManager.getConnection("jdbc:sqlite:" + BitsWorlds.plugin.getDataFolder().getAbsolutePath() + "/bwdb.db");
             }
             else {
                 if (host == null || databaseName == null) {
@@ -50,6 +51,21 @@ public class BWSQL {
     }
 
     public static void setupDB() {
+        try {
+            Statement statement = dbCon.createStatement();
 
+            statement.execute("CREATE TABLE IF NOT EXISTS log" +
+                    "(" +
+                    "    action VARCHAR," +
+                    "    recorder_type VARCHAR," +
+                    "    recorder_uuid CHARACTER(36)," +
+                    "    description VARCHAR," +
+                    "    time TIMESTAMP" +
+                    ");");
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
