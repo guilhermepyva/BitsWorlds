@@ -32,11 +32,7 @@ public class BitsWorlds extends JavaPlugin {
 
         //getConfig().addDefault();
 
-        try {
-            BWSQL.connect();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        BWSQL.connect();
 
         if (LangCore.load()) {
             throw new RuntimeException("[BitsWorlds] Couldn't load the Translation Files, report this for a Developer");

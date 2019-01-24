@@ -18,14 +18,12 @@ public class BWSQL {
 
     public static Connection dbCon;
 
-    private static void setup() {
-
-    }
-
-    public static void connect() throws SQLException {
+    public static void connect() {
         try {
             if (sqlite) {
+                Class.forName("org.sqlite.JDBC");
 
+                DriverManager.getConnection("jdbc:sqlite:" + BitsWorlds.plugin.getDataFolder().getAbsolutePath() + "/bwdb.db");
             }
             else {
                 if (host == null || databaseName == null) {
