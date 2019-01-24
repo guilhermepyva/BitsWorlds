@@ -96,7 +96,7 @@ public class MLMessage {
      * @return
      */
     public MLMessage setKey(String key, MLMessage message) {
-        return setKey(key, message.getTranslatedMessage().message);
+        return setKey(key, message.toString());
     }
 
     public List<LangMessage> replaceKeys() {
@@ -167,5 +167,10 @@ public class MLMessage {
             return oplangMessage1.get();
 
         throw new NullPointerException("Message don't contains any LangMessage");
+    }
+
+    @Override
+    public String toString() {
+        return getTranslatedMessage().message;
     }
 }

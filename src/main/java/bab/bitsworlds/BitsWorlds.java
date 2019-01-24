@@ -1,17 +1,17 @@
 package bab.bitsworlds;
 
 import bab.bitsworlds.cmd.BitsWorldsCmd;
-import bab.bitsworlds.cmd.ConfigCmd;
 import bab.bitsworlds.config.BWConfig;
+import bab.bitsworlds.db.BWSQL;
 import bab.bitsworlds.gui.GUICore;
 import bab.bitsworlds.multilanguage.*;
-import bab.bitsworlds.task.TasksCore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class BitsWorlds extends JavaPlugin {
@@ -28,14 +28,19 @@ public class BitsWorlds extends JavaPlugin {
 
         logger.info("Enabling BitsWorlds V" + this.getDescription().getVersion());
 
-        TasksCore.init();
         loadConfigs();
+
+        //getConfig().addDefault();
+
+        try {
+            BWSQL.connect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         if (LangCore.load()) {
             throw new RuntimeException("[BitsWorlds] Couldn't load the Translation Files, report this for a Developer");
         }
-
-        GUICore.init();
 
         loadListeners();
         loadCmd();
@@ -45,12 +50,10 @@ public class BitsWorlds extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        BWSQL.disconnect();
     }
 
     private void loadConfigs() {
-        saveDefaultConfig();
-
         getConfig().getKeys(false).forEach( key -> BWConfig.loadConfig(key, getConfig().get(key)) );
     }
 
@@ -61,15 +64,15 @@ public class BitsWorlds extends JavaPlugin {
         PrefixMessage.permission_message =
                 PrefixMessage.error.getPrefix() +
                         PrefixMessage.error.getDefaultChatColor() +
-                        LangCore.getClassMessage(getClass(), "permission_message").getTranslatedMessage().message;
+                        LangCore.getClassMessage(getClass(), "permission_message").toString();
     }
 
     private void loadCmd() {
         if (LangCore.lang != Lang.EN) {
             getCommand("BitsWorlds").setDescription(
-                    LangCore.getClassMessage(getClass(), "cmd_description").getTranslatedMessage().message);
+                    LangCore.getClassMessage(getClass(), "cmd_description").toString());
             getCommand("BitsWorlds").setUsage(
-                    LangCore.getClassMessage(getClass(), "cmd_usage").setKey("%%cmd", "/BitsWorlds").getTranslatedMessage().message);
+                    LangCore.getClassMessage(getClass(), "cmd_usage").setKey("%%cmd", "/BitsWorlds").toString());
         }
 
         getCommand("BitsWorlds").setPermissionMessage(PrefixMessage.permission_message);
@@ -80,7 +83,5 @@ public class BitsWorlds extends JavaPlugin {
         PluginManager pm = Bukkit.getPluginManager();
 
         pm.registerEvents(new GUICore(), this);
-
-        GUICore.listeners.add(new ConfigCmd());
     }
 }

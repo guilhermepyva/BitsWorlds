@@ -35,7 +35,7 @@ public class BWConfigTask extends BWTask {
                 PrefixMessage.permission_message =
                         PrefixMessage.error.getPrefix() +
                                 PrefixMessage.error.getDefaultChatColor() +
-                                LangCore.getClassMessage(BitsWorlds.class, "permission_message").getTranslatedMessage().message;
+                                LangCore.getClassMessage(BitsWorlds.class, "permission_message").toString();
 
                 return new DefaultResponse(2);
         }

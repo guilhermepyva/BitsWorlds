@@ -52,7 +52,7 @@ public class BWCommandSender {
         StringBuilder finalString = new StringBuilder();
         for (Object object : objects) {
             if (object instanceof MLMessage)
-                finalString.append(((MLMessage) object).getTranslatedMessage().message);
+                finalString.append(object.toString());
 
             else if (object instanceof LangMessage)
                 finalString.append(((LangMessage) object).message);

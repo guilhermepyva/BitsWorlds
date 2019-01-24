@@ -32,11 +32,11 @@
                 <message key="version-word">Versão: %%v</message>
                 <message key="guide-mode-title">Modo Guia</message>
                 <message key="guide-mode-lore">O modo guia serve para extender a descrição \ndos itens com algumas informações a mais</message>
-                <message key="actually-word">Atualmente: %%s</message>
+                <message key="status-word">Estado: %%s</message>
                 <message key="by-word">por: %%n</message>
-                <message key="head-item-guide-mode">Aqui você pode obter algumas\ninformações e ajuda do Plugin</message>
+                <message key="head-item-guide-mode">aqui você pode obter algumas\ninformações e ajuda do Plugin</message>
                 <message key="config-item-title">Configuração do Plugin</message>
-                <message key="config-item-guide-mode">Aqui você pode acessar e editar\na Configuração do Plugin (arquivo %%file)</message>
+                <message key="config-item-guide-mode">aqui você pode acessar e editar\na Configuração do Plugin (arquivo %%file)</message>
             </class>
             <class name="GUICore">
                 <message key="guide-mode-words">Modo Guia</message>
