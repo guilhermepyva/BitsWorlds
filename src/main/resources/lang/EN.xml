@@ -16,10 +16,11 @@
                 <message key="language-config-guide-mode">changes the Plugin language</message>
                 <message key="database-item-title">Database</message>
                 <message key="database-item-lore">If you change the Plugin database type, a Plugin restart will be necessary \n If you use MySQL make sure you have entered the credentials in the file %%file</message>
+                <message key="database-item-need-restart">Needs a restart!</message>
                 <message key="database-config-guide-mode">change the database type of the Plugin \n if you can't tinker with database it is recommended to leave it in SQLite (default)</message>
                 <message key="database-updated">The Plugin database type is now %%db</message>
                 <message key="database-config-already">The Plugin database type already is %%db</message>
-                <message key="config-use">Use %%cmd language %%args</message>
+                <message key="config-use">Use %%cmd</message>
                 <message key="invalid-arg">%%arg %%prefixColoris an invalid argument, the valid arguments are %%args</message>
                 <message key="back-item-title">Back</message>
                 <message key="back-item-guide-mode">back to the main menu</message>

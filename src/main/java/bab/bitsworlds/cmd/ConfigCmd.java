@@ -1,6 +1,8 @@
 package bab.bitsworlds.cmd;
 
+import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.cmd.impl.BWCommand;
+import bab.bitsworlds.db.BWSQL;
 import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.*;
@@ -20,7 +22,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
@@ -86,6 +87,50 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             commandSender.sendMessage(PrefixMessage.info.getPrefix(),
                     LangCore.getClassMessage(this.getClass(), "language-updated").setKey("%%lang", ChatColor.BOLD + LangCore.lang.title));
         }
+
+        else if (strings[1].equalsIgnoreCase("db")) {
+            if (strings.length == 2) {
+                commandSender.sendMessage(PrefixMessage.warn.getPrefix(),
+                        LangCore.getClassMessage(getClass(), "config-use")
+                                .setKey("%%cmd", ChatColor.BOLD + "/BitsWorlds" + ChatColor.ITALIC + " config db <MYSQL|SQLITE>"));
+                return;
+            }
+
+            boolean sqlite;
+
+            if (strings[2].equalsIgnoreCase("MYSQL"))
+                sqlite = false;
+            else if (strings[2].equalsIgnoreCase("SQLITE"))
+                sqlite = true;
+            else {
+                commandSender.sendMessage(PrefixMessage.error.getPrefix(),
+                        LangCore.getClassMessage(getClass(), "invalid-arg")
+                                .setKey("%%arg", ChatColor.ITALIC + strings[2])
+                                .setKey("%%args", "<MYSQL|SQLITE>")
+                                .setKey("%%prefixColor", PrefixMessage.error.getDefaultChatColor().toString()));
+                return;
+            }
+
+            BWTaskResponse response = new BWConfigTask(BWConfigTask.ConfigTask.DatabaseTypeSet, sqlite, commandSender instanceof BWPlayer ? ((BWPlayer) commandSender).getBukkitPlayer().getUniqueId() : null).execute();
+
+            if (response.getCode() == 0 && response instanceof BWTask.BWExceptionResponse) {
+                commandSender.reportExceptionResponse((BWTask.BWExceptionResponse) response);
+                return;
+            }
+
+            String dbTypeString = BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") ? "SQLite" : "MySQL";
+
+            if (response.getCode() == 1) {
+                commandSender.sendMessage(PrefixMessage.warn.getPrefix(),
+                        LangCore.getClassMessage(getClass(), "database-config-already")
+                                .setKey("%%db", ChatColor.ITALIC + dbTypeString)
+                                .setKey("%%prefixColor", PrefixMessage.warn.getDefaultChatColor().toString()));
+                return;
+            }
+
+            commandSender.sendMessage(PrefixMessage.info.getPrefix(),
+                    LangCore.getClassMessage(this.getClass(), "database-updated").setKey("%%db", ChatColor.BOLD + dbTypeString));
+        }
     }
 
     public BWGUI getGUI(String code, BWPlayer player) {
@@ -104,24 +149,40 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                             case 0:
                                 updateCountryBannerItem(this, player);
                                 break;
+                            case 1:
+                                List<String> databaseLore = new ArrayList<>();
+
+                                if (BWSQL.sqlite) {
+                                    databaseLore.add(ChatColor.AQUA + "SQLite");
+                                    databaseLore.add(ChatColor.BLUE + "MySQL");
+                                }
+                                else {
+                                    databaseLore.add(ChatColor.BLUE + "SQLite");
+                                    databaseLore.add(ChatColor.AQUA + "MySQL");
+                                }
+
+                                databaseLore.add("");
+                                databaseLore.addAll(GUIItem.loreJumper(
+                                        LangCore.getClassMessage(ConfigCmd.class, "database-item-lore").setKey("%%file", ChatColor.ITALIC + "config.yml").toString(),
+                                        ChatColor.WHITE.toString(),
+                                        ChatColor.WHITE + "" + ChatColor.BOLD + LangCore.getUtilMessage("warn-word").toString().toUpperCase() + ": "
+                                ));
+
+                                if (BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") != BWSQL.sqlite) {
+                                    databaseLore.add("");
+                                    databaseLore.add(ChatColor.YELLOW + LangCore.getClassMessage(ConfigCmd.class, "database-item-need-restart").toString());
+                                }
+
+                                this.setItem(1, new GUIItem(
+                                        Material.ANVIL,
+                                        ChatColor.AQUA + "" + ChatColor.BOLD + LangCore.getClassMessage(ConfigCmd.class, "database-item-title").toString(),
+                                        databaseLore,
+                                        LangCore.getClassMessage(ConfigCmd.class, "database-config-guide-mode"),
+                                        player
+                                ));
+
+                                break;
                             case 27:
-                                //BACK ITEM
-                                /*ItemStack backItem = new ItemStack(Material.SIGN);
-
-                                ItemMeta backItemMeta = backItem.getItemMeta();
-
-                                backItemMeta.setDisplayName(ChatColor.GOLD + LangCore.getClassMessage(ConfigCmd.class, "back-item-title").toString());
-
-                                List<String> backItemLore = new ArrayList<>();
-
-                                GUICore.addGuideLore(LangCore.getClassMessage(ConfigCmd.class, "back-item-guide-mode"), player, backItemLore);
-
-                                backItemMeta.setLore(backItemLore);
-
-                                backItem.setItemMeta(backItemMeta);
-
-                                this.setItem(27, backItem);*/
-
                                 this.setItem(27, new GUIItem(
                                         Material.SIGN,
                                         ChatColor.GOLD + LangCore.getClassMessage(ConfigCmd.class, "back-item-title").toString(),
@@ -136,7 +197,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
                     @Override
                     public BWGUI init() {
-                        genItems(0);
+                        genItems(0, 1);
 
                         return this;
                     }
@@ -148,9 +209,11 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
     @Override
     public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
+        BWTaskResponse response;
+
         switch (event.getSlot()) {
             case 0:
-                BWTaskResponse response = new BWConfigTask(BWConfigTask.ConfigTask.LanguageSet, LangCore.lang.ordinal() + 2 > Lang.values().length ? Lang.values()[0] : Lang.values()[LangCore.lang.ordinal() + 1], player.getBukkitPlayer().getUniqueId()).execute();
+                response = new BWConfigTask(BWConfigTask.ConfigTask.LanguageSet, LangCore.lang.ordinal() + 2 > Lang.values().length ? Lang.values()[0] : Lang.values()[LangCore.lang.ordinal() + 1], player.getBukkitPlayer().getUniqueId()).execute();
 
                 if (response.getCode() == 0 && response instanceof BWTask.BWExceptionResponse) {
                     player.reportExceptionResponse((BWTask.BWExceptionResponse) response);
@@ -167,6 +230,22 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                         LangCore.getClassMessage(this.getClass(), "language-updated").setKey("%%lang", ChatColor.BOLD + LangCore.lang.title));
 
                 break;
+            case 1:
+                response = new BWConfigTask(BWConfigTask.ConfigTask.DatabaseTypeSet, !BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite"), player.getBukkitPlayer().getUniqueId()).execute();
+
+                if (response.getCode() == 0 && response instanceof BWTask.BWExceptionResponse) {
+                    player.reportExceptionResponse((BWTask.BWExceptionResponse) response);
+                    return;
+                }
+
+                GUICore.updateAllGUIs();
+
+                if (gui.getItem(27) != null) {
+                    GUICore.openGUIs.get(player).genItems(27);
+                }
+
+                player.sendMessage(PrefixMessage.info.getPrefix(),
+                        LangCore.getClassMessage(this.getClass(), "database-updated").setKey("%%db", ChatColor.BOLD + (BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") ? "SQLite" : "MySQL")));
             case 27:
                 if (gui.getItem(27) != null) {
                     player.openGUI(new MainGUI().getGUI("main", player));
@@ -219,31 +298,6 @@ public class ConfigCmd implements BWCommand, ImplGUI {
     }
 
     private void updateCountryBannerItem(BWGUI gui, BWPlayer player) {
-        /*ItemStack countryBanner = getCountryBanner(LangCore.lang);
-        ItemMeta countryBannerMeta = countryBanner.getItemMeta();
-
-        countryBannerMeta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + LangCore.lang.title);
-        List<String> countryBannerLore = new ArrayList<>();
-
-        for (Lang lang: Lang.values()) {
-            StringBuilder sb = new StringBuilder();
-
-            if (lang == LangCore.lang)
-                sb.append(ChatColor.AQUA);
-            else
-                sb.append(ChatColor.BLUE);
-
-            sb.append(lang.title);
-            countryBannerLore.add(sb.toString());
-        }
-
-        GUICore.addGuideLore(LangCore.getClassMessage(ConfigCmd.class, "language-config-guide-mode"), player, countryBannerLore);
-
-        countryBannerMeta.setLore(countryBannerLore);
-        countryBanner.setItemMeta(countryBannerMeta);
-
-        gui.setItem(0, countryBanner);*/
-
         List<String> countryBannerLore = new ArrayList<>();
 
         for (Lang lang: Lang.values()) {
@@ -272,12 +326,16 @@ public class ConfigCmd implements BWCommand, ImplGUI {
         List<String> list = null;
 
         if (args.length == 2) {
-            list = Arrays.asList("language");
+            list = Arrays.asList("language", "db");
         }
 
         else if (args.length == 3) {
             if (args[1].equalsIgnoreCase("language")) {
                 list = Arrays.asList("EN", "PT", "SP", "FR");
+            }
+
+            else if (args[1].equalsIgnoreCase("db")) {
+                list = Arrays.asList("MYSQL", "SQLITE");
             }
         }
 

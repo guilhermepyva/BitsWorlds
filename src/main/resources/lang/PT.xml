@@ -18,6 +18,7 @@
                 <message key="language-config-guide-mode">altera a linguagem do Plugin</message>
                 <message key="database-item-title">Banco de Dados</message>
                 <message key="database-item-lore">Caso alterar o tipo de banco de dados do Plugin, será necessário um reinício do Plugin \n Caso você use MySQL tenha certeza de que tenha inserido as credenciais no arquivo %%file</message>
+                <message key="database-item-need-restart">Necessita de um reinício!</message>
                 <message key="database-config-guide-mode">altera o tipo de banco de dados do Plugin \n caso não saiba mexer com banco de dados é recomendável deixar em SQLite (padrão)</message>
                 <message key="database-updated">O tipo de banco de dados do Plugin agora é %%db</message>
                 <message key="database-config-already">O tipo de banco de dados do Plugin já é %%db</message>

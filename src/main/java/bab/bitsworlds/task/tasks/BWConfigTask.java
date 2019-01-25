@@ -6,10 +6,10 @@ import bab.bitsworlds.logger.LogController;
 import bab.bitsworlds.logger.LogRecorder;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
-import bab.bitsworlds.multilanguage.PrefixMessage;
 import bab.bitsworlds.task.BWTask;
 import bab.bitsworlds.task.BWTaskResponse;
 import bab.bitsworlds.task.responses.DefaultResponse;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -20,9 +20,9 @@ public class BWConfigTask extends BWTask {
     private Object data;
     private UUID player;
 
-    public BWConfigTask(ConfigTask task, Lang lang, UUID player) {
+    public BWConfigTask(ConfigTask task, Object data, UUID player) {
         this.task = task;
-        this.data = lang;
+        this.data = data;
         this.player = player;
     }
 
@@ -43,12 +43,27 @@ public class BWConfigTask extends BWTask {
                 LogController.addLog(LogAction.GLOBAL_CONFIG_LANGUAGESET, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
 
                 return new DefaultResponse(2);
+            case DatabaseTypeSet:
+                boolean sqlite = (boolean) data;
+                FileConfiguration config = BitsWorlds.plugin.getConfig();
+
+                if ((sqlite && config.getString("db").equalsIgnoreCase("sqlite")) || !sqlite && config.getString("db").equalsIgnoreCase("mysql")) {
+                    return new DefaultResponse(1);
+                }
+
+                config.set("db", sqlite ? "sqlite" : "mysql");
+                BitsWorlds.plugin.saveConfig();
+
+                LogController.addLog(LogAction.GLOBAL_CONFIG_DATABASETYPESET, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
+
+                return new DefaultResponse(2);
         }
 
         return null;
     }
 
     public enum ConfigTask {
-        LanguageSet
+        LanguageSet,
+        DatabaseTypeSet
     }
 }
