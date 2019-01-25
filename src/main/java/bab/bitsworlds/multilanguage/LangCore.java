@@ -1,6 +1,7 @@
 package bab.bitsworlds.multilanguage;
 
 import bab.bitsworlds.BitsWorlds;
+import org.bukkit.ChatColor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -9,6 +10,7 @@ import org.w3c.dom.NodeList;
 import javax.annotation.Nonnull;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class LangCore {
@@ -136,5 +138,17 @@ public class LangCore {
             return utilMessages.getMessage(key);
         }
         return null;
+    }
+
+    public static String getDateByPattern(LocalDateTime time, ChatColor prefixColor) {
+        return LangCore.getUtilMessage("date-pattern")
+                .setKey("%%prefixColor", prefixColor.toString())
+                .setKey("%%dd", String.valueOf(time.getDayOfMonth()))
+                .setKey("%%mm", String.valueOf(time.getMonthValue()))
+                .setKey("%%yyyy", String.valueOf(time.getYear()))
+                .setKey("%%hh", String.valueOf(time.getHour()))
+                .setKey("%%mm", String.valueOf(time.getMinute()))
+                .setKey("%%ss", String.valueOf(time.getSecond()))
+                .toString();
     }
 }
