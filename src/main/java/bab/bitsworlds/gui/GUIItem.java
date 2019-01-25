@@ -80,7 +80,11 @@ public class GUIItem extends ItemStack {
             }
 
             if (word.equals("\n")) {
-                list.add(sb.toString());
+                if (sb.toString().equals(prefix))
+                    list.add(sb.toString());
+                else
+                    list.add("");
+
                 sb = new StringBuilder();
                 sb.append(prefixColor);
                 c = 0;
