@@ -91,6 +91,14 @@ public class MLMessage {
         return this;
     }
 
+    /**
+     * Shortcut to {@link MLMessage#setKey(String, String)} with MLMessages
+     * @return
+     */
+    public MLMessage setKey(String key, MLMessage message) {
+        return setKey(key, message.toString());
+    }
+
     public List<LangMessage> replaceKeys() {
         List<LangMessage> langMessages = new ArrayList<>();
 
@@ -159,5 +167,10 @@ public class MLMessage {
             return oplangMessage1.get();
 
         throw new NullPointerException("Message don't contains any LangMessage");
+    }
+
+    @Override
+    public String toString() {
+        return getTranslatedMessage().message;
     }
 }

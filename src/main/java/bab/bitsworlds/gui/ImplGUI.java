@@ -6,7 +6,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import java.util.Map;
 
 public interface ImplGUI {
-    BWGUI getGUI(String code);
+    BWGUI getGUI(String code, BWPlayer player);
 
     void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui);
 }

@@ -1,1 +1,8 @@
 language: EN
+db: sqlite
+mysql-credentials:
+  host:
+  port:
+  database:
+  user:
+  password:

@@ -1,5 +1,8 @@
 package bab.bitsworlds.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StringUtils {
     /*Can be useful some day...
     public static String replace(String origin, String from, String to) {

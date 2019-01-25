@@ -85,11 +85,10 @@ public class LangCore {
 
                 final ConjuntMessages mlMessagesList = messages.get(sb.toString());
                 addNodeListToConjuntMessage(messageNodes, mlMessagesList, lang);
-
-                NodeList utilMessageNodes = ((Element) document.getElementsByTagName("utils").item(0)).getElementsByTagName("message");
-                addNodeListToConjuntMessage(utilMessageNodes, utilMessages, lang);
-
             }
+
+            NodeList utilMessageNodes = ((Element) document.getElementsByTagName("utils").item(0)).getElementsByTagName("message");
+            addNodeListToConjuntMessage(utilMessageNodes, utilMessages, lang);
         }
 
         return false;

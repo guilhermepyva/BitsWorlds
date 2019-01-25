@@ -1,20 +1,29 @@
 package bab.bitsworlds.task.tasks;
 
 import bab.bitsworlds.BitsWorlds;
+import bab.bitsworlds.logger.LogAction;
+import bab.bitsworlds.logger.LogController;
+import bab.bitsworlds.logger.LogRecorder;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.task.BWTask;
 import bab.bitsworlds.task.BWTaskResponse;
 import bab.bitsworlds.task.responses.DefaultResponse;
+import org.bukkit.configuration.file.FileConfiguration;
+
+import java.sql.Timestamp;
+import java.util.UUID;
 
 public class BWConfigTask extends BWTask {
 
-    public ConfigTask task;
-    public Object data;
+    private ConfigTask task;
+    private Object data;
+    private UUID player;
 
-    public BWConfigTask(ConfigTask task, Lang lang) {
+    public BWConfigTask(ConfigTask task, Object data, UUID player) {
         this.task = task;
-        this.data = lang;
+        this.data = data;
+        this.player = player;
     }
 
     @Override
@@ -31,6 +40,22 @@ public class BWConfigTask extends BWTask {
                 BitsWorlds.plugin.getConfig().set("language", LangCore.lang.name());
                 BitsWorlds.plugin.saveConfig();
 
+                LogController.addLog(LogAction.GLOBAL_CONFIG_LANGUAGESET, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
+
+                return new DefaultResponse(2);
+            case DatabaseTypeSet:
+                boolean sqlite = (boolean) data;
+                FileConfiguration config = BitsWorlds.plugin.getConfig();
+
+                if ((sqlite && config.getString("db").equalsIgnoreCase("sqlite")) || !sqlite && config.getString("db").equalsIgnoreCase("mysql")) {
+                    return new DefaultResponse(1);
+                }
+
+                config.set("db", sqlite ? "sqlite" : "mysql");
+                BitsWorlds.plugin.saveConfig();
+
+                LogController.addLog(LogAction.GLOBAL_CONFIG_DATABASETYPESET, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
+
                 return new DefaultResponse(2);
         }
 
@@ -38,6 +63,7 @@ public class BWConfigTask extends BWTask {
     }
 
     public enum ConfigTask {
-        LanguageSet
+        LanguageSet,
+        DatabaseTypeSet
     }
 }

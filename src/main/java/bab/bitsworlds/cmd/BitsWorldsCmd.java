@@ -3,6 +3,7 @@ package bab.bitsworlds.cmd;
 import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPlayer;
+import bab.bitsworlds.gui.MainGUI;
 import bab.bitsworlds.multilanguage.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -12,7 +13,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,12 +32,14 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
         }
 
         if (args.length <= 0) {
-            bwSender.sendMessage(
-                    PrefixMessage.warn.getPrefix(),
-                    LangCore.getClassMessage(getClass(), "must_insert_argument")
-                            .setKey("%%cmd", ChatColor.BOLD + "/BitsWorlds" + ChatColor.ITALIC)
-                            .setKey("%%prefixColor", PrefixMessage.warn.getDefaultChatColor().toString())
-            );
+            if (!(bwSender instanceof BWPlayer)) {
+                bwSender.sendMessage(
+                        PrefixMessage.error.getPrefix(),
+                        LangCore.getClassMessage(this.getClass(), "cmdsender-cant-run-cmd")
+                );
+                return true;
+            }
+            ((BWPlayer) bwSender).openGUI(new MainGUI().getGUI("main", (BWPlayer) bwSender));
             return true;
         }
 

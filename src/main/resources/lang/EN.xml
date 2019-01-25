@@ -6,16 +6,24 @@
         </class>
         <package path="cmd">
             <class name="BitsWorldsCmd">
-                <message key="must_insert_argument">You must insert an argument using: %%cmd &lt;argument&gt;%%prefixColor\nUse: %%cmd help%%prefixColor for more information and help</message>
+                <message key="cmdsender-cant-run-cmd">You can't execute this command without being a player because will it will open a window</message>
                 <message key="not_valid_argument">%%arg isn't a valid argument\nUse: %%cmd help %%prefixColorfor help</message>
             </class>
             <class name="ConfigCmd">
-                <message key="cmdsender-cant-run-cmd">You can't execute this command without being a player because will it will open a window</message>
                 <message key="gui-title">%%name Settings</message>
                 <message key="language-updated">The Plugin language is now %%lang</message>
-                <message key="language-config-use">Use %%cmd language %%args</message>
-                <message key="language-config-invalid-arg">%%arg %%prefixColoris an invalid argument, the valid arguments are %%args</message>
                 <message key="language-config-already">The language %%lang %%prefixColoris already set</message>
+                <message key="language-config-guide-mode">changes the Plugin language</message>
+                <message key="database-item-title">Database</message>
+                <message key="database-item-lore">If you change the Plugin database type, a Plugin restart will be necessary \n If you use MySQL make sure you have entered the credentials in the file %%file</message>
+                <message key="database-item-need-restart">Needs a restart!</message>
+                <message key="database-config-guide-mode">change the database type of the Plugin \n if you can't tinker with database it is recommended to leave it in SQLite (default)</message>
+                <message key="database-updated">The Plugin database type is now %%db</message>
+                <message key="database-config-already">The Plugin database type already is %%db</message>
+                <message key="config-use">Use %%cmd</message>
+                <message key="invalid-arg">%%arg %%prefixColoris an invalid argument, the valid arguments are %%args</message>
+                <message key="back-item-title">Back</message>
+                <message key="back-item-guide-mode">back to the main menu</message>
             </class>
         </package>
         <package path="extensions">
@@ -23,7 +31,25 @@
                 <message key="exception-response">Unfortunately an error occurred while the task was executed\n\n%%exc</message>
             </class>
         </package>
+        <package path="gui">
+            <class name="MainGUI">
+                <message key="version-word">Version: %%v</message>
+                <message key="guide-mode-title">Guide Mode</message>
+                <message key="guide-mode-lore">The guide mode is used to extend the description of the items with some more information</message>
+                <message key="status-word">Status: %%s</message>
+                <message key="by-word">by: %%n</message>
+                <message key="head-item-guide-mode">here you can get some information and help from the Plugin</message>
+                <message key="config-item-title">Plugin Configuration</message>
+                <message key="config-item-guide-mode">here you can access and edit the Plugin Configuration (%%file file)</message>
+            </class>
+            <class name="GUICore">
+                <message key="guide-mode-words">Guide Mode</message>
+            </class>
+        </package>
     </package>
     <utils>
+        <message key="enabled-word">Enabled</message>
+        <message key="disabled-word">Disabled</message>
+        <message key="warn-word">Warn</message>
     </utils>
 </bitsWorldsTranslationFile>
