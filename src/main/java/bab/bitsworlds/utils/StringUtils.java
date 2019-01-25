@@ -17,21 +17,4 @@ public class StringUtils {
 
         return result.toString();
     }*/
-
-    public static List<String> getDescriptionFromMessage(String message, String prefixColors, String prefix) {
-        List<String> list = new ArrayList<>();
-
-        boolean putPrefix = true;
-        for (String string : message.split("\n")) {
-            if (putPrefix) {
-                putPrefix = false;
-                list.add(prefix + prefixColors + string);
-                continue;
-            }
-
-            list.add(prefixColors + string);
-        }
-
-        return list;
-    }
 }

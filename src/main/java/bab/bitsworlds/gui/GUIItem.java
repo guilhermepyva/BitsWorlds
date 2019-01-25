@@ -1,7 +1,9 @@
 package bab.bitsworlds.gui;
 
 import bab.bitsworlds.extensions.BWPlayer;
+import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.MLMessage;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -34,7 +36,7 @@ public class GUIItem extends ItemStack {
 
         if (meta.getLore() == null)
             meta.setLore(new ArrayList<>());
-        meta.setLore(GUICore.addGuideLore(guideModeMessage, player, meta.getLore()));
+        meta.setLore(addGuideLore(guideModeMessage, player, meta.getLore()));
 
         this.setItemMeta(meta);
     }
@@ -46,5 +48,66 @@ public class GUIItem extends ItemStack {
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         this.setItemMeta(meta);
+    }
+
+    public static List<String> addGuideLore(MLMessage message, BWPlayer player, List<String> list) {
+        if (GUICore.guideMode(player)) {
+            list.add("");
+            list.addAll(loreJumper(message.toString(), ChatColor.DARK_PURPLE + "" + ChatColor.ITALIC, ChatColor.BOLD + LangCore.getClassMessage(GUICore.class, "guide-mode-words").toString() + ": "));
+        }
+        return list;
+    }
+
+    public static List<String> loreJumper(String string, String prefixColor, String prefixWord) {
+        return loreJumper(string, 27, prefixColor, prefixWord);
+    }
+
+    public static List<String> loreJumper(String string, int chars, String prefixColor, String prefix) {
+        List<String> list = new ArrayList<>();
+
+        String[] splitted = string.split(" ");
+
+        int c = 0;
+        int i = 0;
+        StringBuilder sb = new StringBuilder();
+        boolean insertPrefix = true;
+        for (String word : splitted) {
+            if (insertPrefix) {
+                sb.append(prefix);
+                c = c + prefix.length();
+                sb.append(prefixColor);
+                insertPrefix = false;
+            }
+
+            if (word.equals("\n")) {
+                list.add(sb.toString());
+                sb = new StringBuilder();
+                sb.append(prefixColor);
+                c = 0;
+                i++;
+                continue;
+            }
+
+            sb.append(word);
+            c = c + word.length();
+
+            i++;
+
+            if (splitted.length == i) {
+                list.add(sb.toString());
+                continue;
+            }
+
+            sb.append(" ");
+
+            if (c >= chars) {
+                list.add(sb.toString());
+                sb = new StringBuilder();
+                sb.append(prefixColor);
+                c = 0;
+            }
+        }
+
+        return list;
     }
 }

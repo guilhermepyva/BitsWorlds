@@ -28,25 +28,6 @@ public class MainGUI implements ImplGUI {
                     public void setupItem(int item) {
                         switch (item) {
                             case 4:
-                                //HEAD ITEM
-                                /*ItemStack headItem = new ItemStack(Material.GRASS);
-                                ItemMeta headItemMeta = headItem.getItemMeta();
-
-                                headItemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "BitsWorlds");
-
-                                List<String> headItemLore = new ArrayList<>();
-
-                                headItemLore.add(ChatColor.WHITE + LangCore.getClassMessage(MainGUI.class, "version-word").setKey("%%v", BitsWorlds.plugin.getDescription().getVersion()).toString());
-                                headItemLore.add("");
-                                headItemLore.add(ChatColor.WHITE + "" + ChatColor.ITALIC + LangCore.getClassMessage(MainGUI.class, "by-word").setKey("%%n", ChatColor.BLUE + "MrPiva").toString());
-
-                                GUICore.addGuideLore(LangCore.getClassMessage(MainGUI.class, "head-item-guide-mode"), player, headItemLore);
-
-                                headItemMeta.setLore(headItemLore);
-
-                                headItem.setItemMeta(headItemMeta);*/
-
-
                                 this.setItem(4, new GUIItem(
                                         Material.GRASS,
                                         ChatColor.GREEN + "" + ChatColor.BOLD + "BitsWorlds",
@@ -58,24 +39,6 @@ public class MainGUI implements ImplGUI {
                                 ));
                                 break;
                             case 8:
-                                //GUIDE ITEM
-                                /*ItemStack guideItem = new ItemStack(Material.THIN_GLASS);
-
-                                ItemMeta guideItemMeta = guideItem.getItemMeta();
-
-                                guideItemMeta.setDisplayName(ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "guide-mode-title").toString());
-
-                                List<String> guideItemLore = new ArrayList<>();
-
-                                guideItemLore.add(ChatColor.WHITE + LangCore.getClassMessage(MainGUI.class, "actually-word").setKey("%%s",
-                                        GUICore.guideMode(player) ? LangCore.getUtilMessage("enabled-word") : LangCore.getUtilMessage("disabled-word")).toString());
-
-                                guideItemLore.addAll(StringUtils.getDescriptionFromMessage(LangCore.getClassMessage(MainGUI.class, "guide-mode-lore").toString(), ChatColor.WHITE.toString(), ""));
-
-                                guideItemMeta.setLore(guideItemLore);
-
-                                guideItem.setItemMeta(guideItemMeta);*/
-
                                 List<String> guideItemLore = new ArrayList<>();
 
                                 guideItemLore.add(ChatColor.WHITE + LangCore.getClassMessage(MainGUI.class, "status-word").setKey("%%s",
@@ -83,7 +46,7 @@ public class MainGUI implements ImplGUI {
 
                                 guideItemLore.add("");
 
-                                guideItemLore.addAll(StringUtils.getDescriptionFromMessage(LangCore.getClassMessage(MainGUI.class, "guide-mode-lore").toString(), ChatColor.WHITE.toString(), ""));
+                                guideItemLore.addAll(GUIItem.loreJumper(LangCore.getClassMessage(MainGUI.class, "guide-mode-lore").toString(), ChatColor.WHITE.toString(), ""));
 
                                 GUIItem guideModeItem = new GUIItem(
                                         Material.PAPER,
@@ -102,23 +65,6 @@ public class MainGUI implements ImplGUI {
                                 this.setItem(8, guideModeItem);
                                 break;
                             case 19:
-                                //CONFIG ITEM
-                                /*ItemStack configItem = new ItemStack(Material.BOOK_AND_QUILL);
-
-                                ItemMeta configItemMeta = configItem.getItemMeta();
-
-                                configItemMeta.setDisplayName(ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "config-item-title").toString());
-
-                                List<String> configItemLore = new ArrayList<>();
-
-                                GUICore.addGuideLore(LangCore.getClassMessage(MainGUI.class, "config-item-guide-mode").setKey("%%file", ChatColor.ITALIC + "config.yml"), player, configItemLore);
-
-                                configItemMeta.setLore(configItemLore);
-
-                                configItem.setItemMeta(configItemMeta);
-
-                                this.setItem(19, configItem);*/
-
                                 this.setItem(19, new GUIItem(
                                         Material.BOOK_AND_QUILL,
                                         ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "config-item-title").toString(),

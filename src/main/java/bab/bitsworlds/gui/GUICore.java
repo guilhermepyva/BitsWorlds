@@ -93,20 +93,4 @@ public class GUICore implements Listener {
         else
             guideMode.add(player);
     }
-
-    public static String[] getGuideModeAsArray(MLMessage message) {
-        return (String[]) getGuideModeAsList(message).toArray();
-    }
-
-    public static List<String> getGuideModeAsList(MLMessage message) {
-        return StringUtils.getDescriptionFromMessage(message.toString(), "", ChatColor.BOLD + LangCore.getClassMessage(GUICore.class, "guide-mode-words").toString() + ": " + ChatColor.DARK_PURPLE + ChatColor.ITALIC);
-    }
-
-    public static List<String> addGuideLore(MLMessage message, BWPlayer player, List<String> list) {
-        if (GUICore.guideMode(player)) {
-            list.add("");
-            list.addAll(GUICore.getGuideModeAsList(message));
-        }
-        return list;
-    }
 }

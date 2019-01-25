@@ -14,10 +14,14 @@
             <class name="ConfigCmd">
                 <message key="gui-title">Configurações de %%name</message>
                 <message key="language-updated">A linguagem do Plugin agora é %%lang</message>
-                <message key="language-config-use">Use %%cmd </message>
-                <message key="language-config-invalid-arg">%%arg %%prefixColoré um argumento inválido, os argumentos válidos são %%args</message>
                 <message key="language-config-already">A linguagem %%lang %%prefixColorjá está setada</message>
-                <message key="language-config-guide-mode">altera a linguagem do Plugin no servidor</message>
+                <message key="language-config-guide-mode">altera a linguagem do Plugin</message>
+                <message key="database-item-title">Banco de Dados</message>
+                <message key="database-config-guide-mode">altera o tipo de banco de dados do Plugin \n caso não saiba mexer com banco de dados é recomendável deixar em SQLite (padrão)</message>
+                <message key="database-updated">O tipo de banco de dados do Plugin agora é %%db</message>
+                <message key="database-config-already">O tipo de banco de dados do Plugin já é %%db</message>
+                <message key="config-use">Use %%cmd</message>
+                <message key="invalid-arg">%%arg %%prefixColoré um argumento inválido, os argumentos válidos são %%args</message>
                 <message key="back-item-title">Voltar</message>
                 <message key="back-item-guide-mode">volta para o menu principal</message>
             </class>
@@ -31,12 +35,12 @@
             <class name="MainGUI">
                 <message key="version-word">Versão: %%v</message>
                 <message key="guide-mode-title">Modo Guia</message>
-                <message key="guide-mode-lore">O modo guia serve para extender a descrição \ndos itens com algumas informações a mais</message>
+                <message key="guide-mode-lore">O modo guia serve para extender a descrição dos itens com algumas informações a mais</message>
                 <message key="status-word">Estado: %%s</message>
                 <message key="by-word">por: %%n</message>
-                <message key="head-item-guide-mode">aqui você pode obter algumas\ninformações e ajuda do Plugin</message>
+                <message key="head-item-guide-mode">aqui você pode obter algumas informações e ajuda do Plugin</message>
                 <message key="config-item-title">Configuração do Plugin</message>
-                <message key="config-item-guide-mode">aqui você pode acessar e editar\na Configuração do Plugin (arquivo %%file)</message>
+                <message key="config-item-guide-mode">aqui você pode acessar e editar a Configuração do Plugin (arquivo %%file)</message>
             </class>
             <class name="GUICore">
                 <message key="guide-mode-words">Modo Guia</message>
