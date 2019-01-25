@@ -33,7 +33,7 @@ public class BWSQL {
 
                 Class.forName("com.mysql.jdbc.Driver");
 
-                dbCon = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + databaseName, user, pw);
+                dbCon = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + databaseName, user, pw);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,12 +56,13 @@ public class BWSQL {
 
             statement.execute("CREATE TABLE IF NOT EXISTS log" +
                     "(" +
-                    "    action VARCHAR," +
-                    "    recorder_type VARCHAR," +
+                    "    action VARCHAR(30)," +
+                    "    recorder_type VARCHAR(30)," +
                     "    recorder_uuid CHARACTER(36)," +
-                    "    description VARCHAR," +
-                    "    time TIMESTAMP" +
-                    ");");
+                    "    description VARCHAR(200)," +
+                    "    time TIMESTAMP default current_timestamp, " +
+                    "    world CHARACTER(36)" +
+                    ")" + (BWSQL.sqlite ? ";" : " ENGINE = INNODB;"));
 
             statement.close();
         } catch (SQLException e) {
