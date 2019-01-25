@@ -57,6 +57,7 @@ public class BWSQL {
             statement.execute("CREATE TABLE IF NOT EXISTS log" +
                     "(" +
                     "    action VARCHAR(30)," +
+                    "    data VARCHAR(200)," +
                     "    recorder_type VARCHAR(30)," +
                     "    recorder_uuid CHARACTER(36)," +
                     "    description VARCHAR(200)," +

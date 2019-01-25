@@ -3,6 +3,7 @@ package bab.bitsworlds.db;
 import bab.bitsworlds.logger.Log;
 import bab.bitsworlds.logger.LogAction;
 import bab.bitsworlds.logger.LogRecorder;
+import bab.bitsworlds.multilanguage.Lang;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,14 +15,15 @@ import java.util.UUID;
 
 public class SQLDataManager {
     public static void insertLog(Log log) throws SQLException {
-        PreparedStatement statement = BWSQL.dbCon.prepareStatement("INSERT INTO log VALUES (?, ?, ?, ?, ?, ?)");
+        PreparedStatement statement = BWSQL.dbCon.prepareStatement("INSERT INTO log VALUES (?, ?, ?, ?, ?, ?, ?)");
 
         statement.setString(1, log.action.name());
-        statement.setString(2, log.recorder.type.name());
-        statement.setString(3, log.recorder.uuid != null ? log.recorder.uuid.toString() : null);
-        statement.setString(4, log.description);
-        statement.setString(5, log.time.toString());
-        statement.setString(6, log.world != null ? log.world.toString() : null);
+        statement.setString(2, log.data.toString());
+        statement.setString(3, log.recorder.type.name());
+        statement.setString(4, log.recorder.uuid != null ? log.recorder.uuid.toString() : null);
+        statement.setString(5, log.description);
+        statement.setString(6, log.time.toString());
+        statement.setString(7, log.world != null ? log.world.toString() : null);
 
         statement.execute();
 
@@ -40,12 +42,25 @@ public class SQLDataManager {
         }
 
         stm.close();
+        result.close();
 
         return list;
     }
 
     public static Log getLogFromResultSet(ResultSet resultSet) throws SQLException {
-        return new Log(LogAction.valueOf(resultSet.getString("action")),
+        LogAction action = LogAction.valueOf(resultSet.getString("action"));
+        Object data = null;
+
+        switch (action) {
+            case GLOBAL_CONFIG_DATABASETYPESET:
+                data = resultSet.getString("data").equals("sqlite");
+                break;
+            case GLOBAL_CONFIG_LANGUAGESET:
+                data = Lang.valueOf(resultSet.getString("data"));
+        }
+
+        return new Log(action,
+                data,
                 new LogRecorder(LogRecorder.RecorderType.valueOf(resultSet.getString("recorder_type")), UUID.fromString(resultSet.getString("recorder_uuid"))),
                 resultSet.getString("description"),
                 resultSet.getTimestamp("time"),

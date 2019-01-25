@@ -40,7 +40,7 @@ public class BWConfigTask extends BWTask {
                 BitsWorlds.plugin.getConfig().set("language", LangCore.lang.name());
                 BitsWorlds.plugin.saveConfig();
 
-                LogController.addLog(LogAction.GLOBAL_CONFIG_LANGUAGESET, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
+                LogController.addLog(LogAction.GLOBAL_CONFIG_LANGUAGESET, LangCore.lang.name(), new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
 
                 return new DefaultResponse(2);
             case DatabaseTypeSet:
@@ -51,10 +51,12 @@ public class BWConfigTask extends BWTask {
                     return new DefaultResponse(1);
                 }
 
-                config.set("db", sqlite ? "sqlite" : "mysql");
+                String type = sqlite ? "sqlite" : "mysql";
+
+                config.set("db", type);
                 BitsWorlds.plugin.saveConfig();
 
-                LogController.addLog(LogAction.GLOBAL_CONFIG_DATABASETYPESET, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
+                LogController.addLog(LogAction.GLOBAL_CONFIG_DATABASETYPESET, type, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
 
                 return new DefaultResponse(2);
         }
