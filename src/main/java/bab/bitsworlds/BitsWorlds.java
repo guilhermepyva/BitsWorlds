@@ -48,6 +48,8 @@ public class BitsWorlds extends JavaPlugin {
     }
 
     private void loadConfigs() {
+        saveDefaultConfig();
+
         getConfig().getKeys(false).forEach( key -> BWConfig.loadConfig(key, getConfig().get(key)) );
     }
 
