@@ -2,7 +2,7 @@ package bab.bitsworlds.task.tasks;
 
 import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.logger.LogAction;
-import bab.bitsworlds.logger.LogController;
+import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.logger.LogRecorder;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
@@ -40,7 +40,7 @@ public class BWConfigTask extends BWTask {
                 BitsWorlds.plugin.getConfig().set("language", LangCore.lang.name());
                 BitsWorlds.plugin.saveConfig();
 
-                LogController.addLog(LogAction.GLOBAL_CONFIG_LANGUAGESET, LangCore.lang.name(), new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
+                LogCore.addLog(LogAction.GLOBAL_CONFIG_LANGUAGESET, LangCore.lang.name(), new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
 
                 return new DefaultResponse(2);
             case DatabaseTypeSet:
@@ -56,7 +56,7 @@ public class BWConfigTask extends BWTask {
                 config.set("db", type);
                 BitsWorlds.plugin.saveConfig();
 
-                LogController.addLog(LogAction.GLOBAL_CONFIG_DATABASETYPESET, type, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
+                LogCore.addLog(LogAction.GLOBAL_CONFIG_DATABASETYPESET, type, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
 
                 return new DefaultResponse(2);
         }

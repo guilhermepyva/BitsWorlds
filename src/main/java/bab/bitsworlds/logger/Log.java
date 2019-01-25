@@ -11,14 +11,16 @@ public class Log {
     public Timestamp time;
 
     public UUID world;
+    public String worldName;
 
-    public Log(LogAction action, Object data, LogRecorder recorder, String description, Timestamp time, UUID world) {
+    public Log(LogAction action, Object data, LogRecorder recorder, String description, Timestamp time, UUID world, String worldName) {
         this.action = action;
         this.data = data;
         this.recorder = recorder;
         this.description = description;
         this.time = time;
         this.world = world;
+        this.worldName = worldName;
     }
 
     public boolean isGlobal() {

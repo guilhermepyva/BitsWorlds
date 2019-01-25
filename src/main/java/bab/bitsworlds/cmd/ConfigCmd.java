@@ -246,6 +246,8 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
                 player.sendMessage(PrefixMessage.info.getPrefix(),
                         LangCore.getClassMessage(this.getClass(), "database-updated").setKey("%%db", ChatColor.BOLD + (BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") ? "SQLite" : "MySQL")));
+
+                break;
             case 27:
                 if (gui.getItem(27) != null) {
                     player.openGUI(new MainGUI().getGUI("main", player));

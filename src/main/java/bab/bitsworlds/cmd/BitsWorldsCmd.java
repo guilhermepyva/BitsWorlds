@@ -51,7 +51,7 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
             default:
                 bwSender.sendMessage(
                         PrefixMessage.warn.getPrefix(),
-                        LangCore.getClassMessage(getClass(), "not_valid_argument")
+                        LangCore.getClassMessage(getClass(), "not-valid-argument")
                                 .setKey("%%arg", ChatColor.ITALIC + args[0] + PrefixMessage.warn.getDefaultChatColor())
                                 .setKey("%%cmd", ChatColor.BOLD + "/BitsWorlds" + ChatColor.ITALIC)
                                 .setKey("%%prefixColor", PrefixMessage.warn.getDefaultChatColor().toString())

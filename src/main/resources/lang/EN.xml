@@ -2,12 +2,12 @@
 <bitsWorldsTranslationFile>
     <package path="bab.bitsworlds">
         <class name="BitsWorlds">
-            <message key="permission_message">You do not have sufficient permissions to run this command</message>
+            <message key="permission-message">You do not have sufficient permissions to run this command</message>
         </class>
         <package path="cmd">
             <class name="BitsWorldsCmd">
                 <message key="cmdsender-cant-run-cmd">You can't execute this command without being a player because will it will open a window</message>
-                <message key="not_valid_argument">%%arg isn't a valid argument\nUse: %%cmd help %%prefixColorfor help</message>
+                <message key="not-valid-argument">%%arg isn't a valid argument\nUse: %%cmd help %%prefixColorfor help</message>
             </class>
             <class name="ConfigCmd">
                 <message key="gui-title">%%name Settings</message>
@@ -24,6 +24,19 @@
                 <message key="invalid-arg">%%arg %%prefixColoris an invalid argument, the valid arguments are %%args</message>
                 <message key="back-item-title">Back</message>
                 <message key="back-item-guide-mode">back to the main menu</message>
+            </class>
+            <class name="LogCmd">
+                <message key="gui-title">Logs</message>
+            </class>
+        </package>
+        <package path="logger">
+            <class name="LogCore">
+                <message key="global-config-languageset-title">Plugin Language changed</message>
+                <message key="global-config-languageset-lore">The Plugin Language has been changed to %%lang</message>
+                <message key="recorder-word">Recorder: %%r</message>
+                <message key="console-word">Console</message>
+                <message key="system-word">System</message>
+                <message key="world-word">World: %%w</message>
             </class>
         </package>
         <package path="extensions">
@@ -51,5 +64,6 @@
         <message key="enabled-word">Enabled</message>
         <message key="disabled-word">Disabled</message>
         <message key="warn-word">Warn</message>
+        <message key="date-pattern">%%prefixColor%%mm/%%dd/%%yyyy at %%hh:%%mm:%%ss (mm/dd/yyyy at hh:mm:ss)</message>
     </utils>
 </bitsWorldsTranslationFile>

@@ -15,15 +15,16 @@ import java.util.UUID;
 
 public class SQLDataManager {
     public static void insertLog(Log log) throws SQLException {
-        PreparedStatement statement = BWSQL.dbCon.prepareStatement("INSERT INTO log VALUES (?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement statement = BWSQL.dbCon.prepareStatement("INSERT INTO log VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
         statement.setString(1, log.action.name());
         statement.setString(2, log.data.toString());
         statement.setString(3, log.recorder.type.name());
         statement.setString(4, log.recorder.uuid != null ? log.recorder.uuid.toString() : null);
         statement.setString(5, log.description);
-        statement.setString(6, log.time.toString());
+        statement.setTimestamp(6, log.time);
         statement.setString(7, log.world != null ? log.world.toString() : null);
+        statement.setString(8, log.worldName);
 
         statement.execute();
 
@@ -64,6 +65,7 @@ public class SQLDataManager {
                 new LogRecorder(LogRecorder.RecorderType.valueOf(resultSet.getString("recorder_type")), UUID.fromString(resultSet.getString("recorder_uuid"))),
                 resultSet.getString("description"),
                 resultSet.getTimestamp("time"),
-                UUID.fromString(resultSet.getString("world")));
+                UUID.fromString(resultSet.getString("world")),
+                resultSet.getString("worldName"));
     }
 }

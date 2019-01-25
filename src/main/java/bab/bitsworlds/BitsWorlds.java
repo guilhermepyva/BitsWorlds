@@ -60,15 +60,15 @@ public class BitsWorlds extends JavaPlugin {
         PrefixMessage.permission_message =
                 PrefixMessage.error.getPrefix() +
                         PrefixMessage.error.getDefaultChatColor() +
-                        LangCore.getClassMessage(getClass(), "permission_message").toString();
+                        LangCore.getClassMessage(getClass(), "permission-message").toString();
     }
 
     private void loadCmd() {
         if (LangCore.lang != Lang.EN) {
             getCommand("BitsWorlds").setDescription(
-                    LangCore.getClassMessage(getClass(), "cmd_description").toString());
+                    LangCore.getClassMessage(getClass(), "cmd-description").toString());
             getCommand("BitsWorlds").setUsage(
-                    LangCore.getClassMessage(getClass(), "cmd_usage").setKey("%%cmd", "/BitsWorlds").toString());
+                    LangCore.getClassMessage(getClass(), "cmd-usage").setKey("%%cmd", "/BitsWorlds").toString());
         }
 
         getCommand("BitsWorlds").setPermissionMessage(PrefixMessage.permission_message);

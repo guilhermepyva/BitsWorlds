@@ -62,7 +62,8 @@ public class BWSQL {
                     "    recorder_uuid CHARACTER(36)," +
                     "    description VARCHAR(200)," +
                     "    time TIMESTAMP default current_timestamp, " +
-                    "    world CHARACTER(36)" +
+                    "    world CHARACTER(36)," +
+                    "    worldName VARCHAR(200)" +
                     ")" + (BWSQL.sqlite ? ";" : " ENGINE = INNODB;"));
 
             statement.close();
