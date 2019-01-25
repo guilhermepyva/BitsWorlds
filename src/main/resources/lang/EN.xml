@@ -15,6 +15,7 @@
                 <message key="language-config-already">The language %%lang %%prefixColoris already set</message>
                 <message key="language-config-guide-mode">changes the Plugin language</message>
                 <message key="database-item-title">Database</message>
+                <message key="database-item-lore">If you change the Plugin database type, a Plugin restart will be necessary \n If you use MySQL make sure you have entered the credentials in the file %%file</message>
                 <message key="database-config-guide-mode">change the database type of the Plugin \n if you can't tinker with database it is recommended to leave it in SQLite (default)</message>
                 <message key="database-updated">The Plugin database type is now %%db</message>
                 <message key="database-config-already">The Plugin database type already is %%db</message>
@@ -48,5 +49,6 @@
     <utils>
         <message key="enabled-word">Enabled</message>
         <message key="disabled-word">Disabled</message>
+        <message key="warn-word">Warn</message>
     </utils>
 </bitsWorldsTranslationFile>
