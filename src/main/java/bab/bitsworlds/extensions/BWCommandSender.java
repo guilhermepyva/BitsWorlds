@@ -75,4 +75,8 @@ public class BWCommandSender {
      * @param message the String to be sent
      */
     public void sendMessage(String message) { this.getCommandSender().sendMessage(message); }
+
+    public boolean hasPermission(BWPermission permission) {
+        return commandSender.hasPermission(permission.string);
+    }
 }

@@ -97,14 +97,16 @@ public class MainGUI implements ImplGUI {
                 gui.genItems(4, 8, 19);
                 break;
             case 19:
-                if (!player.getBukkitPlayer().hasPermission("bitsworlds.maincmd.configcmd")) {
+                ConfigCmd configCmd = new ConfigCmd();
+
+                if (!player.hasPermission(configCmd.getPermission())) {
                     player.sendMessage(PrefixMessage.permission_message);
 
                     player.getBukkitPlayer().closeInventory();
 
                     return;
                 }
-                BWGUI configCmdGUI = new ConfigCmd().getGUI("config_main",  player);
+                BWGUI configCmdGUI = configCmd.getGUI("config_main",  player);
 
                 player.openGUI(configCmdGUI);
 

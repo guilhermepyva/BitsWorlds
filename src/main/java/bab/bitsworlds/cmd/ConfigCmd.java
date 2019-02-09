@@ -4,6 +4,7 @@ import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.db.BWSQL;
 import bab.bitsworlds.extensions.BWCommandSender;
+import bab.bitsworlds.extensions.BWPermission;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.*;
 import bab.bitsworlds.multilanguage.Lang;
@@ -28,8 +29,8 @@ import java.util.*;
 public class ConfigCmd implements BWCommand, ImplGUI {
 
     @Override
-    public String getPermission() {
-        return "bitsworlds.maincmd.config";
+    public BWPermission getPermission() {
+        return BWPermission.MAINCMD_CONFIG;
     }
 
     public void run(BWCommandSender commandSender, Command command, String s, String[] strings) {
