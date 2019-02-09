@@ -47,7 +47,9 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
             case "CONFIG":
                 bwcmd = new ConfigCmd();
                 break;
-
+            case "LOG":
+                bwcmd = new LogCmd();
+                break;
             default:
                 bwSender.sendMessage(
                         PrefixMessage.warn.getPrefix(),

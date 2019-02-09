@@ -15,26 +15,27 @@ import java.util.UUID;
 
 public class SQLDataManager {
     public static void insertLog(Log log) throws SQLException {
-        PreparedStatement statement = BWSQL.dbCon.prepareStatement("INSERT INTO log VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement statement = BWSQL.dbCon.prepareStatement("INSERT INTO log VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         statement.setString(1, log.action.name());
         statement.setString(2, log.data.toString());
         statement.setString(3, log.recorder.type.name());
         statement.setString(4, log.recorder.uuid != null ? log.recorder.uuid.toString() : null);
         statement.setString(5, log.description);
-        statement.setTimestamp(6, log.time);
-        statement.setString(7, log.world != null ? log.world.toString() : null);
-        statement.setString(8, log.worldName);
+        statement.setString(6, log.descriptionRecorder != null ? log.descriptionRecorder.uuid.toString() : null);
+        statement.setTimestamp(7, log.time);
+        statement.setString(8, log.world != null ? log.world.toString() : null);
+        statement.setString(9, log.worldName);
 
         statement.execute();
 
         statement.close();
     }
 
-    public static List<Log> queryAllLogs() throws SQLException {
+    public static List<Log> queryLogs(String where) throws SQLException {
         Statement stm = BWSQL.dbCon.createStatement();
 
-        ResultSet result = stm.executeQuery("SELECT * FROM logs");
+        ResultSet result = stm.executeQuery("SELECT * FROM log" + where);
 
         List<Log> list = new ArrayList<>();
 
@@ -46,6 +47,10 @@ public class SQLDataManager {
         result.close();
 
         return list;
+    }
+
+    public static List<Log> queryAllLogs() throws SQLException {
+        return queryLogs("");
     }
 
     public static Log getLogFromResultSet(ResultSet resultSet) throws SQLException {
@@ -62,10 +67,11 @@ public class SQLDataManager {
 
         return new Log(action,
                 data,
-                new LogRecorder(LogRecorder.RecorderType.valueOf(resultSet.getString("recorder_type")), UUID.fromString(resultSet.getString("recorder_uuid"))),
+                new LogRecorder(LogRecorder.RecorderType.valueOf(resultSet.getString("recorder_type")), resultSet.getString("recorder_uuid") != null ? UUID.fromString(resultSet.getString("recorder_uuid")) : null),
                 resultSet.getString("description"),
+                new LogRecorder(resultSet.getString("description_appender_uuid") != null ? UUID.fromString(resultSet.getString("description_appender_uuid")) : null),
                 resultSet.getTimestamp("time"),
-                UUID.fromString(resultSet.getString("world")),
+                resultSet.getString("world") != null ? UUID.fromString(resultSet.getString("world")) : null,
                 resultSet.getString("worldName"));
     }
 }

@@ -1,7 +1,6 @@
 package bab.bitsworlds.logger;
 
 import bab.bitsworlds.BitsWorlds;
-import bab.bitsworlds.cmd.LogCmd;
 import bab.bitsworlds.db.SQLDataManager;
 import bab.bitsworlds.gui.GUIItem;
 import bab.bitsworlds.multilanguage.Lang;
@@ -16,18 +15,14 @@ import java.util.List;
 import java.util.UUID;
 
 public class LogCore {
-    public static void addLog(LogAction action, LogRecorder recorder, Timestamp time) {
-        addLog(action, null, recorder, null, time, null, null);
-    }
-
     public static void addLog(LogAction action, Object data, LogRecorder recorder, Timestamp time) {
-        addLog(action, data, recorder, null, time, null, null);
+        addLog(action, data, recorder, null, null, time, null, null);
     }
 
-    public static void addLog(LogAction action, Object data, LogRecorder recorder, String description, Timestamp time, UUID world, String worldName) {
+    public static void addLog(LogAction action, Object data, LogRecorder recorder, String description, LogRecorder descriptionRecorder, Timestamp time, UUID world, String worldName) {
         Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
             try {
-                SQLDataManager.insertLog(new Log(action, data, recorder, description, time, world, worldName));
+                SQLDataManager.insertLog(new Log(action, data, recorder, description, descriptionRecorder, time, world, worldName));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -42,6 +37,11 @@ public class LogCore {
             case GLOBAL_CONFIG_LANGUAGESET:
                 title = ChatColor.AQUA + "" + ChatColor.BOLD + LangCore.getClassMessage(LogCore.class, "global-config-languageset-title").toString();
                 description.add(ChatColor.AQUA + LangCore.getClassMessage(LogCore.class, "global-config-languageset-lore").setKey("%%lang", ChatColor.WHITE + Lang.valueOf(log.data.toString()).name()).toString());
+
+                break;
+            case GLOBAL_CONFIG_DATABASETYPESET:
+                title = ChatColor.AQUA + "" + ChatColor.BOLD + LangCore.getClassMessage(LogCore.class, "global-config-databasetype-set-title").toString();
+                description.add(ChatColor.AQUA + LangCore.getClassMessage(LogCore.class, "global-config-databasetype-set-lore").setKey("%%db", ChatColor.WHITE + ((Boolean) log.data ? "SQLite" : "MySQL")).toString());
 
                 break;
         }
@@ -62,7 +62,7 @@ public class LogCore {
 
         description.add("");
         description.add(ChatColor.AQUA + LangCore.getClassMessage(LogCore.class, "recorder-word").setKey("%%r", ChatColor.WHITE + recorder).toString());
-        description.add(ChatColor.AQUA + LangCore.getDateByPattern(log.time.toLocalDateTime(), ChatColor.WHITE));
+        description.add(ChatColor.AQUA + LangCore.getClassMessage(LogCore.class, "date-word").toString() + ChatColor.WHITE + LangCore.getDateByPattern(log.time.toLocalDateTime()));
         if (log.world != null)
             description.add(ChatColor.AQUA + LangCore.getClassMessage(LogCore.class, "world-word").setKey(ChatColor.WHITE + "%%w", log.worldName + " (" + log.world + ")").toString());
 

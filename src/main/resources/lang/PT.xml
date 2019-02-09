@@ -35,9 +35,12 @@
             <class name="LogCore">
                 <message key="global-config-languageset-title">Linguagem do Plugin alterada</message>
                 <message key="global-config-languageset-lore">A Linguagem do Plugin foi alterada para %%lang</message>
+                <message key="global-config-databasetype-set-title">Tipo do Banco de Dados alterado</message>
+                <message key="global-config-databasetype-set-lore">O tipo do Banco de Dados foi alterado para %%db</message>
                 <message key="recorder-word">Registrador: %%r</message>
                 <message key="console-word">Terminal</message>
                 <message key="system-word">Sistema</message>
+                <message key="date-word">Data: </message>
                 <message key="world-word">Mundo: %%w</message>
             </class>
         </package>
@@ -66,6 +69,6 @@
         <message key="enabled-word">Habilitado</message>
         <message key="disabled-word">Desabilitado</message>
         <message key="warn-word">Aviso</message>
-        <message key="date-pattern">%%prefixColor%%dd/%%mm/%%yyyy at %%hh:%%mm:%%ss (dd/mm/yyyy às hh:mm:ss)</message>
+        <message key="date-pattern">%%dd/%%mm/%%yyyy às %%hh:%%min:%%ss (dd/mm/yyyy às hh:mm:ss)</message>
     </utils>
 </bitsWorldsTranslationFile>

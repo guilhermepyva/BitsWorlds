@@ -23,22 +23,19 @@ public class LangCore {
     /**
      * Store all messages in the server Language
      */
-    public static Map<String, ConjuntMessages> messages;
+    public static Map<String, ConjuntMessages> messages = new HashMap<>();
 
     /**
      * Store all util messages
      * These messages will be used in multiple classes and several times
      */
-    public static ConjuntMessages utilMessages;
+    public static ConjuntMessages utilMessages = new ConjuntMessages();
 
     /**
      * This will init the loader of the Translation Files
      * and store in {@link LangCore#messages}
      */
     public static boolean load() {
-        messages = new HashMap<>();
-        utilMessages = new ConjuntMessages();
-
         Document document;
         DocumentBuilder docBuilder;
 
@@ -140,14 +137,13 @@ public class LangCore {
         return null;
     }
 
-    public static String getDateByPattern(LocalDateTime time, ChatColor prefixColor) {
+    public static String getDateByPattern(LocalDateTime time) {
         return LangCore.getUtilMessage("date-pattern")
-                .setKey("%%prefixColor", prefixColor.toString())
                 .setKey("%%dd", String.valueOf(time.getDayOfMonth()))
                 .setKey("%%mm", String.valueOf(time.getMonthValue()))
                 .setKey("%%yyyy", String.valueOf(time.getYear()))
                 .setKey("%%hh", String.valueOf(time.getHour()))
-                .setKey("%%mm", String.valueOf(time.getMinute()))
+                .setKey("%%min", String.valueOf(time.getMinute()))
                 .setKey("%%ss", String.valueOf(time.getSecond()))
                 .toString();
     }

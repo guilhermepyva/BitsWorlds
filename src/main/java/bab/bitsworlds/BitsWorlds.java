@@ -23,9 +23,7 @@ public class BitsWorlds extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-        logger = Logger.getLogger("BitsWorlds");
-
-        logger.info("Enabling BitsWorlds V" + this.getDescription().getVersion());
+        logger = getLogger();
 
         loadConfigs();
 
@@ -39,7 +37,7 @@ public class BitsWorlds extends JavaPlugin {
         loadListeners();
         loadCmd();
         loadPrefixes();
-        logger.info("BitsWorlds V" + this.getDescription().getVersion() + " enabled successfully");
+        logger.info("BitsWorlds v" + this.getDescription().getVersion() + " enabled successfully");
     }
 
     @Override
