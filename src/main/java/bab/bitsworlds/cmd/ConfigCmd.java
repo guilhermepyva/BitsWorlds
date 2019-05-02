@@ -256,7 +256,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
         }
     }
 
-    public ItemStack setCountryBanner(Lang lang, GUIItem item) {
+    public static ItemStack setCountryBanner(Lang lang, GUIItem item) {
         BannerMeta bannerMeta = (BannerMeta) item.getItemMeta();
 
         switch (lang) {

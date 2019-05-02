@@ -1,6 +1,7 @@
 package bab.bitsworlds.logger;
 
 import bab.bitsworlds.BitsWorlds;
+import bab.bitsworlds.cmd.ConfigCmd;
 import bab.bitsworlds.db.SQLDataManager;
 import bab.bitsworlds.gui.GUIItem;
 import bab.bitsworlds.multilanguage.Lang;
@@ -66,10 +67,16 @@ public class LogCore {
         if (log.world != null)
             description.add(ChatColor.AQUA + LangCore.getClassMessage(LogCore.class, "world-word").setKey(ChatColor.WHITE + "%%w", log.worldName + " (" + log.world + ")").toString());
 
-        return new GUIItem(
+        GUIItem item = new GUIItem(
                 log.action.material,
                 title,
                 description
         );
+
+        if (log.action == LogAction.GLOBAL_CONFIG_LANGUAGESET) {
+            ConfigCmd.setCountryBanner(Lang.valueOf(log.data.toString()), item);
+        }
+
+        return item;
     }
 }
