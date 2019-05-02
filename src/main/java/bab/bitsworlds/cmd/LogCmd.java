@@ -4,6 +4,7 @@ import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.db.SQLDataManager;
 import bab.bitsworlds.extensions.BWCommandSender;
+import bab.bitsworlds.extensions.BWPermission;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.BWGUI;
 import bab.bitsworlds.gui.ImplGUI;
@@ -20,8 +21,8 @@ import java.util.List;
 
 public class LogCmd implements BWCommand, ImplGUI {
     @Override
-    public String getPermission() {
-        return "bitsworlds.logs.all";
+    public BWPermission getPermission() {
+        return BWPermission.LOGS_SEE;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class LogCmd implements BWCommand, ImplGUI {
                                 Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
                                     try {
                                         int i = 0;
-                                        for (Log log : SQLDataManager.queryAllLogs()) {
+                                        for (Log log : SQLDataManager.queryGlobalLogs()) {
                                             this.setItem(i, LogCore.getItemFromLog(log));
 
                                             i++;
