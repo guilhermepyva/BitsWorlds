@@ -61,7 +61,7 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
                 return true;
         }
 
-        if (bwSender instanceof BWPlayer && bwSender.hasPermission(bwcmd.getPermission())) {
+        if (!bwSender.hasPermission(bwcmd.getPermission())) {
             bwSender.sendMessage(PrefixMessage.permission_message);
             return true;
         }
