@@ -32,10 +32,10 @@ public class SQLDataManager {
         statement.close();
     }
 
-    public static List<Log> queryLogs(String where) throws SQLException {
+    public static List<Log> queryLogs(String additional) throws SQLException {
         Statement stm = BWSQL.dbCon.createStatement();
 
-        ResultSet result = stm.executeQuery("SELECT * FROM log" + where);
+        ResultSet result = stm.executeQuery("SELECT * FROM log" + additional);
 
         List<Log> list = new ArrayList<>();
 
@@ -51,6 +51,10 @@ public class SQLDataManager {
 
     public static List<Log> queryAllLogs() throws SQLException {
         return queryLogs("");
+    }
+
+    public static List<Log> queryGlobalLogs() throws SQLException {
+        return queryLogs(" WHERE world IS NULL");
     }
 
     public static Log getLogFromResultSet(ResultSet resultSet) throws SQLException {
