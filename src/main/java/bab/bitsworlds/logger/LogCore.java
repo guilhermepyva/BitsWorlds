@@ -23,7 +23,7 @@ public class LogCore {
     public static void addLog(LogAction action, Object data, LogRecorder recorder, String description, LogRecorder descriptionRecorder, Timestamp time, UUID world, String worldName) {
         Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
             try {
-                SQLDataManager.insertLog(new Log(action, data, recorder, description, descriptionRecorder, time, world, worldName));
+                SQLDataManager.insertLog(new Log(0, action, data, recorder, description, descriptionRecorder, time, world, worldName));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -63,6 +63,7 @@ public class LogCore {
 
         description.add("");
         description.add(ChatColor.AQUA + LangCore.getClassMessage(LogCore.class, "recorder-word").setKey("%%r", ChatColor.WHITE + recorder).toString());
+        description.add(ChatColor.AQUA + "ID: " + ChatColor.WHITE + log.id);
         description.add(ChatColor.AQUA + LangCore.getClassMessage(LogCore.class, "date-word").toString() + ChatColor.WHITE + LangCore.getDateByPattern(log.time.toLocalDateTime()));
         if (log.world != null)
             description.add(ChatColor.AQUA + LangCore.getClassMessage(LogCore.class, "world-word").setKey(ChatColor.WHITE + "%%w", log.worldName + " (" + log.world + ")").toString());

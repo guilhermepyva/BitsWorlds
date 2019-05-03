@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class SQLDataManager {
     public static void insertLog(Log log) throws SQLException {
-        PreparedStatement statement = BWSQL.dbCon.prepareStatement("INSERT INTO log VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement statement = BWSQL.dbCon.prepareStatement("INSERT INTO log(action, data, recorder_type, recorder_uuid, description, description_appender_uuid, time, world, worldname) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         statement.setString(1, log.action.name());
         statement.setString(2, log.data.toString());
@@ -35,7 +35,7 @@ public class SQLDataManager {
     public static List<Log> queryLogs(String additional) throws SQLException {
         Statement stm = BWSQL.dbCon.createStatement();
 
-        ResultSet result = stm.executeQuery("SELECT * FROM log" + additional);
+        ResultSet result = stm.executeQuery("SELECT * FROM log" + additional + " ORDER BY id DESC");
 
         List<Log> list = new ArrayList<>();
 
@@ -69,7 +69,9 @@ public class SQLDataManager {
                 data = Lang.valueOf(resultSet.getString("data"));
         }
 
-        return new Log(action,
+        return new Log(
+                resultSet.getInt("id"),
+                action,
                 data,
                 new LogRecorder(LogRecorder.RecorderType.valueOf(resultSet.getString("recorder_type")), resultSet.getString("recorder_uuid") != null ? UUID.fromString(resultSet.getString("recorder_uuid")) : null),
                 resultSet.getString("description"),

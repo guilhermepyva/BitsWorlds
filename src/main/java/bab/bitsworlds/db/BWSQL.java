@@ -56,6 +56,7 @@ public class BWSQL {
 
             statement.execute("CREATE TABLE IF NOT EXISTS log" +
                     "(" +
+                    "    id " + (BWSQL.sqlite ? "INTEGER" : "INT") + " PRIMARY KEY " + (BWSQL.sqlite ? "AUTOINCREMENT" : "AUTO_INCREMENT") + "," +
                     "    action VARCHAR(30)," +
                     "    data VARCHAR(200)," +
                     "    recorder_type VARCHAR(30)," +
