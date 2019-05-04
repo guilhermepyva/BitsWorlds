@@ -30,7 +30,8 @@ public class GUICore implements Listener {
 
         BWGUI gui = GUICore.openGUIs.get(player);
 
-        if ((Boolean) gui.properties.get(BWGUI.Property.CLICK_SOUND)) {
+        if ((Boolean) gui.properties.get(BWGUI.Property.CLICK_SOUND) && e.getCurrentItem() != null) {
+            System.out.println(e.getCurrentItem());
             player.getBukkitPlayer().playSound(player.getBukkitPlayer().getLocation(), Sound.CLICK, 1F, 1.25F);
         }
         if ((Boolean) gui.properties.get(BWGUI.Property.STATUE_ITEMS)) {
@@ -60,7 +61,8 @@ public class GUICore implements Listener {
         playersToUpdate.keySet().forEach(bwPlayer -> {
             BWGUI bwGui = openGUIs.get(bwPlayer);
 
-            bwPlayer.openGUI(bwGui.getGUIClass().getGUI(bwGui.id, bwPlayer));
+            if (bwGui.updatable)
+                bwPlayer.openGUI(bwGui.getGUIClass().getGUI(bwGui.id, bwPlayer));
         });
     }
 
@@ -72,7 +74,8 @@ public class GUICore implements Listener {
         playersToUpdate.keySet().forEach(bwPlayer -> {
             BWGUI bwGui = openGUIs.get(bwPlayer);
 
-            bwPlayer.openGUI(bwGui.getGUIClass().getGUI(bwGui.id, bwPlayer));
+            if (bwGui.updatable)
+                bwPlayer.openGUI(bwGui.getGUIClass().getGUI(bwGui.id, bwPlayer));
         });
     }
 

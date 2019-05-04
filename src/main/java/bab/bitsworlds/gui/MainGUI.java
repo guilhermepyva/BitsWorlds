@@ -22,7 +22,8 @@ public class MainGUI implements ImplGUI {
                         "main",
                         4*9,
                         ChatColor.DARK_AQUA  + "BitsWorlds",
-                        this) {
+                        this,
+                        true) {
                     @Override
                     public void setupItem(int item) {
                         switch (item) {
