@@ -142,7 +142,8 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                         "config_main",
                         4*9,
                         ChatColor.DARK_AQUA + LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").toString(),
-                        this
+                        this,
+                        true
                 ) {
                     @Override
                     public void setupItem(int item) {
@@ -238,8 +239,6 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                     player.reportExceptionResponse((BWTask.BWExceptionResponse) response);
                     return;
                 }
-
-                GUICore.updateAllGUIs();
 
                 if (gui.getItem(27) != null) {
                     GUICore.openGUIs.get(player).genItems(27);
