@@ -9,6 +9,22 @@
                 <message key="cmdsender-cant-run-cmd">Usted no puede ejecutar este comando sin ser un jugador pues abrirá una interface</message>
                 <message key="not_valid_argument">%%arg no es un argumento válido\nUtilice: %%cmd ayuda %%prefixColorpara ayuda</message>
             </class>
+            <class name="ConfigCmd">
+                <message key="gui-title">%%name Opciones</message>
+                <message key="language-updated">La lenguaje del Plugin ahora es %%lang</message>
+                <message key="language-config-already">El %%lang %%prefixColorya es la lenguaje defenida</message>
+                <message key="language-config-guide-mode">cambia la lenguaje del Plugin</message>
+                <message key="database-item-title">Base de Datos</message>
+                <message key="database-item-lore">Si usted cambiar el tipo de base de datos, el cambio será aplicado al reinicicar el Plugin \n Si usted utilizar MySQL, asegúrese de haber ingresado las credenciales en el fichero %%file</message>
+                <message key="database-item-need-restart">¡Necesita de reiniciar!</message>
+                <message key="database-config-guide-mode">cambia el tipo de base de datos del Plugin \n para usuarios inexperientes es recomendado el uso de SQLite (por defecto)</message>
+                <message key="database-updated">El tipo de base de datos del Plugin ahora es %%db</message>
+                <message key="database-config-already">El %%db %%prefixColorya es el tipo de base de datos defenido</message>
+                <message key="config-use">Utilice %%cmd</message>
+                <message key="invalid-arg">%%arg %%prefixColorno es un argumento válido, los argumento válidos son %%args</message>
+                <message key="back-item-title">Vueltar</message>
+                <message key="back-item-guide-mode">vuelta al menú principal</message>
+            </class>
         </package>
     </package>
     <utils>
