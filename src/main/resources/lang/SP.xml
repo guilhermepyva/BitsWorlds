@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <bitsWorldsTranslationFile>
     <package path="bab.bitsworlds">
+        <class name="BitsWorlds">
+            <message key="permission_message">Usted no tiene permisos suficientes para ejecutar este comando</message>
+        </class>
+        <package path="cmd">
+            <class name="BitsWorldsCmd">
+                <message key="cmdsender-cant-run-cmd">Usted no puede ejecutar este comando sin ser un jugador pues abrirá una interface</message>
+                <message key="not_valid_argument">%%arg no es un argumento válido\nUtilice: %%cmd ayuda %%prefixColorpara ayuda</message>
+            </class>
+        </package>
     </package>
     <utils>
     </utils>
