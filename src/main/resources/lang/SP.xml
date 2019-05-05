@@ -7,7 +7,7 @@
         <package path="cmd">
             <class name="BitsWorldsCmd">
                 <message key="cmdsender-cant-run-cmd">Usted no puede ejecutar este comando sin ser un jugador pues abrirá una interface</message>
-                <message key="not_valid_argument">%%arg no es un argumento válido\nUtilice: %%cmd help %%prefixColorfor help</message>
+                <message key="not_valid_argument">%%arg no es un argumento válido\nUtilice: %%cmd ayuda %%prefixColorpara ayuda</message>
             </class>
         </package>
     </package>
