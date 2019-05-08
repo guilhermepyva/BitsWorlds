@@ -33,7 +33,7 @@ public class BitsWorlds extends JavaPlugin {
         BWSQL.setupDB();
 
         if (LangCore.load()) {
-            throw new RuntimeException("[BitsWorlds] Couldn't load the Translation Files, report this for a Developer");
+            throw new RuntimeException("[BitsWorlds] Couldn't load the Translation Files, report this to a Developer");
         }
 
         loadListeners();
