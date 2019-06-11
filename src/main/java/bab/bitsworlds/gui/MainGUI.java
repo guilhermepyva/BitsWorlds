@@ -78,6 +78,11 @@ public class MainGUI implements ImplGUI {
                     }
 
                     @Override
+                    public void update() {
+                        init();
+                    }
+
+                    @Override
                     public BWGUI init() {
                         genItems(4, 8, 19);
 

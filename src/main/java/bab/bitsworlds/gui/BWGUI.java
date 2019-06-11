@@ -54,6 +54,8 @@ public abstract class BWGUI extends CraftInventoryCustom implements Cloneable {
 
     public abstract BWGUI init();
 
+    public abstract void update();
+
     public ImplGUI getGUIClass() {
         return guiClass;
     }

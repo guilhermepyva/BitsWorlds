@@ -198,6 +198,11 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                     }
 
                     @Override
+                    public void update() {
+                        init();
+                    }
+
+                    @Override
                     public BWGUI init() {
                         genItems(0, 1);
 

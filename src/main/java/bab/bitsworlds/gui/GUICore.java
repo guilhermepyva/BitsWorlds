@@ -54,29 +54,11 @@ public class GUICore implements Listener {
     }
 
     public static void updateGUI(String id) {
-        Map<BWPlayer, BWGUI> playersToUpdate = new HashMap<>();
-
-        openGUIs.keySet().stream().filter(bwPlayer -> openGUIs.get(bwPlayer).id.equals(id)).forEach(bwPlayer ->  playersToUpdate.put(bwPlayer, openGUIs.get(bwPlayer)));
-
-        playersToUpdate.keySet().forEach(bwPlayer -> {
-            BWGUI bwGui = openGUIs.get(bwPlayer);
-
-            if (bwGui.updatable)
-                bwPlayer.openGUI(bwGui.getGUIClass().getGUI(bwGui.id, bwPlayer));
-        });
+        openGUIs.keySet().stream().filter(bwPlayer -> openGUIs.get(bwPlayer).id.equals(id)).forEach(bwPlayer ->  openGUIs.get(bwPlayer).update());
     }
 
     public static void updateAllGUIs() {
-        Map<BWPlayer, BWGUI> playersToUpdate = new HashMap<>();
-
-        openGUIs.keySet().forEach(bwPlayer ->  playersToUpdate.put(bwPlayer, openGUIs.get(bwPlayer)));
-
-        playersToUpdate.keySet().forEach(bwPlayer -> {
-            BWGUI bwGui = openGUIs.get(bwPlayer);
-
-            if (bwGui.updatable)
-                bwPlayer.openGUI(bwGui.getGUIClass().getGUI(bwGui.id, bwPlayer));
-        });
+        openGUIs.keySet().forEach(bwPlayer ->  openGUIs.get(bwPlayer).update());
     }
 
     public static void updateGUIItem(String id, int... items) {

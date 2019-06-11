@@ -120,6 +120,11 @@ public class LogCmd implements BWCommand, ImplGUI {
                     }
 
                     @Override
+                    public void update() {
+                        genItems(0);
+                    }
+
+                    @Override
                     public BWGUI init() {
                         genItems(0, 45, 48, 50);
 
