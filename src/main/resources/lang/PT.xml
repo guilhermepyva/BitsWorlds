@@ -24,11 +24,11 @@
                 <message key="database-config-already">O tipo de banco de dados do Plugin já é %%db</message>
                 <message key="config-use">Use %%cmd</message>
                 <message key="invalid-arg">%%arg %%prefixColoré um argumento inválido, os argumentos válidos são %%args</message>
-                <message key="back-item-title">Voltar</message>
-                <message key="back-item-guide-mode">volta para o menu principal</message>
             </class>
             <class name="LogCmd">
                 <message key="gui-title">Registros</message>
+                <message key="add-note">Clique para adicionar uma nota a este registro</message>
+                <message key="modify-note">Clique para modificar a nota deste registro</message>
             </class>
         </package>
         <package path="logger">
@@ -70,5 +70,9 @@
         <message key="disabled-word">Desabilitado</message>
         <message key="warn-word">Aviso</message>
         <message key="date-pattern">%%dd/%%mm/%%yyyy às %%hh:%%min:%%ss (dd/mm/yyyy às hh:mm:ss)</message>
+        <message key="next-page">Avançar Página</message>
+        <message key="back-page">Retroceder Página</message>
+        <message key="back-item-title">Voltar</message>
+        <message key="back-item-guide-mode">volta para o menu principal</message>
     </utils>
 </bitsWorldsTranslationFile>

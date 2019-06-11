@@ -8,8 +8,8 @@ public enum BWPermission {
 
     LOGS_SEE("logs.see"),
 
-    LOGS_DESCRIPTION_ADD("logs.description.add"),
-    LOGS_DESCRIPTION_MODIFY("logs.description.modify")
+    LOGS_NOTE_ADD("logs.note.add"),
+    LOGS_NOTE_MODIFY("logs.note.modify")
 
     ;
 

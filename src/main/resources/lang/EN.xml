@@ -27,6 +27,8 @@
             </class>
             <class name="LogCmd">
                 <message key="gui-title">Logs</message>
+                <message key="add-note">Click to add a note to this log</message>
+                <message key="modify-note">Click to modify the note of this log</message>
             </class>
         </package>
         <package path="logger">
@@ -68,5 +70,9 @@
         <message key="disabled-word">Disabled</message>
         <message key="warn-word">Warn</message>
         <message key="date-pattern">%%mm/%%dd/%%yyyy at %%hh:%%min:%%ss (mm/dd/yyyy at hh:mm:ss)</message>
+        <message key="next-page">Next Page</message>
+        <message key="back-page">Back Page</message>
+        <message key="back-item-title">Back</message>
+        <message key="back-item-guide-mode">back to the main menu</message>
     </utils>
 </bitsWorldsTranslationFile>

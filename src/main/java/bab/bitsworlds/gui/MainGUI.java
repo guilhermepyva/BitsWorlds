@@ -21,7 +21,7 @@ public class MainGUI implements ImplGUI {
                 return new BWGUI(
                         "main",
                         4*9,
-                        ChatColor.DARK_AQUA  + "BitsWorlds",
+                        "BitsWorlds",
                         this,
                         true) {
                     @Override

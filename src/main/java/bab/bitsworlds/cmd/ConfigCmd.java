@@ -80,7 +80,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             if (response.getCode() == 1) {
                 commandSender.sendMessage(PrefixMessage.warn.getPrefix(),
                         LangCore.getClassMessage(getClass(), "language-config-already")
-                        .setKey("%%lang", ChatColor.ITALIC + LangCore.lang.name())
+                        .setKey("%%lang", ChatColor.ITALIC + LangCore.lang.title)
                         .setKey("%%prefixColor", PrefixMessage.warn.getDefaultChatColor().toString()));
                 return;
             }
@@ -141,7 +141,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                 return new BWGUI(
                         "config_main",
                         4*9,
-                        ChatColor.DARK_AQUA + LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").toString(),
+                        LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").toString(),
                         this,
                         true
                 ) {
@@ -187,9 +187,9 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                             case 27:
                                 this.setItem(27, new GUIItem(
                                         Material.SIGN,
-                                        ChatColor.GOLD + LangCore.getClassMessage(ConfigCmd.class, "back-item-title").toString(),
+                                        ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
                                         Collections.emptyList(),
-                                        LangCore.getClassMessage(ConfigCmd.class, "back-item-guide-mode"),
+                                        LangCore.getUtilMessage("back-item-guide-mode"),
                                         player
                                 ));
 

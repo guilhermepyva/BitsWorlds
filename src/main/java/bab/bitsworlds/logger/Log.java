@@ -9,20 +9,20 @@ public class Log {
     public LogAction action;
     public Object data;
     public LogRecorder recorder;
-    public String description;
-    public LogRecorder descriptionRecorder;
+    public String note;
+    public LogRecorder noteRecorder;
     public Timestamp time;
 
     public UUID world;
     public String worldName;
 
-    public Log(int id, LogAction action, Object data, LogRecorder recorder, String description, LogRecorder descriptionRecorder, Timestamp time, @Nullable UUID world, String worldName) {
+    public Log(int id, LogAction action, Object data, LogRecorder recorder, String note, LogRecorder noteRecorder, Timestamp time, @Nullable UUID world, String worldName) {
         this.id = id;
         this.action = action;
         this.data = data;
         this.recorder = recorder;
-        this.description = description;
-        this.descriptionRecorder = descriptionRecorder;
+        this.note = note;
+        this.noteRecorder = noteRecorder;
         this.time = time;
         this.world = world;
         this.worldName = worldName;

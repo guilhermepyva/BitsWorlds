@@ -15,14 +15,14 @@ import java.util.UUID;
 
 public class SQLDataManager {
     public static void insertLog(Log log) throws SQLException {
-        PreparedStatement statement = BWSQL.dbCon.prepareStatement("INSERT INTO log(action, data, recorder_type, recorder_uuid, description, description_appender_uuid, time, world, worldname) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement statement = BWSQL.dbCon.prepareStatement("INSERT INTO log(action, data, recorder_type, recorder_uuid, note, note_appender_uuid, time, world, worldname) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         statement.setString(1, log.action.name());
         statement.setString(2, log.data.toString());
         statement.setString(3, log.recorder.type.name());
         statement.setString(4, log.recorder.uuid != null ? log.recorder.uuid.toString() : null);
-        statement.setString(5, log.description);
-        statement.setString(6, log.descriptionRecorder != null ? log.descriptionRecorder.uuid.toString() : null);
+        statement.setString(5, log.note);
+        statement.setString(6, log.noteRecorder != null ? log.noteRecorder.uuid.toString() : null);
         statement.setTimestamp(7, log.time);
         statement.setString(8, log.world != null ? log.world.toString() : null);
         statement.setString(9, log.worldName);
@@ -74,8 +74,8 @@ public class SQLDataManager {
                 action,
                 data,
                 new LogRecorder(LogRecorder.RecorderType.valueOf(resultSet.getString("recorder_type")), resultSet.getString("recorder_uuid") != null ? UUID.fromString(resultSet.getString("recorder_uuid")) : null),
-                resultSet.getString("description"),
-                new LogRecorder(resultSet.getString("description_appender_uuid") != null ? UUID.fromString(resultSet.getString("description_appender_uuid")) : null),
+                resultSet.getString("note"),
+                new LogRecorder(resultSet.getString("note_appender_uuid") != null ? UUID.fromString(resultSet.getString("note_appender_uuid")) : null),
                 resultSet.getTimestamp("time"),
                 resultSet.getString("world") != null ? UUID.fromString(resultSet.getString("world")) : null,
                 resultSet.getString("worldName"));

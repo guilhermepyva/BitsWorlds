@@ -1,5 +1,6 @@
 package bab.bitsworlds.gui;
 
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftInventoryCustom;
 
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public abstract class BWGUI extends CraftInventoryCustom implements Cloneable {
     }
 
     public BWGUI(String id, int size, String title, ImplGUI guiClass, boolean updatable) {
-        super(null, size, title);
+        super(null, size, ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + title);
         this.properties = new HashMap<>();
         this.guiClass = guiClass;
         this.id = id;

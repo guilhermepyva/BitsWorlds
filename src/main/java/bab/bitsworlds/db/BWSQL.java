@@ -61,8 +61,8 @@ public class BWSQL {
                     "    data VARCHAR(200)," +
                     "    recorder_type VARCHAR(30)," +
                     "    recorder_uuid CHARACTER(36)," +
-                    "    description VARCHAR(200)," +
-                    "    description_appender_uuid VARCHAR(36)," +
+                    "    note VARCHAR(200)," +
+                    "    note_appender_uuid VARCHAR(36)," +
                     "    time TIMESTAMP default current_timestamp, " +
                     "    world CHARACTER(36)," +
                     "    worldName VARCHAR(200)" +
