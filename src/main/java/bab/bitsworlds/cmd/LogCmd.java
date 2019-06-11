@@ -20,7 +20,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class LogCmd implements BWCommand, ImplGUI {
         switch (code) {
             case "main":
                 return new BWGUI(
-                        "main",
+                        "paged_log",
                         6*9,
                         LangCore.getClassMessage(LogCmd.class, "gui-title").toString(),
                         this,

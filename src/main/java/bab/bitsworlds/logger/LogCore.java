@@ -3,6 +3,7 @@ package bab.bitsworlds.logger;
 import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.cmd.ConfigCmd;
 import bab.bitsworlds.db.SQLDataManager;
+import bab.bitsworlds.gui.GUICore;
 import bab.bitsworlds.gui.GUIItem;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
@@ -28,6 +29,8 @@ public class LogCore {
                 e.printStackTrace();
             }
         });
+
+        GUICore.updateGUI("paged_log");
     }
 
     public static GUIItem getItemFromLog(Log log) {
