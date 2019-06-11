@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 public class BitsWorlds extends JavaPlugin {
@@ -33,6 +34,8 @@ public class BitsWorlds extends JavaPlugin {
         if (LangCore.load()) {
             throw new RuntimeException("[BitsWorlds] Couldn't load the Translation Files, report this for a Developer");
         }
+
+        ChatInput.inputPlayers = new HashMap<>();
 
         loadListeners();
         loadCmd();
@@ -77,5 +80,6 @@ public class BitsWorlds extends JavaPlugin {
         PluginManager pm = Bukkit.getPluginManager();
 
         pm.registerEvents(new GUICore(), this);
+        pm.registerEvents(new ChatInput(), this);
     }
 }
