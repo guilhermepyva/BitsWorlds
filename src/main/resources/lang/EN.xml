@@ -72,6 +72,7 @@
         <message key="date-pattern">%%mm/%%dd/%%yyyy at %%hh:%%min:%%ss (mm/dd/yyyy at hh:mm:ss)</message>
         <message key="next-page">Next Page</message>
         <message key="back-page">Back Page</message>
+        <message key="page">Page</message>
         <message key="back-item-title">Back</message>
         <message key="back-item-guide-mode">back to the main menu</message>
     </utils>
