@@ -2,7 +2,7 @@
 <bitsWorldsTranslationFile>
     <package path="bab.bitsworlds">
         <class name="BitsWorlds">
-            <message key="permission-message">You do not have sufficient permissions to run this command</message>
+            <message key="permission-message">You don't have sufficient permissions to run this command</message>
         </class>
         <package path="cmd">
             <class name="BitsWorldsCmd">
@@ -12,12 +12,12 @@
             <class name="ConfigCmd">
                 <message key="gui-title">%%name Settings</message>
                 <message key="language-updated">The Plugin language is now %%lang</message>
-                <message key="language-config-already">The language %%lang %%prefixColoris already set</message>
+                <message key="language-config-already">The %%lang language %%prefixColoris already set</message>
                 <message key="language-config-guide-mode">changes the Plugin language</message>
                 <message key="database-item-title">Database</message>
                 <message key="database-item-lore">If you change the Plugin database type, a Plugin restart will be necessary \n If you use MySQL make sure you have entered the credentials in the file %%file</message>
                 <message key="database-item-need-restart">Needs a restart!</message>
-                <message key="database-config-guide-mode">change the database type of the Plugin \n if you can't tinker with database it is recommended to leave it in SQLite (default)</message>
+                <message key="database-config-guide-mode">change the database type of the Plugin \n for newbie users it is recommended the use of SQLite (default)</message>
                 <message key="database-updated">The Plugin database type is now %%db</message>
                 <message key="database-config-already">The Plugin database type already is %%db</message>
                 <message key="config-use">Use %%cmd</message>
