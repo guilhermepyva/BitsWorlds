@@ -208,7 +208,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
                         return this;
                     }
-                }.init();
+                };
         }
 
         throw new NullPointerException("No GUI with id " + code + " found");

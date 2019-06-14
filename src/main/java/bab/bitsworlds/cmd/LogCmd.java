@@ -49,63 +49,48 @@ public class LogCmd implements BWCommand, ImplGUI {
                     switch (item) {
                         case 0:
                             Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
-                                try {
-                                    this.itemsID = new ArrayList<Integer>();
+                                this.itemsID = new ArrayList<Integer>();
 
-                                    for (int i = 0; i < 45; i++) {
-                                        setItem(i, new ItemStack(Material.AIR));
+                                for (int i = 0; i < 45; i++) {
+                                    setItem(i, new ItemStack(Material.AIR));
+                                }
+
+                                int i = 0;
+                                int skipItems = this.actualPage * 45;
+                                for (Log log : queryLogs(skipItems)) {
+                                    GUIItem logitem = LogCore.getItemFromLog(log);
+
+                                    if (player.hasPermission(BWPermission.LOGS_NOTE_ADD) || player.hasPermission(BWPermission.LOGS_NOTE_MODIFY)) {
+                                        ItemMeta logitemeta = logitem.getItemMeta();
+
+                                        List<String> logitemlore = logitemeta.getLore();
+                                        if (log.note == null && player.hasPermission(BWPermission.LOGS_NOTE_ADD)) {
+                                            logitemlore.add("");
+
+                                            logitemlore.addAll(
+                                                    GUIItem.loreJumper(LangCore.getClassMessage(LogCmd.class, "add-note").toString(), 30, ChatColor.AQUA.toString(), "")
+                                            );
+                                        }
+
+                                        else if (log.note != null && player.hasPermission(BWPermission.LOGS_NOTE_MODIFY)) {
+                                            logitemlore.add("");
+
+                                            logitemlore.addAll(
+                                                    GUIItem.loreJumper(LangCore.getClassMessage(LogCmd.class, "modify-note").toString(), 30, ChatColor.AQUA.toString(), "")
+                                            );
+                                        }
+
+                                        logitemeta.setLore(logitemlore);
+                                        logitem.setItemMeta(logitemeta);
                                     }
 
-                                    int i = 0;
-                                    int skipItems = this.actualPage * 46;
-                                    boolean skipped = false;
-                                    for (Log log : SQLDataManager.queryGlobalLogs()) {
-                                        if (!skipped) {
-                                            i++;
-                                            if (i >= skipItems) {
-                                                i = 0;
-                                                skipped = true;
-                                            }
+                                    this.setItem(i, logitem);
+                                    ((ArrayList<Integer>) this.itemsID).add(log.id);
 
-                                            continue;
-                                        }
-
-                                        GUIItem logitem = LogCore.getItemFromLog(log);
-
-                                        if (player.hasPermission(BWPermission.LOGS_NOTE_ADD) || player.hasPermission(BWPermission.LOGS_NOTE_MODIFY)) {
-                                            ItemMeta logitemeta = logitem.getItemMeta();
-
-                                            List<String> logitemlore = logitemeta.getLore();
-                                            if (log.note == null && player.hasPermission(BWPermission.LOGS_NOTE_ADD)) {
-                                                logitemlore.add("");
-
-                                                logitemlore.addAll(
-                                                        GUIItem.loreJumper(LangCore.getClassMessage(LogCmd.class, "add-note").toString(), 30, ChatColor.AQUA.toString(), "")
-                                                );
-                                            }
-
-                                            else if (log.note != null && player.hasPermission(BWPermission.LOGS_NOTE_MODIFY)) {
-                                                logitemlore.add("");
-
-                                                logitemlore.addAll(
-                                                        GUIItem.loreJumper(LangCore.getClassMessage(LogCmd.class, "modify-note").toString(), 30, ChatColor.AQUA.toString(), "")
-                                                );
-                                            }
-
-                                            logitemeta.setLore(logitemlore);
-                                            logitem.setItemMeta(logitemeta);
-                                        }
-
-                                        this.setItem(i, logitem);
-                                        ((ArrayList<Integer>) this.itemsID).add(log.id);
-
-                                        i++;
-                                        if (i == 45) {
-                                            break;
-                                        }
+                                    i++;
+                                    if (i == 45) {
+                                        break;
                                     }
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
                                 }
                             });
 
@@ -137,6 +122,8 @@ public class LogCmd implements BWCommand, ImplGUI {
                     }
                 }
 
+
+
                 @Override
                 public void update() {
                     genItems(0, 45);
@@ -158,9 +145,8 @@ public class LogCmd implements BWCommand, ImplGUI {
                 }
 
                 int calculateLastPage() {
-                    int lastPage = 0;
                     try {
-                        int i = 0;
+                        /*int i = 0;
                         for (Log ignored : SQLDataManager.queryGlobalLogs()) {
                             i++;
 
@@ -168,13 +154,25 @@ public class LogCmd implements BWCommand, ImplGUI {
                                 i = 1;
                                 lastPage++;
                             }
-                        }
+                        }*/
+
+                        return (int) Math.floor((double) SQLDataManager.queryCountLogs() / 45);
                     } catch (SQLException e) {
                         e.printStackTrace();
+                        return 0;
                     }
-                    return lastPage;
                 }
-            }.init();
+
+                List<Log> queryLogs(int offset) {
+                    try {
+                        return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+
+                        return null;
+                    }
+                }
+            };
         }
 
         return null;

@@ -35,7 +35,7 @@ public class SQLDataManager {
     public static List<Log> queryLogs(String additional) throws SQLException {
         Statement stm = BWSQL.dbCon.createStatement();
 
-        ResultSet result = stm.executeQuery("SELECT * FROM log" + additional + " ORDER BY id DESC");
+        ResultSet result = stm.executeQuery("SELECT * FROM log ORDER BY id DESC" + additional);
 
         List<Log> list = new ArrayList<>();
 
@@ -43,18 +43,23 @@ public class SQLDataManager {
             list.add(getLogFromResultSet(result));
         }
 
-        stm.close();
         result.close();
+        stm.close();
 
         return list;
     }
 
-    public static List<Log> queryAllLogs() throws SQLException {
-        return queryLogs("");
-    }
+    public static int queryCountLogs() throws SQLException {
+        Statement stm = BWSQL.dbCon.createStatement();
 
-    public static List<Log> queryGlobalLogs() throws SQLException {
-        return queryLogs(" WHERE world IS NULL");
+        ResultSet result = stm.executeQuery("SELECT COUNT(*) FROM log");
+
+        int count = result.getInt(1);
+
+        result.close();
+        stm.close();
+
+        return count;
     }
 
     public static Log getLogFromResultSet(ResultSet resultSet) throws SQLException {
