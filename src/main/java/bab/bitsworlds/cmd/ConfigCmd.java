@@ -4,6 +4,7 @@ import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.db.BWSQL;
 import bab.bitsworlds.extensions.BWCommandSender;
+import bab.bitsworlds.extensions.BWPermission;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.*;
 import bab.bitsworlds.multilanguage.Lang;
@@ -28,8 +29,8 @@ import java.util.*;
 public class ConfigCmd implements BWCommand, ImplGUI {
 
     @Override
-    public String getPermission() {
-        return "bitsworlds.maincmd.config";
+    public BWPermission getPermission() {
+        return BWPermission.MAINCMD_CONFIG;
     }
 
     public void run(BWCommandSender commandSender, Command command, String s, String[] strings) {
@@ -79,7 +80,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             if (response.getCode() == 1) {
                 commandSender.sendMessage(PrefixMessage.warn.getPrefix(),
                         LangCore.getClassMessage(getClass(), "language-config-already")
-                        .setKey("%%lang", ChatColor.ITALIC + LangCore.lang.name())
+                        .setKey("%%lang", ChatColor.ITALIC + LangCore.lang.title)
                         .setKey("%%prefixColor", PrefixMessage.warn.getDefaultChatColor().toString()));
                 return;
             }
@@ -140,8 +141,9 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                 return new BWGUI(
                         "config_main",
                         4*9,
-                        ChatColor.DARK_AQUA + LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").toString(),
-                        this
+                        LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").toString(),
+                        this,
+                        true
                 ) {
                     @Override
                     public void setupItem(int item) {
@@ -185,9 +187,9 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                             case 27:
                                 this.setItem(27, new GUIItem(
                                         Material.SIGN,
-                                        ChatColor.GOLD + LangCore.getClassMessage(ConfigCmd.class, "back-item-title").toString(),
+                                        ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
                                         Collections.emptyList(),
-                                        LangCore.getClassMessage(ConfigCmd.class, "back-item-guide-mode"),
+                                        LangCore.getUtilMessage("back-item-guide-mode"),
                                         player
                                 ));
 
@@ -196,12 +198,17 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                     }
 
                     @Override
+                    public void update() {
+                        init();
+                    }
+
+                    @Override
                     public BWGUI init() {
                         genItems(0, 1);
 
                         return this;
                     }
-                }.init();
+                };
         }
 
         throw new NullPointerException("No GUI with id " + code + " found");
@@ -238,14 +245,14 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                     return;
                 }
 
-                GUICore.updateAllGUIs();
-
                 if (gui.getItem(27) != null) {
                     GUICore.openGUIs.get(player).genItems(27);
                 }
 
                 player.sendMessage(PrefixMessage.info.getPrefix(),
                         LangCore.getClassMessage(this.getClass(), "database-updated").setKey("%%db", ChatColor.BOLD + (BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") ? "SQLite" : "MySQL")));
+
+                break;
             case 27:
                 if (gui.getItem(27) != null) {
                     player.openGUI(new MainGUI().getGUI("main", player));
@@ -253,7 +260,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
         }
     }
 
-    public ItemStack setCountryBanner(Lang lang, GUIItem item) {
+    public static ItemStack setCountryBanner(Lang lang, GUIItem item) {
         BannerMeta bannerMeta = (BannerMeta) item.getItemMeta();
 
         switch (lang) {

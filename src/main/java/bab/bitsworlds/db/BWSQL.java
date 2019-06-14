@@ -56,12 +56,16 @@ public class BWSQL {
 
             statement.execute("CREATE TABLE IF NOT EXISTS log" +
                     "(" +
+                    "    id " + (BWSQL.sqlite ? "INTEGER" : "INT") + " PRIMARY KEY " + (BWSQL.sqlite ? "AUTOINCREMENT" : "AUTO_INCREMENT") + "," +
                     "    action VARCHAR(30)," +
+                    "    data VARCHAR(200)," +
                     "    recorder_type VARCHAR(30)," +
                     "    recorder_uuid CHARACTER(36)," +
-                    "    description VARCHAR(200)," +
+                    "    note VARCHAR(200)," +
+                    "    note_appender_uuid VARCHAR(36)," +
                     "    time TIMESTAMP default current_timestamp, " +
-                    "    world CHARACTER(36)" +
+                    "    world CHARACTER(36)," +
+                    "    worldName VARCHAR(200)" +
                     ")" + (BWSQL.sqlite ? ";" : " ENGINE = INNODB;"));
 
             statement.close();

@@ -2,12 +2,12 @@
 <bitsWorldsTranslationFile>
     <package path="bab.bitsworlds">
         <class name="BitsWorlds">
-            <message key="permission_message">You don't have sufficient permissions to run this command</message>
+            <message key="permission-message">You don't have sufficient permissions to run this command</message>
         </class>
         <package path="cmd">
             <class name="BitsWorldsCmd">
                 <message key="cmdsender-cant-run-cmd">You can't execute this command without being a player because will it will open a window</message>
-                <message key="not_valid_argument">%%arg isn't a valid argument\nUse: %%cmd help %%prefixColorfor help</message>
+                <message key="not-valid-argument">%%arg isn't a valid argument\nUse: %%cmd help %%prefixColorfor help</message>
             </class>
             <class name="ConfigCmd">
                 <message key="gui-title">%%name Settings</message>
@@ -25,6 +25,27 @@
                 <message key="back-item-title">Back</message>
                 <message key="back-item-guide-mode">back to the main menu</message>
             </class>
+            <class name="LogCmd">
+                <message key="gui-title">Logs</message>
+                <message key="add-note">Click to add a note to this log</message>
+                <message key="modify-note">Click to modify the note of this log</message>
+                <message key="type-note">Type the note you want to append to this log</message>
+                <message key="note-appended-success">The note has been appended sucessfully</message>
+            </class>
+        </package>
+        <package path="logger">
+            <class name="LogCore">
+                <message key="global-config-languageset-title">Plugin Language changed</message>
+                <message key="global-config-languageset-lore">The Plugin Language has been changed to %%lang</message>
+                <message key="global-config-databasetype-set-title">Database type changed</message>
+                <message key="global-config-databasetype-set-lore">The Database type has been changed to %%db</message>
+                <message key="recorder-word">Recorder: %%r</message>
+                <message key="console-word">Console</message>
+                <message key="system-word">System</message>
+                <message key="date-word">Date: </message>
+                <message key="world-word">World: %%w</message>
+                <message key="note-word">Note: %%n  %%p</message>
+            </class>
         </package>
         <package path="extensions">
             <class name="BWCommandSender">
@@ -41,6 +62,8 @@
                 <message key="head-item-guide-mode">here you can get some information and help from the Plugin</message>
                 <message key="config-item-title">Plugin Configuration</message>
                 <message key="config-item-guide-mode">here you can access and edit the Plugin Configuration (%%file file)</message>
+                <message key="global-log-item-title">Plugin Logs</message>
+                <message key="global-log-item-guide-mode">here you can see the logs made by the Plugin Configuration or others</message>
             </class>
             <class name="GUICore">
                 <message key="guide-mode-words">Guide Mode</message>
@@ -51,5 +74,11 @@
         <message key="enabled-word">Enabled</message>
         <message key="disabled-word">Disabled</message>
         <message key="warn-word">Warn</message>
+        <message key="date-pattern">%%mm/%%dd/%%yyyy at %%hh:%%min:%%ss (mm/dd/yyyy at hh:mm:ss)</message>
+        <message key="next-page">Next Page</message>
+        <message key="back-page">Back Page</message>
+        <message key="page">Page</message>
+        <message key="back-item-title">Back</message>
+        <message key="back-item-guide-mode">back to the main menu</message>
     </utils>
 </bitsWorldsTranslationFile>

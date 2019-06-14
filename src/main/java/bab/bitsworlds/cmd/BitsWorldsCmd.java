@@ -47,11 +47,13 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
             case "CONFIG":
                 bwcmd = new ConfigCmd();
                 break;
-
+            case "LOG":
+                bwcmd = new LogCmd();
+                break;
             default:
                 bwSender.sendMessage(
                         PrefixMessage.warn.getPrefix(),
-                        LangCore.getClassMessage(getClass(), "not_valid_argument")
+                        LangCore.getClassMessage(getClass(), "not-valid-argument")
                                 .setKey("%%arg", ChatColor.ITALIC + args[0] + PrefixMessage.warn.getDefaultChatColor())
                                 .setKey("%%cmd", ChatColor.BOLD + "/BitsWorlds" + ChatColor.ITALIC)
                                 .setKey("%%prefixColor", PrefixMessage.warn.getDefaultChatColor().toString())
@@ -59,7 +61,7 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
                 return true;
         }
 
-        if (bwSender instanceof BWPlayer && !((BWPlayer) bwSender).getBukkitPlayer().hasPermission(bwcmd.getPermission())) {
+        if (!bwSender.hasPermission(bwcmd.getPermission())) {
             bwSender.sendMessage(PrefixMessage.permission_message);
             return true;
         }
@@ -73,10 +75,11 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
         List<String> list = new ArrayList<>();
 
-        BWCommand configcmd = new ConfigCmd();
+        BWCommand configCmd = new ConfigCmd();
+        BWCommandSender bwSender = new BWCommandSender(sender);
 
         if (args.length == 1) {
-            if (sender.hasPermission(new HelpCmd().getPermission()))
+            if (bwSender.hasPermission(new HelpCmd().getPermission()))
                 switch (LangCore.lang) {
                     case EN:
                         list.add("help");
@@ -92,13 +95,13 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
                         break;
                 }
 
-            if (sender.hasPermission(configcmd.getPermission()))
+            if (bwSender.hasPermission(configCmd.getPermission()))
                 list.add("config");
         }
 
         else if (args.length >= 2) {
-            if (sender.hasPermission(configcmd.getPermission()))
-                list.addAll(configcmd.tabComplete(new BWCommandSender(sender), cmd, alias, args));
+            if (bwSender.hasPermission(configCmd.getPermission()))
+                list.addAll(configCmd.tabComplete(bwSender, cmd, alias, args));
         }
 
         if (!args[args.length - 1].equals(""))

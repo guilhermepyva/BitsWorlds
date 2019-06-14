@@ -2,6 +2,7 @@ package bab.bitsworlds.gui;
 
 import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.cmd.ConfigCmd;
+import bab.bitsworlds.cmd.LogCmd;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
@@ -21,8 +22,9 @@ public class MainGUI implements ImplGUI {
                 return new BWGUI(
                         "main",
                         4*9,
-                        ChatColor.DARK_AQUA  + "BitsWorlds",
-                        this) {
+                        "BitsWorlds",
+                        this,
+                        true) {
                     @Override
                     public void setupItem(int item) {
                         switch (item) {
@@ -65,7 +67,7 @@ public class MainGUI implements ImplGUI {
                                 break;
                             case 19:
                                 this.setItem(19, new GUIItem(
-                                        Material.BOOK_AND_QUILL,
+                                        Material.REDSTONE,
                                         ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "config-item-title").toString(),
                                         new ArrayList<>(),
                                         LangCore.getClassMessage(MainGUI.class, "config-item-guide-mode").setKey("%%file", ChatColor.ITALIC + "config.yml"),
@@ -73,16 +75,30 @@ public class MainGUI implements ImplGUI {
                                 ));
 
                                 break;
+                            case 30:
+                                this.setItem(30, new GUIItem(
+                                        Material.BOOK,
+                                        ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "global-log-item-title").toString(),
+                                        new ArrayList<>(),
+                                        LangCore.getClassMessage(MainGUI.class, "global-log-item-guide-mode"),
+                                        player
+                                ));
+                                break;
                         }
                     }
 
                     @Override
+                    public void update() {
+                        init();
+                    }
+
+                    @Override
                     public BWGUI init() {
-                        genItems(4, 8, 19);
+                        genItems(4, 8, 19, 30);
 
                         return this;
                     }
-                }.init();
+                };
         }
 
         throw new NullPointerException("No GUI with id " + code + " found");
@@ -94,23 +110,41 @@ public class MainGUI implements ImplGUI {
             case 8:
                 GUICore.alternateGuideMode(player);
 
-                gui.genItems(4, 8, 19);
+                gui.init();
                 break;
             case 19:
-                if (!player.getBukkitPlayer().hasPermission("bitsworlds.maincmd.configcmd")) {
+                ConfigCmd configCmd = new ConfigCmd();
+
+                if (!player.hasPermission(configCmd.getPermission())) {
                     player.sendMessage(PrefixMessage.permission_message);
 
                     player.getBukkitPlayer().closeInventory();
 
                     return;
                 }
-                BWGUI configCmdGUI = new ConfigCmd().getGUI("config_main",  player);
+                BWGUI configCmdGUI = configCmd.getGUI("config_main",  player);
 
                 player.openGUI(configCmdGUI);
 
                 configCmdGUI.genItems(27);
 
                 break;
+            case 30:
+                LogCmd logCmd = new LogCmd();
+
+                if (!player.hasPermission(logCmd.getPermission())) {
+                    player.sendMessage(PrefixMessage.permission_message);
+
+                    player.getBukkitPlayer().closeInventory();
+
+                    return;
+                }
+
+                BWGUI logCmdGUI = logCmd.getGUI("global",  player);
+
+                player.openGUI(logCmdGUI);
+
+                logCmdGUI.genItems(45);
         }
     }
 }

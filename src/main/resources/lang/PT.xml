@@ -2,14 +2,14 @@
 <bitsWorldsTranslationFile>
     <package path="bab.bitsworlds">
         <class name="BitsWorlds">
-            <message key="permission_message">Você não tem permissões suficientes para usar este comando</message>
-            <message key="cmd_description">Comando principal</message>
-            <message key="cmd_usage">%%cmd &lt;argumentos...&gt;</message>
+            <message key="permission-message">Você não tem permissões suficientes para usar este comando</message>
+            <message key="cmd-description">Comando principal</message>
+            <message key="cmd-usage">%%cmd &lt;argumentos...&gt;</message>
         </class>
         <package path="cmd">
             <class name="BitsWorldsCmd">
                 <message key="cmdsender-cant-run-cmd">Você não pode executar este comando sem ser um jogador pois abrirá uma janela</message>
-                <message key="not_valid_argument">%%arg não é um argumento válido\nUse: %%cmd ajuda %%prefixColorpara ajuda</message>
+                <message key="not-valid-argument">%%arg não é um argumento válido\nUse: %%cmd ajuda %%prefixColorpara ajuda</message>
             </class>
             <class name="ConfigCmd">
                 <message key="gui-title">Configurações de %%name</message>
@@ -24,8 +24,27 @@
                 <message key="database-config-already">O tipo de banco de dados do Plugin já é %%db</message>
                 <message key="config-use">Use %%cmd</message>
                 <message key="invalid-arg">%%arg %%prefixColoré um argumento inválido, os argumentos válidos são %%args</message>
-                <message key="back-item-title">Voltar</message>
-                <message key="back-item-guide-mode">volta para o menu principal</message>
+            </class>
+            <class name="LogCmd">
+                <message key="gui-title">Registros</message>
+                <message key="add-note">Clique para adicionar uma nota a este registro</message>
+                <message key="modify-note">Clique para modificar a nota deste registro</message>
+                <message key="type-note">Digite a nota que deseja anexar a este registro</message>
+                <message key="note-appended-success">Nota anexada com sucesso</message>
+            </class>
+        </package>
+        <package path="logger">
+            <class name="LogCore">
+                <message key="global-config-languageset-title">Linguagem do Plugin alterada</message>
+                <message key="global-config-languageset-lore">A Linguagem do Plugin foi alterada para %%lang</message>
+                <message key="global-config-databasetype-set-title">Tipo do Banco de Dados alterado</message>
+                <message key="global-config-databasetype-set-lore">O tipo do Banco de Dados foi alterado para %%db</message>
+                <message key="recorder-word">Registrador: %%r</message>
+                <message key="console-word">Terminal</message>
+                <message key="system-word">Sistema</message>
+                <message key="date-word">Data: </message>
+                <message key="world-word">Mundo: %%w</message>
+                <message key="note-word">Nota: %%n  %%p</message>
             </class>
         </package>
         <package path="extensions">
@@ -43,6 +62,8 @@
                 <message key="head-item-guide-mode">aqui você pode obter algumas informações e ajuda do Plugin</message>
                 <message key="config-item-title">Configuração do Plugin</message>
                 <message key="config-item-guide-mode">aqui você pode acessar e editar a Configuração do Plugin (arquivo %%file)</message>
+                <message key="global-log-item-title">Registros do Plugin</message>
+                <message key="global-log-item-guide-mode">aqui você pode ver os registros feito pela configuração do Plugin ou outros</message>
             </class>
             <class name="GUICore">
                 <message key="guide-mode-words">Modo Guia</message>
@@ -53,5 +74,11 @@
         <message key="enabled-word">Habilitado</message>
         <message key="disabled-word">Desabilitado</message>
         <message key="warn-word">Aviso</message>
+        <message key="date-pattern">%%dd/%%mm/%%yyyy às %%hh:%%min:%%ss (dd/mm/yyyy às hh:mm:ss)</message>
+        <message key="next-page">Avançar Página</message>
+        <message key="back-page">Retroceder Página</message>
+        <message key="page">Página</message>
+        <message key="back-item-title">Voltar</message>
+        <message key="back-item-guide-mode">volta para o menu principal</message>
     </utils>
 </bitsWorldsTranslationFile>

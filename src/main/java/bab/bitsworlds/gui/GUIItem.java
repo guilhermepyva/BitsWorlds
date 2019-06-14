@@ -67,8 +67,8 @@ public class GUIItem extends ItemStack {
 
         String[] splitted = string.split(" ");
 
-        int c = 0;
-        int i = 0;
+        int c = 0, i = 0;
+
         StringBuilder sb = new StringBuilder();
         boolean insertPrefix = true;
         for (String word : splitted) {

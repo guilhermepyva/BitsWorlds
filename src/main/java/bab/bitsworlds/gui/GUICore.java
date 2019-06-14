@@ -5,6 +5,7 @@ import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.MLMessage;
 import bab.bitsworlds.utils.StringUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -53,27 +54,11 @@ public class GUICore implements Listener {
     }
 
     public static void updateGUI(String id) {
-        Map<BWPlayer, BWGUI> playersToUpdate = new HashMap<>();
-
-        openGUIs.keySet().stream().filter(bwPlayer -> openGUIs.get(bwPlayer).id.equals(id)).forEach(bwPlayer ->  playersToUpdate.put(bwPlayer, openGUIs.get(bwPlayer)));
-
-        playersToUpdate.keySet().forEach(bwPlayer -> {
-            BWGUI bwGui = openGUIs.get(bwPlayer);
-
-            bwPlayer.openGUI(bwGui.getGUIClass().getGUI(bwGui.id, bwPlayer));
-        });
+        openGUIs.keySet().stream().filter(bwPlayer -> openGUIs.get(bwPlayer).id.equals(id)).forEach(bwPlayer ->  openGUIs.get(bwPlayer).update());
     }
 
     public static void updateAllGUIs() {
-        Map<BWPlayer, BWGUI> playersToUpdate = new HashMap<>();
-
-        openGUIs.keySet().forEach(bwPlayer ->  playersToUpdate.put(bwPlayer, openGUIs.get(bwPlayer)));
-
-        playersToUpdate.keySet().forEach(bwPlayer -> {
-            BWGUI bwGui = openGUIs.get(bwPlayer);
-
-            bwPlayer.openGUI(bwGui.getGUIClass().getGUI(bwGui.id, bwPlayer));
-        });
+        openGUIs.keySet().forEach(bwPlayer ->  openGUIs.get(bwPlayer).update());
     }
 
     public static void updateGUIItem(String id, int... items) {
