@@ -33,14 +33,14 @@ public class LogCmd implements BWCommand, ImplGUI {
 
     @Override
     public void run(BWCommandSender sender, Command cmd, String alias, String[] args) {
-        ((BWPlayer) sender).openGUI(getGUI("main", (BWPlayer) sender));
+        ((BWPlayer) sender).openGUI(getGUI("global", (BWPlayer) sender));
     }
 
     @Override
     public BWGUI getGUI(String code, BWPlayer player) {
-        if (code.equals("main")) {
+        if (code.equals("global")) {
             return new BWPagedGUI<ArrayList<Integer>>(
-                    "paged_log",
+                    "global_logs",
                     6*9,
                     LangCore.getClassMessage(LogCmd.class, "gui-title").toString(),
                     this,
@@ -128,7 +128,7 @@ public class LogCmd implements BWCommand, ImplGUI {
 
                 @Override
                 public void update() {
-                    genItems(0, 45);
+                    setupItem(0);
                     this.lastPage = calculateLastPage();
 
                     setupItemPage(this);
@@ -136,7 +136,7 @@ public class LogCmd implements BWCommand, ImplGUI {
 
                 @Override
                 public BWGUI init() {
-                    genItems(0, 45);
+                    setupItem(0);
 
                     this.actualPage = 0;
                     this.lastPage = calculateLastPage();
@@ -175,7 +175,7 @@ public class LogCmd implements BWCommand, ImplGUI {
         BWPagedGUI<List<Integer>> pagedGUI = (BWPagedGUI) gui;
 
         if (event.getSlot() < 45) {
-            if (!pagedGUI.itemsID.contains(event.getSlot()))
+            if (pagedGUI.itemsID.size() - 1 < event.getSlot())
                 return;
 
             Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
@@ -196,7 +196,7 @@ public class LogCmd implements BWCommand, ImplGUI {
 
                 player.openGUI(gui);
 
-                GUICore.updateGUI("paged_log");
+                GUICore.updateGUI(gui.id);
             });
 
             return;
@@ -204,11 +204,10 @@ public class LogCmd implements BWCommand, ImplGUI {
 
         switch (event.getSlot()) {
             case 45:
-                if (gui.getItem(27) != null) {
+                if (gui.getItem(45) != null) {
                     player.openGUI(new MainGUI().getGUI("main", player));
                 }
                 break;
-                //TODO LEMBRAR DE FAZER O ITEM APARECER SOMENTE QUANDO A PESSOA USAR A JANELA PRINCIPAL DO PL
             case 48:
                 if (pagedGUI.actualPage > 0) {
                     pagedGUI.actualPage--;

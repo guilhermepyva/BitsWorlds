@@ -62,6 +62,8 @@
                 <message key="head-item-guide-mode">aqui você pode obter algumas informações e ajuda do Plugin</message>
                 <message key="config-item-title">Configuração do Plugin</message>
                 <message key="config-item-guide-mode">aqui você pode acessar e editar a Configuração do Plugin (arquivo %%file)</message>
+                <message key="global-log-item-title">Registros do Plugin</message>
+                <message key="global-log-item-guide-mode">aqui você pode ver os registros feito pela configuração do Plugin ou outros</message>
             </class>
             <class name="GUICore">
                 <message key="guide-mode-words">Modo Guia</message>
