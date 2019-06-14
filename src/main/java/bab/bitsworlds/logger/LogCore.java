@@ -2,6 +2,7 @@ package bab.bitsworlds.logger;
 
 import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.cmd.ConfigCmd;
+import bab.bitsworlds.cmd.LogCmd;
 import bab.bitsworlds.db.SQLDataManager;
 import bab.bitsworlds.gui.GUICore;
 import bab.bitsworlds.gui.GUIItem;
@@ -64,12 +65,27 @@ public class LogCore {
                 break;
         }
 
+        String noteRecorder = null;
+
+        switch (log.noteRecorder.type) {
+            case PLAYER:
+                noteRecorder = ChatColor.GOLD.toString() + ChatColor.ITALIC + "[" + Bukkit.getOfflinePlayer(log.noteRecorder.uuid).getName() + "]";
+                break;
+            case SYSTEM:
+                noteRecorder = ChatColor.AQUA.toString() + ChatColor.ITALIC + "[" + LangCore.getClassMessage(LogCore.class, "system-word").toString() + "]";
+                break;
+        }
+
         description.add("");
         description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "recorder-word").setKey("%%r", ChatColor.WHITE + recorder).toString());
         description.add(ChatColor.GOLD + "ID: " + ChatColor.WHITE + log.id);
         description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "date-word").toString() + ChatColor.WHITE + LangCore.getDateByPattern(log.time.toLocalDateTime()));
+
         if (log.world != null)
             description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "world-word").setKey(ChatColor.WHITE + "%%w", log.worldName + " (" + log.world + ")").toString());
+
+        if (log.note != null)
+            description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "note-word").setKey("%%n", ChatColor.WHITE + log.note).setKey("%%p", noteRecorder).toString());
 
         GUIItem item = new GUIItem(
                 log.action.material,

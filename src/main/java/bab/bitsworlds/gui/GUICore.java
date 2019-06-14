@@ -31,7 +31,7 @@ public class GUICore implements Listener {
 
         BWGUI gui = GUICore.openGUIs.get(player);
 
-        if ((Boolean) gui.properties.get(BWGUI.Property.CLICK_SOUND) && e.getCurrentItem().getType() == Material.AIR) {
+        if ((Boolean) gui.properties.get(BWGUI.Property.CLICK_SOUND)) {
             player.getBukkitPlayer().playSound(player.getBukkitPlayer().getLocation(), Sound.CLICK, 1F, 1.25F);
         }
         if ((Boolean) gui.properties.get(BWGUI.Property.STATUE_ITEMS)) {

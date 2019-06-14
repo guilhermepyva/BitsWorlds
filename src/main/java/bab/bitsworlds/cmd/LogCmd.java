@@ -1,6 +1,7 @@
 package bab.bitsworlds.cmd;
 
 import bab.bitsworlds.BitsWorlds;
+import bab.bitsworlds.ChatInput;
 import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.db.SQLDataManager;
 import bab.bitsworlds.extensions.BWCommandSender;
@@ -10,6 +11,7 @@ import bab.bitsworlds.gui.*;
 import bab.bitsworlds.logger.Log;
 import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.multilanguage.LangCore;
+import bab.bitsworlds.multilanguage.PrefixMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -37,7 +39,7 @@ public class LogCmd implements BWCommand, ImplGUI {
     @Override
     public BWGUI getGUI(String code, BWPlayer player) {
         if (code.equals("main")) {
-            return new BWPagedGUI(
+            return new BWPagedGUI<ArrayList<Integer>>(
                     "paged_log",
                     6*9,
                     LangCore.getClassMessage(LogCmd.class, "gui-title").toString(),
@@ -49,7 +51,7 @@ public class LogCmd implements BWCommand, ImplGUI {
                     switch (item) {
                         case 0:
                             Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
-                                this.itemsID = new ArrayList<Integer>();
+                                this.itemsID = new ArrayList<>();
 
                                 for (int i = 0; i < 45; i++) {
                                     setItem(i, new ItemStack(Material.AIR));
@@ -85,7 +87,7 @@ public class LogCmd implements BWCommand, ImplGUI {
                                     }
 
                                     this.setItem(i, logitem);
-                                    ((ArrayList<Integer>) this.itemsID).add(log.id);
+                                    this.itemsID.add(log.id);
 
                                     i++;
                                     if (i == 45) {
@@ -146,16 +148,6 @@ public class LogCmd implements BWCommand, ImplGUI {
 
                 int calculateLastPage() {
                     try {
-                        /*int i = 0;
-                        for (Log ignored : SQLDataManager.queryGlobalLogs()) {
-                            i++;
-
-                            if (i == 45) {
-                                i = 1;
-                                lastPage++;
-                            }
-                        }*/
-
                         return (int) Math.floor((double) SQLDataManager.queryCountLogs() / 45);
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -180,6 +172,36 @@ public class LogCmd implements BWCommand, ImplGUI {
 
     @Override
     public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
+        BWPagedGUI<List<Integer>> pagedGUI = (BWPagedGUI) gui;
+
+        if (event.getSlot() < 45) {
+            if (!pagedGUI.itemsID.contains(event.getSlot()))
+                return;
+
+            Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
+                int logID = pagedGUI.itemsID.get(event.getSlot());
+
+                player.getBukkitPlayer().closeInventory();
+
+                player.sendMessage(PrefixMessage.info.getPrefix() + LangCore.getClassMessage(LogCmd.class, "type-note"));
+
+                String note = ChatInput.askPlayer(player);
+                try {
+                    SQLDataManager.updateNoteLog(logID, note, player.getBukkitPlayer().getUniqueId().toString());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                player.sendMessage(PrefixMessage.info.getPrefix() + LangCore.getClassMessage(LogCmd.class, "note-appended-success"));
+
+                player.openGUI(gui);
+
+                GUICore.updateGUI("paged_log");
+            });
+
+            return;
+        }
+
         switch (event.getSlot()) {
             case 45:
                 if (gui.getItem(27) != null) {
@@ -188,7 +210,6 @@ public class LogCmd implements BWCommand, ImplGUI {
                 break;
                 //TODO LEMBRAR DE FAZER O ITEM APARECER SOMENTE QUANDO A PESSOA USAR A JANELA PRINCIPAL DO PL
             case 48:
-                BWPagedGUI pagedGUI = (BWPagedGUI) gui;
                 if (pagedGUI.actualPage > 0) {
                     pagedGUI.actualPage--;
                     setupItemPage(pagedGUI);
@@ -196,7 +217,6 @@ public class LogCmd implements BWCommand, ImplGUI {
                 }
                 break;
             case 50:
-                pagedGUI = (BWPagedGUI) gui;
                 if (pagedGUI.actualPage < pagedGUI.lastPage) {
                     pagedGUI.actualPage++;
                     setupItemPage(pagedGUI);

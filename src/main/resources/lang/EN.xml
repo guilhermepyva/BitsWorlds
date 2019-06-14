@@ -29,6 +29,8 @@
                 <message key="gui-title">Logs</message>
                 <message key="add-note">Click to add a note to this log</message>
                 <message key="modify-note">Click to modify the note of this log</message>
+                <message key="type-note">Type the note you want to append to this log</message>
+                <message key="note-appended-success">The note has been appended sucessfully</message>
             </class>
         </package>
         <package path="logger">
@@ -42,6 +44,7 @@
                 <message key="system-word">System</message>
                 <message key="date-word">Date: </message>
                 <message key="world-word">World: %%w</message>
+                <message key="note-word">Note: %%n  %%p</message>
             </class>
         </package>
         <package path="extensions">

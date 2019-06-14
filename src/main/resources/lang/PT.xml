@@ -29,6 +29,8 @@
                 <message key="gui-title">Registros</message>
                 <message key="add-note">Clique para adicionar uma nota a este registro</message>
                 <message key="modify-note">Clique para modificar a nota deste registro</message>
+                <message key="type-note">Digite a nota que deseja anexar a este registro</message>
+                <message key="note-appended-success">Nota anexada com sucesso</message>
             </class>
         </package>
         <package path="logger">
@@ -42,6 +44,7 @@
                 <message key="system-word">Sistema</message>
                 <message key="date-word">Data: </message>
                 <message key="world-word">Mundo: %%w</message>
+                <message key="note-word">Nota: %%n  %%p</message>
             </class>
         </package>
         <package path="extensions">

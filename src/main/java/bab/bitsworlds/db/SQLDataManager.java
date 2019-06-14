@@ -1,5 +1,6 @@
 package bab.bitsworlds.db;
 
+import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.logger.Log;
 import bab.bitsworlds.logger.LogAction;
 import bab.bitsworlds.logger.LogRecorder;
@@ -32,6 +33,12 @@ public class SQLDataManager {
         statement.close();
     }
 
+    public static void updateNoteLog(int id, String note, String note_appender) throws SQLException {
+        Statement stm = BWSQL.dbCon.createStatement();
+
+        stm.execute("UPDATE log SET note = '" + note + "', note_appender_uuid = '" + note_appender + "' WHERE id = " + id);
+    }
+
     public static List<Log> queryLogs(String additional) throws SQLException {
         Statement stm = BWSQL.dbCon.createStatement();
 
@@ -54,7 +61,11 @@ public class SQLDataManager {
 
         ResultSet result = stm.executeQuery("SELECT COUNT(*) FROM log");
 
-        int count = result.getInt(1);
+        int count;
+
+        result.next();
+
+        count = result.getInt(1);
 
         result.close();
         stm.close();
@@ -74,13 +85,20 @@ public class SQLDataManager {
                 data = Lang.valueOf(resultSet.getString("data"));
         }
 
+        LogRecorder noteRecorder = null;
+
+        if (resultSet.getString("note_appender_uuid") == null)
+            noteRecorder = new LogRecorder(LogRecorder.RecorderType.SYSTEM);
+        else
+            noteRecorder = new LogRecorder(UUID.fromString(resultSet.getString("note_appender_uuid")));
+
         return new Log(
                 resultSet.getInt("id"),
                 action,
                 data,
                 new LogRecorder(LogRecorder.RecorderType.valueOf(resultSet.getString("recorder_type")), resultSet.getString("recorder_uuid") != null ? UUID.fromString(resultSet.getString("recorder_uuid")) : null),
                 resultSet.getString("note"),
-                new LogRecorder(resultSet.getString("note_appender_uuid") != null ? UUID.fromString(resultSet.getString("note_appender_uuid")) : null),
+                noteRecorder,
                 resultSet.getTimestamp("time"),
                 resultSet.getString("world") != null ? UUID.fromString(resultSet.getString("world")) : null,
                 resultSet.getString("worldName"));
