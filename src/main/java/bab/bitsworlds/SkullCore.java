@@ -19,7 +19,7 @@ public class SkullCore {
         for (Skull skull : Skull.values()) {
             GameProfile profile = new GameProfile(UUID.randomUUID(), null);
 
-            profile.getProperties().put("textures", new Property(new String(Base64.getEncoder().encode(("\"textures\":{\"SKIN\":{\"url\":\"" + skull.getPath() + "\"}}").getBytes())), "textures"));
+            profile.getProperties().put("textures", new Property("textures", new String(Base64.getEncoder().encode(("{textures:{SKIN:{url:\"" + skull.getPath() + "\"}}}").getBytes()))));
 
             skulls.put(skull, profile);
         }
@@ -45,7 +45,7 @@ public class SkullCore {
         }
 
         public String getPath() {
-            return "http://textures.minecraft.net/texture/" + path;
+            return "https://textures.minecraft.net/texture/" + path;
         }
     }
 }

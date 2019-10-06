@@ -27,6 +27,8 @@ public class BitsWorlds extends JavaPlugin {
 
         loadConfigs();
 
+        SkullCore.loadSkulls();
+
         BWSQL.connect();
         BWSQL.setupDB();
 
