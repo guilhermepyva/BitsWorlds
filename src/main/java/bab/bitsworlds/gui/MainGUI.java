@@ -3,6 +3,7 @@ package bab.bitsworlds.gui;
 import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.SkullCore;
 import bab.bitsworlds.cmd.ConfigCmd;
+import bab.bitsworlds.cmd.ListWorldCmd;
 import bab.bitsworlds.cmd.LogCmd;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.multilanguage.LangCore;
@@ -84,6 +85,22 @@ public class MainGUI implements ImplGUI {
                                 ));
 
                                 break;
+                            case 21:
+                                GUIItem listworlditem = new GUIItem(
+                                        Material.SKULL_ITEM,
+                                        1,
+                                        (short) 3,
+                                        ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "list-world-item-title").toString(),
+                                        new ArrayList<>(),
+                                        LangCore.getClassMessage(MainGUI.class, "list-world-item-guide-mode").setKey("%%file", ChatColor.ITALIC + "config.yml"),
+                                        player
+                                );
+
+                                meta = (SkullMeta) listworlditem.getItemMeta();
+                                SkullCore.applyToSkull(meta, SkullCore.Skull.LISTWORLDICON);
+                                listworlditem.setItemMeta(meta);
+                                this.setItem(21, listworlditem);
+                                break;
                             case 30:
                                 this.setItem(30, new GUIItem(
                                         Material.BOOK,
@@ -103,7 +120,7 @@ public class MainGUI implements ImplGUI {
 
                     @Override
                     public BWGUI init() {
-                        genItems(4, 8, 19, 30);
+                        genItems(4, 8, 19, 21, 30);
 
                         return this;
                     }
@@ -136,6 +153,24 @@ public class MainGUI implements ImplGUI {
                 player.openGUI(configCmdGUI);
 
                 configCmdGUI.genItems(27);
+
+                break;
+            case 21:
+                ListWorldCmd listWorldCmd = new ListWorldCmd();
+
+                if (!player.hasPermission(listWorldCmd.getPermission())) {
+                    player.sendMessage(PrefixMessage.permission_message);
+
+                    player.getBukkitPlayer().closeInventory();
+
+                    return;
+                }
+
+                BWGUI listWorldGui = listWorldCmd.getGUI("listworld_main",  player);
+
+                player.openGUI(listWorldGui);
+
+                listWorldGui.genItems(36);
 
                 break;
             case 30:

@@ -50,6 +50,11 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
             case "LOG":
                 bwcmd = new LogCmd();
                 break;
+            case "LIST":
+            case "LISTAR":
+            case "LISTA":
+                bwcmd = new ListWorldCmd();
+                break;
             default:
                 bwSender.sendMessage(
                         PrefixMessage.warn.getPrefix(),
@@ -76,6 +81,8 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
         List<String> list = new ArrayList<>();
 
         BWCommand configCmd = new ConfigCmd();
+        LogCmd logCmd = new LogCmd();
+        ListWorldCmd listWorldCmd = new ListWorldCmd();
         BWCommandSender bwSender = new BWCommandSender(sender);
 
         if (args.length == 1) {
@@ -97,6 +104,22 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
 
             if (bwSender.hasPermission(configCmd.getPermission()))
                 list.add("config");
+
+            if (bwSender.hasPermission(logCmd.getPermission()))
+                list.add("log");
+
+            if (bwSender.hasPermission(listWorldCmd.getPermission()))
+                switch (LangCore.lang) {
+                    case EN:
+                        list.add("list");
+                    case PT:
+                        list.add("listar");
+                    case SP:
+                        list.add("lista");
+                    case FR:
+
+                }
+
         }
 
         else if (args.length >= 2) {

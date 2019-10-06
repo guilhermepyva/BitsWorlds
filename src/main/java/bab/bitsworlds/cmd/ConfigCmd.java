@@ -177,98 +177,96 @@ public class ConfigCmd implements BWCommand, ImplGUI {
     }
 
     public BWGUI getGUI(String code, BWPlayer player) {
-        switch (code) {
-            case "config_main":
-                return new BWGUI(
-                        "config_main",
-                        4*9,
-                        LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").toString(),
-                        this,
-                        true
-                ) {
-                    @Override
-                    public void setupItem(int item) {
-                        switch (item) {
-                            case 0:
-                                updateCountryBannerItem(this, player);
-                                break;
-                            case 1:
-                                List<String> databaseLore = new ArrayList<>();
+        if ("config_main".equals(code)) {
+            return new BWGUI(
+                    "config_main",
+                    4 * 9,
+                    LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").toString(),
+                    this,
+                    true
+            ) {
+                @Override
+                public void setupItem(int item) {
+                    switch (item) {
+                        case 0:
+                            updateCountryBannerItem(this, player);
+                            break;
+                        case 1:
+                            List<String> databaseLore = new ArrayList<>();
 
-                                if (BWSQL.sqlite) {
-                                    databaseLore.add(ChatColor.AQUA + "SQLite");
-                                    databaseLore.add(ChatColor.BLUE + "MySQL");
-                                }
-                                else {
-                                    databaseLore.add(ChatColor.BLUE + "SQLite");
-                                    databaseLore.add(ChatColor.AQUA + "MySQL");
-                                }
+                            if (BWSQL.sqlite) {
+                                databaseLore.add(ChatColor.AQUA + "SQLite");
+                                databaseLore.add(ChatColor.BLUE + "MySQL");
+                            } else {
+                                databaseLore.add(ChatColor.BLUE + "SQLite");
+                                databaseLore.add(ChatColor.AQUA + "MySQL");
+                            }
 
+                            databaseLore.add("");
+                            databaseLore.addAll(GUIItem.loreJumper(
+                                    LangCore.getClassMessage(ConfigCmd.class, "database-item-lore").setKey("%%file", ChatColor.ITALIC + "config.yml").toString(),
+                                    ChatColor.WHITE.toString(),
+                                    ChatColor.WHITE + "" + ChatColor.BOLD + LangCore.getUtilMessage("warn-word").toString().toUpperCase() + ": "
+                            ));
+
+                            if (BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") != BWSQL.sqlite) {
                                 databaseLore.add("");
-                                databaseLore.addAll(GUIItem.loreJumper(
-                                        LangCore.getClassMessage(ConfigCmd.class, "database-item-lore").setKey("%%file", ChatColor.ITALIC + "config.yml").toString(),
-                                        ChatColor.WHITE.toString(),
-                                        ChatColor.WHITE + "" + ChatColor.BOLD + LangCore.getUtilMessage("warn-word").toString().toUpperCase() + ": "
-                                ));
+                                databaseLore.add(ChatColor.YELLOW + LangCore.getClassMessage(ConfigCmd.class, "database-item-need-restart").toString());
+                            }
 
-                                if (BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") != BWSQL.sqlite) {
-                                    databaseLore.add("");
-                                    databaseLore.add(ChatColor.YELLOW + LangCore.getClassMessage(ConfigCmd.class, "database-item-need-restart").toString());
-                                }
+                            this.setItem(1, new GUIItem(
+                                    Material.ANVIL,
+                                    ChatColor.AQUA + "" + ChatColor.BOLD + LangCore.getClassMessage(ConfigCmd.class, "database-item-title").toString(),
+                                    databaseLore,
+                                    LangCore.getClassMessage(ConfigCmd.class, "database-config-guide-mode"),
+                                    player
+                            ));
 
-                                this.setItem(1, new GUIItem(
-                                        Material.ANVIL,
-                                        ChatColor.AQUA + "" + ChatColor.BOLD + LangCore.getClassMessage(ConfigCmd.class, "database-item-title").toString(),
-                                        databaseLore,
-                                        LangCore.getClassMessage(ConfigCmd.class, "database-config-guide-mode"),
-                                        player
-                                ));
+                            break;
+                        case 2:
+                            List<String> noteLogsLore = new ArrayList<>();
 
-                                break;
-                            case 2:
-                                List<String> noteLogsLore = new ArrayList<>();
+                            if (LogCore.notes) {
+                                noteLogsLore.add(ChatColor.AQUA + LangCore.getUtilMessage("enabled-word").toString());
+                                noteLogsLore.add(ChatColor.BLUE + LangCore.getUtilMessage("disabled-word").toString());
+                            } else {
+                                noteLogsLore.add(ChatColor.BLUE + LangCore.getUtilMessage("enabled-word").toString());
+                                noteLogsLore.add(ChatColor.AQUA + LangCore.getUtilMessage("disabled-word").toString());
+                            }
 
-                                if (LogCore.notes) {
-                                    noteLogsLore.add(ChatColor.AQUA + LangCore.getUtilMessage("enabled-word").toString());
-                                    noteLogsLore.add(ChatColor.BLUE + LangCore.getUtilMessage("disabled-word").toString());
-                                } else {
-                                    noteLogsLore.add(ChatColor.BLUE + LangCore.getUtilMessage("enabled-word").toString());
-                                    noteLogsLore.add(ChatColor.AQUA + LangCore.getUtilMessage("disabled-word").toString());
-                                }
+                            this.setItem(2, new GUIItem(
+                                    Material.PAPER,
+                                    ChatColor.AQUA.toString() + ChatColor.BOLD + LangCore.getClassMessage(ConfigCmd.class, "log-notes-item-title").toString(),
+                                    noteLogsLore,
+                                    LangCore.getClassMessage(ConfigCmd.class, "log-notes-item-guide-mode"),
+                                    player
+                            ));
 
-                                this.setItem(2, new GUIItem(
-                                        Material.PAPER,
-                                        ChatColor.AQUA.toString() + ChatColor.BOLD + LangCore.getClassMessage(ConfigCmd.class, "log-notes-item-title").toString(),
-                                        noteLogsLore,
-                                        LangCore.getClassMessage(ConfigCmd.class, "log-notes-item-guide-mode"),
-                                        player
-                                ));
+                        case 27:
+                            this.setItem(27, new GUIItem(
+                                    Material.SIGN,
+                                    ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
+                                    Collections.emptyList(),
+                                    LangCore.getUtilMessage("back-item-guide-mode"),
+                                    player
+                            ));
 
-                            case 27:
-                                this.setItem(27, new GUIItem(
-                                        Material.SIGN,
-                                        ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
-                                        Collections.emptyList(),
-                                        LangCore.getUtilMessage("back-item-guide-mode"),
-                                        player
-                                ));
-
-                                break;
-                        }
+                            break;
                     }
+                }
 
-                    @Override
-                    public void update() {
-                        init();
-                    }
+                @Override
+                public void update() {
+                    init();
+                }
 
-                    @Override
-                    public BWGUI init() {
-                        genItems(0, 1, 2);
+                @Override
+                public BWGUI init() {
+                    genItems(0, 1, 2);
 
-                        return this;
-                    }
-                };
+                    return this;
+                }
+            };
         }
 
         throw new NullPointerException("No GUI with id " + code + " found");

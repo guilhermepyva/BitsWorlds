@@ -36,6 +36,9 @@
                 <message key="type-note">Type the note you want to append to this log</message>
                 <message key="note-appended-success">The note has been appended sucessfully</message>
             </class>
+            <class name="ListWorldCmd">
+                <message key="gui-title">World list</message>
+            </class>
         </package>
         <package path="logger">
             <class name="LogCore">
@@ -66,6 +69,8 @@
                 <message key="head-item-guide-mode">here you can get some information and help from the Plugin</message>
                 <message key="config-item-title">Plugin Configuration</message>
                 <message key="config-item-guide-mode">here you can access and edit the Plugin Configuration (%%file file)</message>
+                <message key="list-world-item-title">World list</message>
+                <message key="list-world-item-guide-mode">here you can see all the worlds of the server and interact with them</message>
                 <message key="global-log-item-title">Plugin Logs</message>
                 <message key="global-log-item-guide-mode">here you can see the logs made by the Plugin Configuration or others</message>
             </class>

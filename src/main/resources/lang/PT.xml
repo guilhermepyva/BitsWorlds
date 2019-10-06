@@ -36,6 +36,9 @@
                 <message key="type-note">Digite a nota que deseja anexar a este registro</message>
                 <message key="note-appended-success">Nota anexada com sucesso</message>
             </class>
+            <class name="ListWorldCmd">
+                <message key="gui-title">Lista de mundos</message>
+            </class>
         </package>
         <package path="logger">
             <class name="LogCore">
@@ -66,6 +69,8 @@
                 <message key="head-item-guide-mode">aqui você pode obter algumas informações e ajuda do Plugin</message>
                 <message key="config-item-title">Configuração do Plugin</message>
                 <message key="config-item-guide-mode">aqui você pode acessar e editar a Configuração do Plugin (arquivo %%file)</message>
+                <message key="list-world-item-title">Lista de mundos</message>
+                <message key="list-world-item-guide-mode">aqui você pode ver todos os mundos do servidor e interagir com eles</message>
                 <message key="global-log-item-title">Registros do Plugin</message>
                 <message key="global-log-item-guide-mode">aqui você pode ver os registros feito pela configuração do Plugin ou outros</message>
             </class>
