@@ -39,7 +39,7 @@ public class LogCmd implements BWCommand, ImplGUI {
     @Override
     public BWGUI getGUI(String code, BWPlayer player) {
         if (code.equals("global")) {
-            return new BWPagedGUI<ArrayList<Integer>>(
+            return new BWPagedGUI<List<Integer>>(
                     "global_logs",
                     6*9,
                     LangCore.getClassMessage(LogCmd.class, "gui-title").toString(),
@@ -128,10 +128,10 @@ public class LogCmd implements BWCommand, ImplGUI {
 
                 @Override
                 public void update() {
-                    setupItem(0);
                     this.lastPage = calculateLastPage();
+                    setupItem(0);
 
-                    setupItemPage(this);
+                    this.setupItemPage(50, 48);
                 }
 
                 @Override
@@ -141,7 +141,7 @@ public class LogCmd implements BWCommand, ImplGUI {
                     this.actualPage = 0;
                     this.lastPage = calculateLastPage();
 
-                    setupItemPage(this);
+                    this.setupItemPage(50, 48);
 
                     return this;
                 }
@@ -214,29 +214,17 @@ public class LogCmd implements BWCommand, ImplGUI {
             case 48:
                 if (pagedGUI.actualPage > 0) {
                     pagedGUI.actualPage--;
-                    setupItemPage(pagedGUI);
+                    pagedGUI.setupItemPage(50, 48);
                     pagedGUI.setupItem(0);
                 }
                 break;
             case 50:
                 if (pagedGUI.actualPage < pagedGUI.lastPage) {
                     pagedGUI.actualPage++;
-                    setupItemPage(pagedGUI);
+                    pagedGUI.setupItemPage(50, 48);
                     pagedGUI.setupItem(0);
                 }
                 break;
-        }
-    }
-
-    void setupItemPage(BWPagedGUI pagedGUI) {
-        pagedGUI.setItem(48, new ItemStack(Material.AIR));
-        pagedGUI.setItem(50, new ItemStack(Material.AIR));
-
-        if (pagedGUI.actualPage > 0) {
-            pagedGUI.setupItem(48);
-        }
-        if (pagedGUI.actualPage < pagedGUI.lastPage) {
-            pagedGUI.setupItem(50);
         }
     }
 

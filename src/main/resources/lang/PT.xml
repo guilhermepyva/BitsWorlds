@@ -38,6 +38,7 @@
             </class>
             <class name="ListWorldCmd">
                 <message key="gui-title">Lista de mundos</message>
+                <message key="players-in">Jogadores: %%c</message>
             </class>
         </package>
         <package path="logger">
@@ -82,7 +83,13 @@
     <utils>
         <message key="enabled-word">Habilitado</message>
         <message key="disabled-word">Desabilitado</message>
+        <message key="loaded-word">Carregado</message>
+        <message key="unloaded-word">Descarregado</message>
         <message key="warn-word">Aviso</message>
+        <message key="dimension-word">Dimensão</message>
+        <message key="overworld">Overworld</message>
+        <message key="nether">Nether</message>
+        <message key="theend">O Fim</message>
         <message key="date-pattern">%%dd/%%mm/%%yyyy às %%hh:%%min:%%ss (dd/mm/yyyy às hh:mm:ss)</message>
         <message key="next-page">Avançar Página</message>
         <message key="back-page">Retroceder Página</message>
