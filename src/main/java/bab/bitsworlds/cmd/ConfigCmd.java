@@ -177,7 +177,6 @@ public class ConfigCmd implements BWCommand, ImplGUI {
     }
 
     public BWGUI getGUI(String code, BWPlayer player) {
-
         switch (code) {
             case "config_main":
                 return new BWGUI(
@@ -408,7 +407,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
         List<String> list = null;
 
         if (args.length == 2) {
-            list = Arrays.asList("language", "db");
+            list = Arrays.asList("language", "db", "notes");
         }
 
         else if (args.length == 3) {
@@ -418,6 +417,10 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
             else if (args[1].equalsIgnoreCase("db")) {
                 list = Arrays.asList("MYSQL", "SQLITE");
+            }
+
+            else if (args[1].equalsIgnoreCase("notes")) {
+                list = Arrays.asList("true", "false");
             }
         }
 
