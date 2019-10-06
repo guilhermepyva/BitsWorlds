@@ -20,6 +20,10 @@
                 <message key="database-config-guide-mode">change the database type of the Plugin \n for newbie users it is recommended the use of SQLite (default)</message>
                 <message key="database-updated">The Plugin database type is now %%db</message>
                 <message key="database-config-already">The Plugin database type already is %%db</message>
+                <message key="log-notes-config-already">The notes are already in this configuration</message>
+                <message key="log-notes-item-title">Log Notes</message>
+                <message key="log-notes-item-guide-mode">Enable or disables notes in Logs</message>
+                <message key="log-notes-updated">The log notes are now %%s</message>
                 <message key="config-use">Use %%cmd</message>
                 <message key="invalid-arg">%%arg %%prefixColoris an invalid argument, the valid arguments are %%args</message>
                 <message key="back-item-title">Back</message>

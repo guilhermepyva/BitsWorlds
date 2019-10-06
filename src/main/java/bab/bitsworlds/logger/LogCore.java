@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class LogCore {
+    public static boolean notes;
+
     public static void addLog(LogAction action, Object data, LogRecorder recorder, Timestamp time) {
         addLog(action, data, recorder, null, null, time, null, null);
     }

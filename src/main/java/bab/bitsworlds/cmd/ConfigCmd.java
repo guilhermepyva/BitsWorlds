@@ -7,6 +7,7 @@ import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPermission;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.*;
+import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
@@ -132,6 +133,47 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             commandSender.sendMessage(PrefixMessage.info.getPrefix(),
                     LangCore.getClassMessage(this.getClass(), "database-updated").setKey("%%db", ChatColor.BOLD + dbTypeString));
         }
+
+        else if (strings[1].equalsIgnoreCase("notes")) {
+            if (strings.length == 2) {
+                commandSender.sendMessage(PrefixMessage.warn.getPrefix(),
+                        LangCore.getClassMessage(getClass(), "config-use")
+                                .setKey("%%cmd", ChatColor.BOLD + "/BitsWorlds" + ChatColor.ITALIC + " config notes <true|false>"));
+                return;
+            }
+
+            boolean notes;
+
+            if (strings[2].equalsIgnoreCase("true"))
+                notes = true;
+            else if (strings[2].equalsIgnoreCase("false"))
+                notes = false;
+            else {
+                commandSender.sendMessage(PrefixMessage.error.getPrefix(),
+                        LangCore.getClassMessage(getClass(), "invalid-arg")
+                                .setKey("%%arg", ChatColor.ITALIC + strings[2])
+                                .setKey("%%args", "<true|false>")
+                                .setKey("%%prefixColor", PrefixMessage.error.getDefaultChatColor().toString()));
+                return;
+            }
+
+            BWTaskResponse response = new BWConfigTask(BWConfigTask.ConfigTask.NoteLogsSet, notes, commandSender instanceof BWPlayer ? ((BWPlayer) commandSender).getBukkitPlayer().getUniqueId() : null).execute();
+
+            if (response.getCode() == 0 && response instanceof BWTask.BWExceptionResponse) {
+                commandSender.reportExceptionResponse((BWTask.BWExceptionResponse) response);
+                return;
+            }
+
+            if (response.getCode() == 1) {
+                commandSender.sendMessage(PrefixMessage.warn.getPrefix(),
+                        LangCore.getClassMessage(getClass(), "log-notes-config-already")
+                                .setKey("%%prefixColor", PrefixMessage.warn.getDefaultChatColor().toString()));
+                return;
+            }
+
+            commandSender.sendMessage(PrefixMessage.info.getPrefix(),
+                    LangCore.getClassMessage(this.getClass(), "log-notes-updated").setKey("%%s", ChatColor.BOLD + String.valueOf(notes)));
+        }
     }
 
     public BWGUI getGUI(String code, BWPlayer player) {
@@ -184,6 +226,25 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                                 ));
 
                                 break;
+                            case 2:
+                                List<String> noteLogsLore = new ArrayList<>();
+
+                                if (LogCore.notes) {
+                                    noteLogsLore.add(ChatColor.AQUA + LangCore.getUtilMessage("enabled-word").toString());
+                                    noteLogsLore.add(ChatColor.BLUE + LangCore.getUtilMessage("disabled-word").toString());
+                                } else {
+                                    noteLogsLore.add(ChatColor.BLUE + LangCore.getUtilMessage("enabled-word").toString());
+                                    noteLogsLore.add(ChatColor.AQUA + LangCore.getUtilMessage("disabled-word").toString());
+                                }
+
+                                this.setItem(2, new GUIItem(
+                                        Material.PAPER,
+                                        ChatColor.AQUA.toString() + ChatColor.BOLD + LangCore.getClassMessage(ConfigCmd.class, "log-notes-item-title").toString(),
+                                        noteLogsLore,
+                                        LangCore.getClassMessage(ConfigCmd.class, "log-notes-item-guide-mode"),
+                                        player
+                                ));
+
                             case 27:
                                 this.setItem(27, new GUIItem(
                                         Material.SIGN,
@@ -204,7 +265,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
                     @Override
                     public BWGUI init() {
-                        genItems(0, 1);
+                        genItems(0, 1, 2);
 
                         return this;
                     }
@@ -245,12 +306,26 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                     return;
                 }
 
+                player.sendMessage(PrefixMessage.info.getPrefix(),
+                        LangCore.getClassMessage(this.getClass(), "database-updated").setKey("%%db", ChatColor.BOLD + (BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") ? "SQLite" : "MySQL")));
+
+                break;
+            case 2:
+                response = new BWConfigTask(BWConfigTask.ConfigTask.NoteLogsSet, !LogCore.notes, player.getBukkitPlayer().getUniqueId()).execute();
+
+                if (response.getCode() == 0 && response instanceof BWTask.BWExceptionResponse) {
+                    player.reportExceptionResponse((BWTask.BWExceptionResponse) response);
+                    return;
+                }
+
+                GUICore.updateAllGUIs();
+
                 if (gui.getItem(27) != null) {
                     GUICore.openGUIs.get(player).genItems(27);
                 }
 
                 player.sendMessage(PrefixMessage.info.getPrefix(),
-                        LangCore.getClassMessage(this.getClass(), "database-updated").setKey("%%db", ChatColor.BOLD + (BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") ? "SQLite" : "MySQL")));
+                        LangCore.getClassMessage(this.getClass(), "log-notes-updated").setKey("%%s", ChatColor.BOLD + String.valueOf(LogCore.notes)));
 
                 break;
             case 27:

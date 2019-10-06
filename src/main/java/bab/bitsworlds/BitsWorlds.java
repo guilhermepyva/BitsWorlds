@@ -1,7 +1,6 @@
 package bab.bitsworlds;
 
 import bab.bitsworlds.cmd.BitsWorldsCmd;
-import bab.bitsworlds.config.BWConfig;
 import bab.bitsworlds.db.BWSQL;
 import bab.bitsworlds.gui.GUICore;
 import bab.bitsworlds.multilanguage.*;

@@ -22,6 +22,10 @@
                 <message key="database-config-guide-mode">altera o tipo de banco de dados do Plugin \n para usuários inexperientes é recomendado o uso de SQLite (padrão)</message>
                 <message key="database-updated">O tipo de banco de dados do Plugin agora é %%db</message>
                 <message key="database-config-already">O tipo de banco de dados do Plugin já é %%db</message>
+                <message key="log-notes-config-already">As notas já estão nesta configuração</message>
+                <message key="log-notes-updated">As notas do registro agora estão %%s</message>
+                <message key="log-notes-item-title">Notas nos Registros</message>
+                <message key="log-notes-item-guide-mode">Habilita ou desabilita as notas nos Registros</message>
                 <message key="config-use">Use %%cmd</message>
                 <message key="invalid-arg">%%arg %%prefixColoré um argumento inválido, os argumentos válidos são %%args</message>
             </class>

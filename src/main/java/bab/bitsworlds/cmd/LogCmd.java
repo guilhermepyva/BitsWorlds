@@ -62,7 +62,7 @@ public class LogCmd implements BWCommand, ImplGUI {
                                 for (Log log : queryLogs(skipItems)) {
                                     GUIItem logitem = LogCore.getItemFromLog(log);
 
-                                    if (player.hasPermission(BWPermission.LOGS_NOTE_ADD) || player.hasPermission(BWPermission.LOGS_NOTE_MODIFY)) {
+                                    if ((player.hasPermission(BWPermission.LOGS_NOTE_ADD) || player.hasPermission(BWPermission.LOGS_NOTE_MODIFY)) && LogCore.notes) {
                                         ItemMeta logitemeta = logitem.getItemMeta();
 
                                         List<String> logitemlore = logitemeta.getLore();
@@ -148,6 +148,7 @@ public class LogCmd implements BWCommand, ImplGUI {
 
                 int calculateLastPage() {
                     try {
+                        //TODO CEIL TA ERRADO TENHO QUE VER ISSO DPS
                         return (int) Math.floor((double) SQLDataManager.queryCountLogs() / 45);
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -175,6 +176,9 @@ public class LogCmd implements BWCommand, ImplGUI {
         BWPagedGUI<List<Integer>> pagedGUI = (BWPagedGUI) gui;
 
         if (event.getSlot() < 45) {
+            if (!LogCore.notes)
+                return;
+
             if (pagedGUI.itemsID.size() - 1 < event.getSlot())
                 return;
 
