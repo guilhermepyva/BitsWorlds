@@ -148,7 +148,6 @@ public class LogCmd implements BWCommand, ImplGUI {
 
                 int calculateLastPage() {
                     try {
-                        //TODO CEIL TA ERRADO TENHO QUE VER ISSO DPS
                         return (int) Math.floor((double) SQLDataManager.queryCountLogs() / 45);
                     } catch (SQLException e) {
                         e.printStackTrace();
