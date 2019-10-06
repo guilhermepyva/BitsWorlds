@@ -8,6 +8,7 @@ import org.bukkit.World;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +20,7 @@ public class WorldUtils {
         List<BWorld> worlds = new ArrayList<>();
 
         Bukkit.getWorlds().forEach(world -> worlds.add(new BWLoadedWorld(world)));
-        getUnloadedWorlds().forEach(file -> worlds.add(new BWUnloadedWorld(file.getName())));
+        getStreamUnloadedWorlds().forEach(file -> worlds.add(new BWUnloadedWorld(file.getName())));
 
         return worlds;
     }
@@ -30,14 +31,14 @@ public class WorldUtils {
             i++;
         }
 
-        for (Object ignored : getUnloadedWorlds().toArray()) {
+        for (Object ignored : getStreamUnloadedWorlds().toArray()) {
             i++;
         }
 
         return i;
     }
 
-    public static Stream<File> getUnloadedWorlds() {
+    public static Stream<File> getStreamUnloadedWorlds() {
         List<String> loadedWorldNames = Bukkit.getWorlds().stream().map(World::getName).collect(Collectors.toList());
 
         FileFilter fileFilter = pathname -> pathname.isDirectory();
@@ -45,5 +46,25 @@ public class WorldUtils {
         return Arrays.stream(Bukkit.getWorldContainer().listFiles(fileFilter))
                 .filter(file -> new File(file + "/level.dat").exists())
                 .filter(file -> !loadedWorldNames.contains(file.getName()));
+    }
+
+    public static List<BWorld> getUnloadedWorlds() {
+        List<BWorld> list = new ArrayList<>();
+        getStreamUnloadedWorlds().forEach(file -> list.add(new BWUnloadedWorld(file.getName())));
+        return list;
+    }
+
+    public static List<BWorld> getLoadedWorlds() {
+        List<BWorld> list = new ArrayList<>();
+        Bukkit.getWorlds().forEach(world -> list.add(new BWLoadedWorld(world)));
+        return list;
+    }
+
+    public static int countUnloadedWorlds() {
+        int i = 0;
+        for (Object ignored : getStreamUnloadedWorlds().toArray()) {
+            i++;
+        }
+        return i;
     }
 }

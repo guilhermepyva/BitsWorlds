@@ -39,6 +39,8 @@
             <class name="ListWorldCmd">
                 <message key="gui-title">Lista de mundos</message>
                 <message key="players-in">Jogadores: %%c</message>
+                <message key="loaded-worlds-filter-item-title">Filtrar por mundos carregados</message>
+                <message key="unloaded-worlds-filter-item-title">Filtrar por mundos descarregados</message>
             </class>
         </package>
         <package path="logger">

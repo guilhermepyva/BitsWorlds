@@ -39,6 +39,8 @@
             <class name="ListWorldCmd">
                 <message key="gui-title">World list</message>
                 <message key="players-in">Players: %%c</message>
+                <message key="loaded-worlds-filter-item-title">Filter by loaded worlds</message>
+                <message key="unloaded-worlds-filter-item-title">Filter by unloaded worlds</message>
             </class>
         </package>
         <package path="logger">

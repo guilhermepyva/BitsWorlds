@@ -1,7 +1,6 @@
 package bab.bitsworlds.cmd;
 
 import bab.bitsworlds.cmd.impl.BWCommand;
-import bab.bitsworlds.db.SQLDataManager;
 import bab.bitsworlds.extensions.*;
 import bab.bitsworlds.gui.*;
 import bab.bitsworlds.multilanguage.LangCore;
@@ -11,7 +10,6 @@ import org.bukkit.command.Command;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.sql.SQLException;
 import java.util.*;
 
 public class ListWorldCmd implements BWCommand, ImplGUI {
@@ -49,31 +47,46 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
 
     @Override
     public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
-        BWPagedGUI<List<Integer>> pagedGUI = (BWPagedGUI) gui;
+        ListWorldGUI worldListGui = (ListWorldGUI) gui;
 
         switch (event.getSlot()) {
             case 36:
-                if (gui.getItem(36) != null)
+                if (worldListGui.getItem(36) != null)
                     player.openGUI(new MainGUI().getGUI("main", player));
             case 39:
-                if (pagedGUI.actualPage > 0) {
-                    pagedGUI.actualPage--;
-                    pagedGUI.setupItemPage(41, 39);
-                    pagedGUI.setupItem(0);
+                if (worldListGui.actualPage > 0) {
+                    worldListGui.actualPage--;
+                    worldListGui.setupItemPage(41, 39);
+                    worldListGui.setupItem(0);
                 }
                 break;
             case 41:
-                if (pagedGUI.actualPage < pagedGUI.lastPage) {
-                    pagedGUI.actualPage++;
-                    pagedGUI.setupItemPage(41, 39);
-                    pagedGUI.setupItem(0);
+                if (worldListGui.actualPage < worldListGui.lastPage) {
+                    worldListGui.actualPage++;
+                    worldListGui.setupItemPage(41, 39);
+                    worldListGui.setupItem(0);
                 }
+                break;
+            case 43:
+                if (worldListGui.filter == ListWorldGUI.Filter.LOADEDWORLDS)
+                    worldListGui.filter = null;
+                else
+                    worldListGui.filter = ListWorldGUI.Filter.LOADEDWORLDS;
+                worldListGui.init();
+                break;
+            case 44:
+                if (worldListGui.filter == ListWorldGUI.Filter.UNLOADEDWORLDS)
+                    worldListGui.filter = null;
+                else
+                    worldListGui.filter = ListWorldGUI.Filter.UNLOADEDWORLDS;
+                worldListGui.init();
                 break;
         }
     }
 
-    private static class ListWorldGUI extends BWPagedGUI<List<BWorld>> {
+    private static class ListWorldGUI extends BWPagedGUI<List<BWorld>>{
         public BWPlayer player;
+        public Filter filter;
 
         public ListWorldGUI(String id, int size, String title, ImplGUI guiClass, boolean updatable, BWPlayer player) {
             super(id, size, title, guiClass, updatable);
@@ -155,15 +168,38 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
                             Collections.emptyList()
                     ));
                     break;
+                case 44:
+                    GUIItem unloadedWorldFilter = new GUIItem(
+                            Material.HOPPER,
+                            ChatColor.DARK_PURPLE + LangCore.getClassMessage(ListWorldCmd.class, "unloaded-worlds-filter-item-title").toString(),
+                            new ArrayList<>()
+                    );
+
+                    if (filter == Filter.UNLOADEDWORLDS)
+                        unloadedWorldFilter.addEffect();
+
+                    this.setItem(44, unloadedWorldFilter);
+                    break;
+                case 43:
+                    GUIItem loadedWorldFilter = new GUIItem(
+                            Material.HOPPER,
+                            ChatColor.DARK_PURPLE + LangCore.getClassMessage(ListWorldCmd.class, "loaded-worlds-filter-item-title").toString(),
+                            new ArrayList<>()
+                    );
+
+                    if (filter == Filter.LOADEDWORLDS)
+                        loadedWorldFilter.addEffect();
+
+                    this.setItem(43, loadedWorldFilter);
+                    break;
             }
         }
 
         @Override
         public BWGUI init() {
-            genItems(0);
+            genItems(0, 43, 44);
             this.actualPage = 0;
             this.lastPage = calculateLastPage();
-            System.out.println(WorldUtils.countWorlds() / 36);
 
             this.setupItemPage(41, 39);
 
@@ -173,19 +209,19 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
         @Override
         public void update() {
             this.lastPage = calculateLastPage();
-            genItems(0);
+            genItems(0, 43, 44);
 
             this.setupItemPage(41, 39);
         }
 
         int calculateLastPage() {
-            return WorldUtils.countWorlds() / 36;
+            return countWorldsByFilter() / 36;
         }
 
         List<BWorld> queryWorlds(int offset) {
             List<BWorld> worlds = new ArrayList<>();
             int i = 0;
-            for (BWorld world : WorldUtils.getWorlds()) {
+            for (BWorld world : getWorldsByFilter()) {
                 if (i >= offset) {
                     if ((i - offset) > 35) {
                         break;
@@ -197,6 +233,29 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
             }
 
             return worlds;
+        }
+
+        List<BWorld> getWorldsByFilter() {
+            if (filter == null)
+                return WorldUtils.getWorlds();
+            else if (filter == Filter.LOADEDWORLDS)
+                return WorldUtils.getLoadedWorlds();
+            else
+                return WorldUtils.getUnloadedWorlds();
+        }
+
+        int countWorldsByFilter() {
+            if (filter == null)
+                return WorldUtils.countWorlds();
+            else if (filter == Filter.LOADEDWORLDS)
+                return Bukkit.getWorlds().size();
+            else
+                return WorldUtils.countUnloadedWorlds();
+        }
+
+        public enum Filter {
+            LOADEDWORLDS,
+            UNLOADEDWORLDS
         }
     }
 }
