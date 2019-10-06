@@ -1,6 +1,7 @@
 package bab.bitsworlds.gui;
 
 import bab.bitsworlds.BitsWorlds;
+import bab.bitsworlds.SkullCore;
 import bab.bitsworlds.cmd.ConfigCmd;
 import bab.bitsworlds.cmd.LogCmd;
 import bab.bitsworlds.extensions.BWPlayer;
@@ -10,7 +11,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.*;
 
@@ -29,15 +32,21 @@ public class MainGUI implements ImplGUI {
                     public void setupItem(int item) {
                         switch (item) {
                             case 4:
-                                this.setItem(4, new GUIItem(
-                                        Material.GRASS,
+                                GUIItem icon = new GUIItem(
+                                        Material.SKULL_ITEM,
+                                        1,
+                                        (short) 3,
                                         ChatColor.GREEN + "" + ChatColor.BOLD + "BitsWorlds",
                                         Arrays.asList(ChatColor.WHITE + LangCore.getClassMessage(MainGUI.class, "version-word").setKey("%%v", BitsWorlds.plugin.getDescription().getVersion()).toString(),
                                                 "",
                                                 ChatColor.WHITE + "" + ChatColor.ITALIC + LangCore.getClassMessage(MainGUI.class, "by-word").setKey("%%n", ChatColor.BLUE + "MrPiva").toString()),
                                         LangCore.getClassMessage(MainGUI.class, "head-item-guide-mode"),
                                         player
-                                ));
+                                );
+                                SkullMeta meta = (SkullMeta) icon.getItemMeta();
+                                SkullCore.applyToSkull(meta, SkullCore.Skull.BWICON);
+                                icon.setItemMeta(meta);
+                                this.setItem(4, icon);
                                 break;
                             case 8:
                                 List<String> guideItemLore = new ArrayList<>();
