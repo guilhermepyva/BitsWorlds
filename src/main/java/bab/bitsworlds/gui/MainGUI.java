@@ -46,7 +46,6 @@ public class MainGUI implements ImplGUI {
                                 SkullMeta meta = (SkullMeta) icon.getItemMeta();
                                 SkullCore.applyToSkull(meta, SkullCore.Skull.BWICON);
                                 icon.setItemMeta(meta);
-                                player.getBukkitPlayer().getInventory().addItem(icon);
                                 this.setItem(4, icon);
                                 break;
                             case 8:
