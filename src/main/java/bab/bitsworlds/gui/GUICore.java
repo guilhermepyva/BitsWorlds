@@ -11,8 +11,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.*;
 
 import java.util.*;
 
@@ -27,6 +26,13 @@ public class GUICore implements Listener {
         if (!check(e.getWhoClicked()))
             return;
 
+        if (e.getClickedInventory().getType() == InventoryType.PLAYER && e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+            e.setCancelled(true);
+            return;
+        }
+        if (e.getClickedInventory().getType() == InventoryType.PLAYER)
+            return;
+
         BWPlayer player = new BWPlayer((Player) e.getWhoClicked());
 
         BWGUI gui = GUICore.openGUIs.get(player);
@@ -39,6 +45,14 @@ public class GUICore implements Listener {
         }
 
         gui.getGUIClass().clickEvent(e, player, gui);
+    }
+
+    @EventHandler
+    public void onInventoryInteract(InventoryDragEvent e) {
+        if (!check(e.getWhoClicked()))
+            return;
+
+        e.setCancelled(true);
     }
 
     @EventHandler
