@@ -59,6 +59,7 @@
                 <message key="name-item-title">Set the name</message>
                 <message key="name-item-guide-mode">here you can set the world's name</message>
                 <message key="name-set-message">Type the name in the chat, type '!' to cancel the operation</message>
+                <message key="name-set-unsucess">Invalid name</message>
                 <message key="normal-type">Normal</message>
                 <message key="flat-type">Flat</message>
                 <message key="large-biomes-type">Large Biomes</message>

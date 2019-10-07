@@ -59,6 +59,7 @@
                 <message key="name-item-title">Definir o nome</message>
                 <message key="name-item-guide-mode">aqui você pode definir o nome do mundo</message>
                 <message key="name-set-message">Digite o nome no bate-papo, digite '!' para cancelar a operação</message>
+                <message key="name-set-unsucess">Nome inválido</message>
                 <message key="normal-type">Normal</message>
                 <message key="flat-type">Superplano</message>
                 <message key="large-biomes-type">Biomas Grandes</message>

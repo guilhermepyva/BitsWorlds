@@ -14,6 +14,7 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -77,6 +78,8 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                 World world = bukCreator.createWorld();
                 world.save();
 
+                player.getBukkitPlayer().teleport(world.getSpawnLocation());
+
                 GUICore.updateGUI("listworld_main");
 
                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "world-created-message"));
@@ -139,6 +142,12 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                             player.getBukkitPlayer().closeInventory();
 
                             String input = ChatInput.askPlayer(player);
+
+                            if (new File(Bukkit.getWorldContainer() + "/" + input + "/").exists()) {
+                                player.openGUI(createWorldGUI);
+                                player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "name-set-unsucess"));
+                                return;
+                            }
 
                             if (!input.equals("!"))
                                 creator.name = input;
