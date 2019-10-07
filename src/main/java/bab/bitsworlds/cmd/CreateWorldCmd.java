@@ -82,7 +82,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                 World world = bukCreator.createWorld();
                 world.save();
 
-                LogCore.addLog(LogAction.WORLD_CREATED, world.getName(), new LogRecorder(player.getBukkitPlayer().getUniqueId()), new Timestamp(System.currentTimeMillis()));
+                LogCore.addLog(LogAction.WORLD_CREATED, null, new LogRecorder(player.getBukkitPlayer().getUniqueId()), new Timestamp(System.currentTimeMillis()), world.getUID(), world.getName());
 
                 player.getBukkitPlayer().teleport(world.getSpawnLocation());
 

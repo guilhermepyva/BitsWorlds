@@ -1,6 +1,5 @@
 package bab.bitsworlds.db;
 
-import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.logger.Log;
 import bab.bitsworlds.logger.LogAction;
 import bab.bitsworlds.logger.LogRecorder;
@@ -19,7 +18,7 @@ public class SQLDataManager {
         PreparedStatement statement = BWSQL.dbCon.prepareStatement("INSERT INTO log(action, data, recorder_type, recorder_uuid, note, note_appender_uuid, time, world, worldname) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         statement.setString(1, log.action.name());
-        statement.setString(2, log.data.toString());
+        statement.setString(2, log.data == null ? null : log.data.toString());
         statement.setString(3, log.recorder.type.name());
         statement.setString(4, log.recorder.uuid != null ? log.recorder.uuid.toString() : null);
         statement.setString(5, log.note);

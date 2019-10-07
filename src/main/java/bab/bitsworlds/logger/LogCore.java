@@ -24,6 +24,10 @@ public class LogCore {
         addLog(action, data, recorder, null, null, time, null, null);
     }
 
+    public static void addLog(LogAction action, Object data, LogRecorder recorder, Timestamp time, UUID world, String worldName) {
+        addLog(action, data, recorder, null, null, time, world, worldName);
+    }
+
     public static void addLog(LogAction action, Object data, LogRecorder recorder, String note, LogRecorder noteRecorder, Timestamp time, UUID world, String worldName) {
         Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
             try {
@@ -54,7 +58,7 @@ public class LogCore {
                 break;
             case WORLD_CREATED:
                 title = title + LangCore.getClassMessage(LogCore.class, "world-created-title").toString();
-                description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "world-created-lore").setKey("%%s", ChatColor.WHITE + log.data.toString() + ChatColor.GOLD).toString());
+                description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "world-created-lore").setKey("%%s", ChatColor.WHITE + log.worldName + ChatColor.GOLD).toString());
         }
 
         String recorder = null;
@@ -88,7 +92,7 @@ public class LogCore {
         description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "date-word").toString() + ChatColor.WHITE + LangCore.getDateByPattern(log.time.toLocalDateTime()));
 
         if (log.world != null)
-            description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "world-word").setKey(ChatColor.WHITE + "%%w", log.worldName + " (" + log.world + ")").toString());
+            description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "world-word").setKey("%%w", ChatColor.WHITE + log.worldName + " (" + log.world + ")").toString());
 
         if (log.note != null)
             description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "note-word").setKey("%%n", ChatColor.WHITE + log.note).setKey("%%p", noteRecorder).toString());
