@@ -53,10 +53,13 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
             case "LIST":
             case "LISTAR":
             case "LISTA":
+            case "LISTER":
                 bwcmd = new ListWorldCmd();
                 break;
             case "CREATE":
             case "CRIAR":
+            case "CREER":
+            case "CREAR":
                 bwcmd = new CreateWorldCmd();
                 break;
             default:
@@ -125,7 +128,8 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
                         list.add("lista");
                         break;
                     case FR:
-
+                        list.add("lister");
+                        break;
                 }
 
             if (bwSender.hasPermission(createWorldCmd.getPermission()))
@@ -137,7 +141,11 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
                         list.add("criar");
                         break;
                     case FR:
+                        list.add("creer");
+                        break;
                     case SP:
+                        list.add("crear");
+                        break;
                 }
         }
 
