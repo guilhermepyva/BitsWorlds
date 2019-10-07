@@ -77,6 +77,8 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                 World world = bukCreator.createWorld();
                 world.save();
 
+                GUICore.updateGUI("listworld_main");
+
                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "world-created-message"));
             case 9:
             case 10:
