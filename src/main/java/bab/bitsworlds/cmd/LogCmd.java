@@ -164,7 +164,7 @@ public class LogCmd implements BWCommand, ImplGUI {
                         return null;
                     }
                 }
-            };
+            }.init();
         }
 
         return null;

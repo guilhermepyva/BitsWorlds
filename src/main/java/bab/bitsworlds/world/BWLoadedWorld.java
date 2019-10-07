@@ -1,4 +1,4 @@
-package bab.bitsworlds.extensions;
+package bab.bitsworlds.world;
 
 import org.bukkit.World;
 

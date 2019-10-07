@@ -36,8 +36,6 @@ public abstract class BWGUI extends CraftInventoryCustom implements Cloneable {
         for (Property property : Property.values()) {
             properties.put(property, property.defaultProperty);
         }
-
-        init();
     }
 
     public void setProperty(Property property, Object value) {

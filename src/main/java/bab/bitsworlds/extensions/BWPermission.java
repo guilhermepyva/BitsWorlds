@@ -5,6 +5,7 @@ public enum BWPermission {
     MAINCMD_CONFIG("maincmd.config"),
     MAINCMD_HELP("maincmd.help"),
     MAINCMD_WORLD_LIST("maincmd.world.list"),
+    MAINCMD_WORLD_CREATE("maincmd.world.create"),
 
     LOGS_SEE("logs.see"),
 

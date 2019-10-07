@@ -5,6 +5,8 @@ import bab.bitsworlds.extensions.*;
 import bab.bitsworlds.gui.*;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.utils.WorldUtils;
+import bab.bitsworlds.world.BWLoadedWorld;
+import bab.bitsworlds.world.BWorld;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -40,7 +42,7 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
                     this,
                     true,
                     player
-            );
+            ).init();
         }
         throw new NullPointerException("No GUI with id " + code + " found");
     }
@@ -53,6 +55,7 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
             case 36:
                 if (worldListGui.getItem(36) != null)
                     player.openGUI(new MainGUI().getGUI("main", player));
+                break;
             case 39:
                 if (worldListGui.actualPage > 0) {
                     worldListGui.actualPage--;

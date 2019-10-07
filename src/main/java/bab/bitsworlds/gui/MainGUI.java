@@ -3,6 +3,7 @@ package bab.bitsworlds.gui;
 import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.SkullCore;
 import bab.bitsworlds.cmd.ConfigCmd;
+import bab.bitsworlds.cmd.CreateWorldCmd;
 import bab.bitsworlds.cmd.ListWorldCmd;
 import bab.bitsworlds.cmd.LogCmd;
 import bab.bitsworlds.extensions.BWPlayer;
@@ -101,6 +102,14 @@ public class MainGUI implements ImplGUI {
                                 listworlditem.setItemMeta(meta);
                                 this.setItem(21, listworlditem);
                                 break;
+                            case 23:
+                                this.setItem(23, new GUIItem(
+                                        Material.REDSTONE_TORCH_ON,
+                                        ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "create-world-item-title").toString(),
+                                        new ArrayList<>(),
+                                        LangCore.getClassMessage(MainGUI.class, "create-world-item-guide-mode"),
+                                        player
+                                ));
                             case 30:
                                 this.setItem(30, new GUIItem(
                                         Material.BOOK,
@@ -120,11 +129,11 @@ public class MainGUI implements ImplGUI {
 
                     @Override
                     public BWGUI init() {
-                        genItems(4, 8, 19, 21, 30);
+                        genItems(4, 8, 19, 21, 23, 30);
 
                         return this;
                     }
-                };
+                }.init();
         }
 
         throw new NullPointerException("No GUI with id " + code + " found");
@@ -173,6 +182,23 @@ public class MainGUI implements ImplGUI {
                 listWorldGui.genItems(36);
 
                 break;
+            case 23:
+                CreateWorldCmd createWorldCmd = new CreateWorldCmd();
+
+                if (!player.hasPermission(createWorldCmd.getPermission())) {
+                    player.sendMessage(PrefixMessage.permission_message);
+
+                    player.getBukkitPlayer().closeInventory();
+
+                    return;
+                }
+
+                BWGUI createWorldGui = createWorldCmd.getGUI("createworld_gui",  player);
+
+                player.openGUI(createWorldGui);
+
+                createWorldGui.genItems(36);
+                break;
             case 30:
                 LogCmd logCmd = new LogCmd();
 
@@ -189,6 +215,7 @@ public class MainGUI implements ImplGUI {
                 player.openGUI(logCmdGUI);
 
                 logCmdGUI.genItems(45);
+                break;
         }
     }
 }

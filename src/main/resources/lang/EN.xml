@@ -42,6 +42,33 @@
                 <message key="loaded-worlds-filter-item-title">Filter by loaded worlds</message>
                 <message key="unloaded-worlds-filter-item-title">Filter by unloaded worlds</message>
             </class>
+            <class name="CreateWorldCmd">
+                <message key="gui-title">Create world</message>
+                <message key="missing">Missing: </message>
+                <message key="missing-name">Set the world's name</message>
+                <message key="missing-environment">Set the world's environment</message>
+                <message key="missing-world-type">Set the world type</message>
+                <message key="all-done">All done, click here to create the world</message>
+                <message key="dimension-guide-mode">here you can set the environment of the world</message>
+                <message key="seed-item-title">Seed</message>
+                <message key="seed-item-guide-mode">here you can set the world's seed, leave blank to a random seed</message>
+                <message key="seed-set-message">Type the seed in the chat, type '!' to cancel the operation</message>
+                <message key="seed-set-unsucess">The inserted seed isn't valid</message>
+                <message key="generate-structures-item-title">Generate Structures</message>
+                <message key="generate-structures-item-guide-mode">when enabled, the world will generate structures like villages, mineshafts, strongholds, etc...</message>
+                <message key="name-item-title">Set the name</message>
+                <message key="name-item-guide-mode">here you can set the world's name</message>
+                <message key="name-set-message">Type the name in the chat, type '!' to cancel the operation</message>
+                <message key="normal-type">Normal</message>
+                <message key="flat-type">Flat</message>
+                <message key="large-biomes-type">Large Biomes</message>
+                <message key="amplified-type">Amplified</message>
+                <message key="customized-type">Customized</message>
+                <message key="type-item-guide">here you can set the world type</message>
+                <message key="generator-settings-set-message">Type the generator settings in the chat for the world, type '!' to cancel the operation</message>
+                <message key="creating-world-message">Creating world...</message>
+                <message key="world-created-message">World created!</message>
+            </class>
         </package>
         <package path="logger">
             <class name="LogCore">
@@ -74,6 +101,8 @@
                 <message key="config-item-guide-mode">here you can access and edit the Plugin Configuration (%%file file)</message>
                 <message key="list-world-item-title">World list</message>
                 <message key="list-world-item-guide-mode">here you can see all the worlds of the server and interact with them</message>
+                <message key="create-world-item-title">Create a world</message>
+                <message key="create-world-item-guide-mode">here you can create a world using this plugin with graphical interfaces</message>
                 <message key="global-log-item-title">Plugin Logs</message>
                 <message key="global-log-item-guide-mode">here you can see the logs made by the Plugin Configuration or others</message>
             </class>

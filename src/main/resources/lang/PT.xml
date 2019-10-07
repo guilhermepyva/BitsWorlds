@@ -42,6 +42,33 @@
                 <message key="loaded-worlds-filter-item-title">Filtrar por mundos carregados</message>
                 <message key="unloaded-worlds-filter-item-title">Filtrar por mundos descarregados</message>
             </class>
+            <class name="CreateWorldCmd">
+                <message key="gui-title">Criar mundo</message>
+                <message key="missing">Faltante: </message>
+                <message key="missing-name">Definir o nome do mundo</message>
+                <message key="missing-environment">Definir o ambiente do mundo</message>
+                <message key="missing-world-type">Definir o tipo do mundo</message>
+                <message key="all-done">Tudo pronto, clique aqui para criar o mundo</message>
+                <message key="dimension-guide-mode">aqui você pode definir o ambiente do mundo</message>
+                <message key="seed-item-title">Semente (Seed)</message>
+                <message key="seed-item-guide-mode">aqui você pode definir a semente (seed) do mundo, deixe em branco para uma semente aleatória</message>
+                <message key="seed-set-message">Digite a semente no bate-papo, digite '!' para cancelar a operação</message>
+                <message key="seed-set-unsucess">A semente informada não é válida</message>
+                <message key="generate-structures-item-title">Gerar Estruturas</message>
+                <message key="generate-structures-item-guide-mode">quando habilitado, o mundo irá gerar estruturas como vilas, minas, fortalezas, etc...</message>
+                <message key="name-item-title">Definir o nome</message>
+                <message key="name-item-guide-mode">aqui você pode definir o nome do mundo</message>
+                <message key="name-set-message">Digite o nome no bate-papo, digite '!' para cancelar a operação</message>
+                <message key="normal-type">Normal</message>
+                <message key="flat-type">Superplano</message>
+                <message key="large-biomes-type">Biomas Grandes</message>
+                <message key="amplified-type">Amplificado</message>
+                <message key="customized-type">Customizado</message>
+                <message key="type-item-guide">aqui você pode definir o tipo do mundo</message>
+                <message key="generator-settings-set-message">Digite as configurações de geração do mundo no bate-papo, digite '!' para cancelar a operação</message>
+                <message key="creating-world-message">Criando mundo...</message>
+                <message key="world-created-message">Mundo criado!</message>
+            </class>
         </package>
         <package path="logger">
             <class name="LogCore">
@@ -74,6 +101,8 @@
                 <message key="config-item-guide-mode">aqui você pode acessar e editar a Configuração do Plugin (arquivo %%file)</message>
                 <message key="list-world-item-title">Lista de mundos</message>
                 <message key="list-world-item-guide-mode">aqui você pode ver todos os mundos do servidor e interagir com eles</message>
+                <message key="create-world-item-title">Criar um mundo</message>
+                <message key="create-world-item-guide-mode">aqui você pode criar um mundo usando este plugin com interfaces gráficas</message>
                 <message key="global-log-item-title">Registros do Plugin</message>
                 <message key="global-log-item-guide-mode">aqui você pode ver os registros feito pela configuração do Plugin ou outros</message>
             </class>

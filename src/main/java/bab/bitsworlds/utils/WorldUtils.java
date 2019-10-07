@@ -1,14 +1,13 @@
 package bab.bitsworlds.utils;
 
-import bab.bitsworlds.extensions.BWLoadedWorld;
-import bab.bitsworlds.extensions.BWUnloadedWorld;
-import bab.bitsworlds.extensions.BWorld;
+import bab.bitsworlds.world.BWLoadedWorld;
+import bab.bitsworlds.world.BWUnloadedWorld;
+import bab.bitsworlds.world.BWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package bab.bitsworlds.extensions;
+package bab.bitsworlds.world;
 
 public class BWUnloadedWorld implements BWorld {
     private String name;
