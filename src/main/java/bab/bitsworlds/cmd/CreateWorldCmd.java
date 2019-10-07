@@ -184,7 +184,6 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
 
                 break;
             case 33:
-                //TODO testar dps
                 Bukkit.getScheduler().runTaskAsynchronously(
                         BitsWorlds.plugin,
                         () -> {

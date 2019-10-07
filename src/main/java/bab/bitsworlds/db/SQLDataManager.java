@@ -38,10 +38,10 @@ public class SQLDataManager {
         stm.execute("UPDATE log SET note = '" + note + "', note_appender_uuid = '" + note_appender + "' WHERE id = " + id);
     }
 
-    public static List<Log> queryLogs(String additional) throws SQLException {
+    public static List<Log> queryLogs(String additional, String where) throws SQLException {
         Statement stm = BWSQL.dbCon.createStatement();
 
-        ResultSet result = stm.executeQuery("SELECT * FROM log ORDER BY id DESC" + additional);
+        ResultSet result = stm.executeQuery("SELECT * FROM log" + where +" ORDER BY id DESC" + additional);
 
         List<Log> list = new ArrayList<>();
 

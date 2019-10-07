@@ -37,137 +37,28 @@ public class LogCmd implements BWCommand, ImplGUI {
     }
 
     @Override
+    public List<String> tabComplete(BWCommandSender sender, Command cmd, String alias, String[] args) {
+        return Collections.emptyList();
+    }
+
+    @Override
     public BWGUI getGUI(String code, BWPlayer player) {
-        if (code.equals("global")) {
-            return new BWPagedGUI<List<Integer>>(
-                    "global_logs",
-                    6*9,
-                    LangCore.getClassMessage(LogCmd.class, "gui-title").toString(),
-                    this,
-                    true
-            ) {
-                @Override
-                public void setupItem(int item) {
-                    switch (item) {
-                        case 0:
-                            Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
-                                this.itemsID = new ArrayList<>();
+        LogGUI logGUI =  new LogGUI(
+                "main_logs",
+                6*9,
+                LangCore.getClassMessage(LogCmd.class, "gui-title").toString(),
+                this,
+                true,
+                player
+        );
 
-                                for (int i = 0; i < 45; i++) {
-                                    setItem(i, new ItemStack(Material.AIR));
-                                }
+        if ("plugin".equals(code))
+            logGUI.filter = Filter.PLUGIN;
 
-                                int i = 0;
-                                int skipItems = this.actualPage * 45;
-                                for (Log log : queryLogs(skipItems)) {
-                                    GUIItem logitem = LogCore.getItemFromLog(log);
+        if ("world".equals(code))
+            logGUI.filter = Filter.WORLD;
 
-                                    if ((player.hasPermission(BWPermission.LOGS_NOTE_ADD) || player.hasPermission(BWPermission.LOGS_NOTE_MODIFY)) && LogCore.notes) {
-                                        ItemMeta logitemeta = logitem.getItemMeta();
-
-                                        List<String> logitemlore = logitemeta.getLore();
-                                        if (log.note == null && player.hasPermission(BWPermission.LOGS_NOTE_ADD)) {
-                                            logitemlore.add("");
-
-                                            logitemlore.addAll(
-                                                    GUIItem.loreJumper(LangCore.getClassMessage(LogCmd.class, "add-note").toString(), 30, ChatColor.AQUA.toString(), "")
-                                            );
-                                        }
-
-                                        else if (log.note != null && player.hasPermission(BWPermission.LOGS_NOTE_MODIFY)) {
-                                            logitemlore.add("");
-
-                                            logitemlore.addAll(
-                                                    GUIItem.loreJumper(LangCore.getClassMessage(LogCmd.class, "modify-note").toString(), 30, ChatColor.AQUA.toString(), "")
-                                            );
-                                        }
-
-                                        logitemeta.setLore(logitemlore);
-                                        logitem.setItemMeta(logitemeta);
-                                    }
-
-                                    this.setItem(i, logitem);
-                                    this.itemsID.add(log.id);
-
-                                    i++;
-                                    if (i == 45) {
-                                        break;
-                                    }
-                                }
-                            });
-
-                            break;
-                        case 45:
-                            this.setItem(45, new GUIItem(
-                                    Material.SIGN,
-                                    ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
-                                    Collections.emptyList(),
-                                    LangCore.getUtilMessage("back-item-guide-mode"),
-                                    player
-                            ));
-
-                            break;
-                        case 48:
-                            this.setItem(48, new GUIItem(
-                                    Material.ARROW,
-                                    ChatColor.GOLD.toString() + LangCore.getUtilMessage("page").toString() + " " + (this.actualPage),
-                                    Collections.emptyList()
-                            ));
-                            break;
-                        case 50:
-                            this.setItem(50, new GUIItem(
-                                    Material.ARROW,
-                                    ChatColor.GOLD.toString() + LangCore.getUtilMessage("page").toString() + " " + (this.actualPage + 2),
-                                    Collections.emptyList()
-                            ));
-                            break;
-                    }
-                }
-
-
-
-                @Override
-                public void update() {
-                    this.lastPage = calculateLastPage();
-                    setupItem(0);
-
-                    this.setupItemPage(50, 48);
-                }
-
-                @Override
-                public BWGUI init() {
-                    setupItem(0);
-
-                    this.actualPage = 0;
-                    this.lastPage = calculateLastPage();
-
-                    this.setupItemPage(50, 48);
-
-                    return this;
-                }
-
-                int calculateLastPage() {
-                    try {
-                        return (int) Math.floor((double) SQLDataManager.queryCountLogs() / 45);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                        return 0;
-                    }
-                }
-
-                List<Log> queryLogs(int offset) {
-                    try {
-                        return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-
-                        return null;
-                    }
-                }
-            }.init();
-        }
-
-        return null;
+        return logGUI.init();
     }
 
     @Override
@@ -228,8 +119,142 @@ public class LogCmd implements BWCommand, ImplGUI {
         }
     }
 
-    @Override
-    public List<String> tabComplete(BWCommandSender sender, Command cmd, String alias, String[] args) {
-        return Collections.emptyList();
+    private class LogGUI extends BWPagedGUI<List<Integer>> {
+        private BWPlayer player;
+        public Filter filter;
+
+        public LogGUI(String id, int size, String title, ImplGUI guiClass, boolean updatable, BWPlayer player) {
+            super(id, size, title, guiClass, updatable);
+            this.player = player;
+        }
+
+        @Override
+        public void setupItem(int item) {
+            switch (item) {
+                case 0:
+                    Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
+                        this.itemsID = new ArrayList<>();
+
+                        for (int i = 0; i < 45; i++) {
+                            setItem(i, new ItemStack(Material.AIR));
+                        }
+
+                        int i = 0;
+                        int skipItems = this.actualPage * 45;
+                        for (Log log : queryLogs(skipItems)) {
+                            GUIItem logitem = LogCore.getItemFromLog(log);
+
+                            if ((player.hasPermission(BWPermission.LOGS_NOTE_ADD) || player.hasPermission(BWPermission.LOGS_NOTE_MODIFY)) && LogCore.notes) {
+                                ItemMeta logitemeta = logitem.getItemMeta();
+
+                                List<String> logitemlore = logitemeta.getLore();
+                                if (log.note == null && player.hasPermission(BWPermission.LOGS_NOTE_ADD)) {
+                                    logitemlore.add("");
+
+                                    logitemlore.addAll(
+                                            GUIItem.loreJumper(LangCore.getClassMessage(LogCmd.class, "add-note").toString(), 30, ChatColor.AQUA.toString(), "")
+                                    );
+                                }
+
+                                else if (log.note != null && player.hasPermission(BWPermission.LOGS_NOTE_MODIFY)) {
+                                    logitemlore.add("");
+
+                                    logitemlore.addAll(
+                                            GUIItem.loreJumper(LangCore.getClassMessage(LogCmd.class, "modify-note").toString(), 30, ChatColor.AQUA.toString(), "")
+                                    );
+                                }
+
+                                logitemeta.setLore(logitemlore);
+                                logitem.setItemMeta(logitemeta);
+                            }
+
+                            this.setItem(i, logitem);
+                            this.itemsID.add(log.id);
+
+                            i++;
+                            if (i == 45) {
+                                break;
+                            }
+                        }
+                    });
+
+                    break;
+                case 45:
+                    this.setItem(45, new GUIItem(
+                            Material.SIGN,
+                            ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
+                            Collections.emptyList(),
+                            LangCore.getUtilMessage("back-item-guide-mode"),
+                            player
+                    ));
+
+                    break;
+                case 48:
+                    this.setItem(48, new GUIItem(
+                            Material.ARROW,
+                            ChatColor.GOLD.toString() + LangCore.getUtilMessage("page").toString() + " " + (this.actualPage),
+                            Collections.emptyList()
+                    ));
+                    break;
+                case 50:
+                    this.setItem(50, new GUIItem(
+                            Material.ARROW,
+                            ChatColor.GOLD.toString() + LangCore.getUtilMessage("page").toString() + " " + (this.actualPage + 2),
+                            Collections.emptyList()
+                    ));
+                    break;
+            }
+        }
+
+
+
+        @Override
+        public void update() {
+            this.lastPage = calculateLastPage();
+            setupItem(0);
+
+            this.setupItemPage(50, 48);
+        }
+
+        @Override
+        public BWGUI init() {
+            setupItem(0);
+
+            this.actualPage = 0;
+            this.lastPage = calculateLastPage();
+
+            this.setupItemPage(50, 48);
+
+            return this;
+        }
+
+        int calculateLastPage() {
+            try {
+                return (int) Math.floor((double) SQLDataManager.queryCountLogs() / 45);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return 0;
+            }
+        }
+
+        List<Log> queryLogs(int offset) {
+            try {
+                if (filter == null)
+                    return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, "");
+                else if (filter == Filter.PLUGIN)
+                    return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, " WHERE world IS NULL");
+                else
+                    return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, " WHERE world IS NOT NULL");
+            } catch (SQLException e) {
+                e.printStackTrace();
+
+                return null;
+            }
+        }
+    }
+
+    public enum Filter {
+        WORLD,
+        PLUGIN
     }
 }

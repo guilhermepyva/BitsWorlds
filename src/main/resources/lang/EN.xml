@@ -106,8 +106,12 @@
                 <message key="list-world-item-guide-mode">here you can see all the worlds of the server and interact with them</message>
                 <message key="create-world-item-title">Create a world</message>
                 <message key="create-world-item-guide-mode">here you can create a world using this plugin with graphical interfaces</message>
-                <message key="global-log-item-title">Plugin Logs</message>
-                <message key="global-log-item-guide-mode">here you can see the logs made by the Plugin Configuration or others</message>
+                <message key="global-log-item-title">Global Logs</message>
+                <message key="global-log-item-guide-mode">here you can see all the logs</message>
+                <message key="plugin-log-item-title">Plugin Logs</message>
+                <message key="plugin-log-item-guide-mode">here you can see the plugin logs made by the Plugin Configuration or other</message>
+                <message key="world-log-item-title">World Logs</message>
+                <message key="world-log-item-guide-mode">here you can see the world logs</message>
             </class>
             <class name="GUICore">
                 <message key="guide-mode-words">Guide Mode</message>

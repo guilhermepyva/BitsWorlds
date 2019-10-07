@@ -38,7 +38,7 @@ public class LogCore {
         });
 
         //TODO MEXER NISSO QND OS LOGS DOS MUNDOS ESTIVEREM PRONTOS
-        GUICore.updateGUI("global_logs");
+        GUICore.updateGUI("main_logs");
     }
 
     public static GUIItem getItemFromLog(Log log) {

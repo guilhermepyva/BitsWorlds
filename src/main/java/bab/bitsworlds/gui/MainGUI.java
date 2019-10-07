@@ -119,6 +119,24 @@ public class MainGUI implements ImplGUI {
                                         player
                                 ));
                                 break;
+                            case 31:
+                                this.setItem(31, new GUIItem(
+                                        Material.BOOK,
+                                        ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "plugin-log-item-title").toString(),
+                                        new ArrayList<>(),
+                                        LangCore.getClassMessage(MainGUI.class, "plugin-log-item-guide-mode"),
+                                        player
+                                ));
+                                break;
+                            case 32:
+                                this.setItem(32, new GUIItem(
+                                        Material.BOOK,
+                                        ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "world-log-item-title").toString(),
+                                        new ArrayList<>(),
+                                        LangCore.getClassMessage(MainGUI.class, "world-log-item-guide-mode"),
+                                        player
+                                ));
+                                break;
                         }
                     }
 
@@ -129,7 +147,7 @@ public class MainGUI implements ImplGUI {
 
                     @Override
                     public BWGUI init() {
-                        genItems(4, 8, 19, 21, 23, 30);
+                        genItems(4, 8, 19, 21, 23, 30, 31, 32);
 
                         return this;
                     }
@@ -200,6 +218,8 @@ public class MainGUI implements ImplGUI {
                 createWorldGui.genItems(36);
                 break;
             case 30:
+            case 31:
+            case 32:
                 LogCmd logCmd = new LogCmd();
 
                 if (!player.hasPermission(logCmd.getPermission())) {
@@ -210,7 +230,13 @@ public class MainGUI implements ImplGUI {
                     return;
                 }
 
-                BWGUI logCmdGUI = logCmd.getGUI("global",  player);
+                BWGUI logCmdGUI;
+                if (event.getSlot() == 30)
+                    logCmdGUI = logCmd.getGUI("global",  player);
+                else if (event.getSlot() == 31)
+                    logCmdGUI = logCmd.getGUI("plugin",  player);
+                else
+                    logCmdGUI = logCmd.getGUI("world",  player);
 
                 player.openGUI(logCmdGUI);
 
