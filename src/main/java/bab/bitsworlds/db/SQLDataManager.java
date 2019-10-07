@@ -83,6 +83,10 @@ public class SQLDataManager {
                 break;
             case GLOBAL_CONFIG_LANGUAGESET:
                 data = Lang.valueOf(resultSet.getString("data"));
+                break;
+            case WORLD_CREATED:
+                data =  resultSet.getString("data");
+                break;
         }
 
         LogRecorder noteRecorder = null;

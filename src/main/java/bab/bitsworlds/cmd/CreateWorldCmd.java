@@ -7,6 +7,9 @@ import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPermission;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.*;
+import bab.bitsworlds.logger.LogAction;
+import bab.bitsworlds.logger.LogCore;
+import bab.bitsworlds.logger.LogRecorder;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
 import bab.bitsworlds.world.WorldCreator;
@@ -15,6 +18,7 @@ import org.bukkit.command.Command;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -77,6 +81,8 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                 //TODO FAZER ABRIR UMA INTERFACE DO MUNDO QUANDO ESTIVER PRONTO
                 World world = bukCreator.createWorld();
                 world.save();
+
+                LogCore.addLog(LogAction.WORLD_CREATED, world.getName(), new LogRecorder(player.getBukkitPlayer().getUniqueId()), new Timestamp(System.currentTimeMillis()));
 
                 player.getBukkitPlayer().teleport(world.getSpawnLocation());
 

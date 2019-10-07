@@ -4,7 +4,9 @@ import org.bukkit.Material;
 
 public enum LogAction {
     GLOBAL_CONFIG_LANGUAGESET(Material.BANNER),
-    GLOBAL_CONFIG_DATABASETYPESET(Material.ANVIL);
+    GLOBAL_CONFIG_DATABASETYPESET(Material.ANVIL),
+
+    WORLD_CREATED(Material.REDSTONE_TORCH_ON);
 
     public Material material;
 
