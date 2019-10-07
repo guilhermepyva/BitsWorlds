@@ -70,6 +70,8 @@ public class BWConfigTask extends BWTask {
                 config.set("log-notes", notes);
                 LogCore.notes = notes;
 
+                LogCore.addLog(LogAction.GLOBAL_CONFIG_NOTESSET, notes, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
+
                 return new DefaultResponse(2);
         }
 

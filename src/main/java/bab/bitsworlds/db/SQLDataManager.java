@@ -4,6 +4,7 @@ import bab.bitsworlds.logger.Log;
 import bab.bitsworlds.logger.LogAction;
 import bab.bitsworlds.logger.LogRecorder;
 import bab.bitsworlds.multilanguage.Lang;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -82,6 +83,9 @@ public class SQLDataManager {
                 break;
             case GLOBAL_CONFIG_LANGUAGESET:
                 data = Lang.valueOf(resultSet.getString("data"));
+                break;
+            case GLOBAL_CONFIG_NOTESSET:
+                data = Boolean.valueOf(resultSet.getString("data"));
                 break;
             case WORLD_CREATED:
                 data =  resultSet.getString("data");

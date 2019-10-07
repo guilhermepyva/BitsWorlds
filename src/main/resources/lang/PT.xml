@@ -77,6 +77,8 @@
                 <message key="global-config-languageset-lore">A Linguagem do Plugin foi alterada para %%lang</message>
                 <message key="global-config-databasetype-set-title">Tipo do Banco de Dados alterado</message>
                 <message key="global-config-databasetype-set-lore">O tipo do Banco de Dados foi alterado para %%db</message>
+                <message key="global-config-notes-set-title">Valor das Notas dos registros foi alterado</message>
+                <message key="global-config-notes-set-lore">O valor das notas na configuração foi alterado para %%s</message>
                 <message key="world-created-title">Um mundo foi criado</message>
                 <message key="world-created-lore">Um mundo chamado %%s foi criado</message>
                 <message key="recorder-word">Registrador: %%r</message>

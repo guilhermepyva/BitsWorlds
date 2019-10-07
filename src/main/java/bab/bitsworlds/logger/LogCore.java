@@ -56,6 +56,11 @@ public class LogCore {
                 description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "global-config-databasetype-set-lore").setKey("%%db", ChatColor.WHITE + ((Boolean) log.data ? "SQLite" : "MySQL")).toString());
 
                 break;
+            case GLOBAL_CONFIG_NOTESSET:
+                title = title + LangCore.getClassMessage(LogCore.class, "global-config-notes-set-title").toString();
+                description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "global-config-notes-set-lore").setKey("%%s", ChatColor.WHITE + log.data.toString()).toString());
+
+                break;
             case WORLD_CREATED:
                 title = title + LangCore.getClassMessage(LogCore.class, "world-created-title").toString();
                 description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "world-created-lore").setKey("%%s", ChatColor.WHITE + log.worldName + ChatColor.GOLD).toString());
