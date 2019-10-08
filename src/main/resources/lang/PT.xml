@@ -70,6 +70,43 @@
                 <message key="creating-world-message">Criando mundo...</message>
                 <message key="world-created-message">Mundo criado!</message>
             </class>
+            <class name="InteractWorldCmd">
+                <message key="gui-title">Interagir com mundo</message>
+                <message key="unload-without-save-item-title">Descarregar mundo sem salvar</message>
+                <message key="unload-without-save-item-warn-prefix">AVISO: </message>
+                <message key="unload-without-save-item-warn">As mudanças feitas no mundo serão descartadas e irreversíveis</message>
+                <message key="unload-without-save-item-guide-mode">isto vai descarregar o mundo e descartar as mudanças feitas nele</message>
+                <message key="unload-item-title">Descarregar mundo e salvar</message>
+                <message key="unload-item-guide-mode">isto vai descarregar o mundo e salvar as mudanças feitas nele</message>
+                <message key="unloading-world-message">Descarregando mundo %%s...</message>
+                <message key="unloaded-world-message">Mundo %%s descarregado com sucesso!</message>
+                <message key="load-world-item-title">Carregar o mundo</message>
+                <message key="load-world-item-guide-mode">isto vai carregar o mundo</message>
+                <message key="loading-world-message">Carregando mundo %%s...</message>
+                <message key="loaded-world-message">Mundo %%s carregado com sucesso!</message>
+                <message key="world-cant-be-unloaded">Este mundo não pode ser descarregado</message>
+                <message key="world-cant-be-loaded">Este mundo não pode ser carregado</message>
+                <message key="gamerule-item-title">Regras de Jogo</message>
+                <message key="gamerule-item-guide-mode">aqui você pode ver e editar o valor das regras de jogo</message>
+                <message key="gamerule-click-to-change-value">Clique para alterar o valor</message>
+                <message key="gamerule-set-message">Digite o novo valor para a regra de jogo no bate-papo, use '!' para canelar a operação</message>
+                <message key="value-word">Valor: %%v</message>
+                <message key="save-world-item-tile">Salvar</message>
+                <message key="save-world-item-guide-mode">isto vai salvar o mundo</message>
+                <message key="saving-world-message">Salvando este mundo...</message>
+                <message key="world-saved-message">Mundo salvo</message>
+                <message key="duplicate-world-item-title">Duplicar Mundo</message>
+                <message key="duplicate-world-item-guide-mode">isto vai duplicar o mundo</message>
+                <message key="duplicating-world-message">Duplicando o mundo...</message>
+                <message key="duplicate-world-message">Mundo duplicado</message>
+                <message key="cant-duplicate-world-message">Um erro ocorreu enquanto o mundo era duplicado...</message>
+                <message key="duplicate-world-set-name-message">Digite o novo nome para o mundo duplicado no bate-papo, use '!' para canelar a operação</message>
+                <message key="backup-item-title">Fazer Backup</message>
+                <message key="backup-item-guide-mode">isto vai fazer um backup do seu mundo</message>
+                <message key="making-backup-message">Fazendo backup deste mundo...</message>
+                <message key="maked-backup-message">Backup feito</message>
+                <message key="backup-error-message">Um erro ocorreu enquanto era feito o backup</message>
+            </class>
         </package>
         <package path="logger">
             <class name="LogCore">

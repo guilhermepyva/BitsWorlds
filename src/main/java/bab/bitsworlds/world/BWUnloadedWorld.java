@@ -1,14 +1,16 @@
 package bab.bitsworlds.world;
 
+import java.io.File;
+
 public class BWUnloadedWorld implements BWorld {
-    private String name;
+    private File file;
 
     @Override
     public String getName() {
-        return name;
+        return file.getName();
     }
 
-    public BWUnloadedWorld(String name) {
-        this.name = name;
+    public BWUnloadedWorld(File file) {
+        this.file = file;
     }
 }

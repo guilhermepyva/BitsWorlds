@@ -3,11 +3,14 @@ package bab.bitsworlds.utils;
 import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.BWUnloadedWorld;
 import bab.bitsworlds.world.BWorld;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +22,7 @@ public class WorldUtils {
         List<BWorld> worlds = new ArrayList<>();
 
         Bukkit.getWorlds().forEach(world -> worlds.add(new BWLoadedWorld(world)));
-        getStreamUnloadedWorlds().forEach(file -> worlds.add(new BWUnloadedWorld(file.getName())));
+        getStreamUnloadedWorlds().forEach(file -> worlds.add(new BWUnloadedWorld(file)));
 
         return worlds;
     }
@@ -49,7 +52,7 @@ public class WorldUtils {
 
     public static List<BWorld> getUnloadedWorlds() {
         List<BWorld> list = new ArrayList<>();
-        getStreamUnloadedWorlds().forEach(file -> list.add(new BWUnloadedWorld(file.getName())));
+        getStreamUnloadedWorlds().forEach(file -> list.add(new BWUnloadedWorld(file)));
         return list;
     }
 
@@ -65,5 +68,14 @@ public class WorldUtils {
             i++;
         }
         return i;
+    }
+
+    public static BWUnloadedWorld getUnloadedWorld(String name) {
+        return new BWUnloadedWorld(new File(Bukkit.getWorldContainer() + "/" + name));
+    }
+
+    public static void copyWorld(String world, File to) throws IOException {
+        FileUtils.copyDirectory(new File(Bukkit.getWorldContainer() + "/" + world), to);
+        new File(to + "/uid.dat").delete();
     }
 }

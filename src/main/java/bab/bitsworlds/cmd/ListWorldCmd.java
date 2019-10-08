@@ -51,6 +51,16 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
     public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
         ListWorldGUI worldListGui = (ListWorldGUI) gui;
 
+        if (event.getSlot() <= 35) {
+            if (worldListGui.itemsID.size() - 1 >= event.getSlot() && worldListGui.itemsID.get(event.getSlot()) != null) {
+                InteractWorldCmd interactWorldCmd = new InteractWorldCmd();
+                InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd.getGUI("main", player);
+                interactGui.world = worldListGui.itemsID.get(event.getSlot());
+                player.openGUI(interactGui.init());
+                interactGui.genItems(36);
+            }
+        }
+
         switch (event.getSlot()) {
             case 36:
                 if (worldListGui.getItem(36) != null)
@@ -102,9 +112,6 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
                 case 0:
                     this.itemsID = new ArrayList<>();
                     int i = 0;
-                    //TODO NAO ESQUECER DE SALVAR O MUNDO LOGO APÓS ELE SER CRIADO
-                    //Bukkit.createWorld(new WorldCreator("teste"));
-                    //Bukkit.getWorld("teste").save();
                     for (int i1 = 0; i1 < 36; i1++) {
                         setItem(i1, new ItemStack(Material.AIR));
                     }
