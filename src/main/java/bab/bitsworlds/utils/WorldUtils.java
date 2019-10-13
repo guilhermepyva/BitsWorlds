@@ -1,5 +1,7 @@
 package bab.bitsworlds.utils;
 
+import bab.bitsworlds.BitsWorlds;
+import bab.bitsworlds.world.BWBackup;
 import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.BWUnloadedWorld;
 import bab.bitsworlds.world.BWorld;
@@ -10,7 +12,6 @@ import org.bukkit.World;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,9 +44,7 @@ public class WorldUtils {
     public static Stream<File> getStreamUnloadedWorlds() {
         List<String> loadedWorldNames = Bukkit.getWorlds().stream().map(World::getName).collect(Collectors.toList());
 
-        FileFilter fileFilter = pathname -> pathname.isDirectory();
-
-        return Arrays.stream(Bukkit.getWorldContainer().listFiles(fileFilter))
+        return Arrays.stream(Bukkit.getWorldContainer().listFiles(File::isDirectory))
                 .filter(file -> new File(file + "/level.dat").exists())
                 .filter(file -> !loadedWorldNames.contains(file.getName()));
     }
@@ -77,5 +76,9 @@ public class WorldUtils {
     public static void copyWorld(String world, File to) throws IOException {
         FileUtils.copyDirectory(new File(Bukkit.getWorldContainer() + "/" + world), to);
         new File(to + "/uid.dat").delete();
+    }
+
+    public static String getValidWorldName(String string) {
+        return string.replace("/", "").replace("\\", "").replace(".", "");
     }
 }

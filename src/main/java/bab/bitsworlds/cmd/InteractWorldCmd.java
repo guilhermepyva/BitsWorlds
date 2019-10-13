@@ -14,12 +14,12 @@ import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.BWorld;
 import org.bukkit.*;
 import org.bukkit.command.Command;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -108,22 +108,31 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                         player.openGUI(interactWorldGUI);
                     }
                     break;
-                case 25:
+                case 14:
                     if (player.hasPermission(BWPermission.SAVE)) {
                         player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "saving-world-message"));
                         ((BWLoadedWorld) interactWorldGUI.world).getWorld().save();
                         player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-saved-message"));
                     }
                     break;
+                case 25:
+                    if (player.hasPermission(BWPermission.MAINCMD_BACKUP_LIST)) {
+                        ListBackupCmd.ListBackupGui listBackupGui = (ListBackupCmd.ListBackupGui) new ListBackupCmd().getGUI("", player);
+
+                        listBackupGui.filter = interactWorldGUI.world.getName();
+                        listBackupGui.returnItemWorld = interactWorldGUI.world;
+                        listBackupGui.returnItemFromInteractWorld = interactWorldGUI.returnItem;
+
+                        player.openGUI(listBackupGui.init());
+                    }
+                    break;
                 case 33:
                     if (player.hasPermission(BWPermission.BACKUP)) {
-                        LocalDateTime localDateTime = LocalDateTime.now();
                         player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "making-backup-message"));
                         try {
                             WorldUtils.copyWorld(
                                     interactWorldGUI.world.getName(),
-                                    new File(BitsWorlds.plugin.getDataFolder() + "/backups/" + interactWorldGUI.world.getName() + "." + localDateTime.getDayOfMonth() + "." + localDateTime.getMonthValue() + "." + localDateTime.getYear() + "-" + localDateTime.getHour() + ":" + localDateTime.getMinute() + ":" + localDateTime.getSecond())
-                            );
+                                    new File(BitsWorlds.plugin.getDataFolder() + "/backups/" + interactWorldGUI.world.getName() + "." + System.currentTimeMillis()));
                         } catch (IOException e) {
                             e.printStackTrace();
                             player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "backup-error-message"));
@@ -148,8 +157,15 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
                                     player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "duplicating-world-message"));
 
+                                    String worldName = WorldUtils.getValidWorldName(input);
+                                    if (worldName.isEmpty()) {
+                                        player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "name-set-unsucess"));
+                                        player.openGUI(interactWorldGUI);
+                                        return;
+                                    }
+
                                     try {
-                                        WorldUtils.copyWorld(interactWorldGUI.world.getName(), new File(Bukkit.getWorldContainer() + "/" + input.replace("/", "").replace("\\", "")));
+                                        WorldUtils.copyWorld(interactWorldGUI.world.getName(), new File(Bukkit.getWorldContainer() + "/" + worldName));
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                         player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "cant-duplicate-world-message"));
@@ -162,6 +178,38 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                         );
                     }
                     break;
+                case 19:
+                    if (player.hasPermission(BWPermission.TELEPORT))
+                        player.getBukkitPlayer().teleport(((BWLoadedWorld) interactWorldGUI.world).world.getSpawnLocation());
+                    break;
+                case 20:
+                    if (player.hasPermission(BWPermission.TELEPORT_OTHER_PLAYER))
+                        Bukkit.getScheduler().runTaskAsynchronously(
+                                BitsWorlds.plugin,
+                                () -> {
+                                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "teleport-set-player-message"));
+                                    player.getBukkitPlayer().closeInventory();
+
+                                    String input = ChatInput.askPlayer(player);
+
+                                    if (input.equals("!")) {
+                                        player.openGUI(interactWorldGUI);
+                                        return;
+                                    }
+
+                                    Player target = Bukkit.getPlayerExact(input);
+                                    if (target == null) {
+                                        player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "teleport-not-online-player-message"));
+                                        player.openGUI(interactWorldGUI);
+                                        return;
+                                    }
+
+                                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "player-teleported-message").setKey("%%pn", input));
+                                    Bukkit.getScheduler().runTask(BitsWorlds.plugin, () -> target.teleport(((BWLoadedWorld) interactWorldGUI.world).world.getSpawnLocation()));
+                                }
+                        );
+                    break;
+
             }
         else
             switch (event.getSlot()) {
@@ -278,9 +326,9 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             ));
                         }
                         break;
-                    case 25:
+                    case 14:
                         if (player.hasPermission(BWPermission.SAVE)) {
-                            this.setItem(25, new GUIItem(
+                            this.setItem(14, new GUIItem(
                                     Material.IRON_AXE,
                                     ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "save-world-item-tile").toString(),
                                     new ArrayList<>(),
@@ -288,6 +336,18 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                     player
                             ));
                         }
+                        break;
+                    case 25:
+                        if (player.hasPermission(BWPermission.MAINCMD_BACKUP_LIST)) {
+                            this.setItem(25, new GUIItem(
+                                    Material.BOOK,
+                                    ChatColor.GOLD + LangCore.getClassMessage(ListBackupCmd.class, "gui-title").toString(),
+                                    new ArrayList<>(),
+                                    LangCore.getClassMessage(InteractWorldCmd.class, "backup-list-item-guide-mode"),
+                                    player
+                            ));
+                        }
+                        break;
                     case 33:
                         if (player.hasPermission(BWPermission.BACKUP)) {
                             this.setItem(33, new GUIItem(
@@ -298,6 +358,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                     player
                             ));
                         }
+                        break;
                     case 34:
                         if (player.hasPermission(BWPermission.DUPLICATE)) {
                             this.setItem(34, new GUIItem(
@@ -308,6 +369,29 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                     player
                             ));
                         }
+                        break;
+                    case 19:
+                        if (player.hasPermission(BWPermission.TELEPORT)) {
+                            this.setItem(19, new GUIItem(
+                                    Material.IRON_BARDING,
+                                    ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "teleport-self-item-title").toString(),
+                                    new ArrayList<>(),
+                                    LangCore.getClassMessage(InteractWorldCmd.class, "teleport-self-guide-mode"),
+                                    player
+                            ));
+                        }
+                        break;
+                    case 20:
+                        if (player.hasPermission(BWPermission.TELEPORT)) {
+                            this.setItem(20, new GUIItem(
+                                    Material.GOLD_BARDING,
+                                    ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "teleport-other-item-title").toString(),
+                                    new ArrayList<>(),
+                                    LangCore.getClassMessage(InteractWorldCmd.class, "teleport-other-guide-mode"),
+                                    player
+                            ));
+                        }
+                        break;
                 }
             else
                 switch (item) {
@@ -335,7 +419,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         @Override
         public BWGUI init() {
             if (world instanceof BWLoadedWorld)
-                genItems(4, 11, 15, 16, 25, 33, 34);
+                genItems(4, 11, 15, 16, 14, 25, 33, 34, 19, 20);
             else
 
                 genItems(4, 16);

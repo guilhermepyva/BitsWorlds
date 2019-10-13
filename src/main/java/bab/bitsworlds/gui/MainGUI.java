@@ -103,13 +103,19 @@ public class MainGUI implements ImplGUI {
                                 this.setItem(21, listworlditem);
                                 break;
                             case 23:
-                                this.setItem(23, new GUIItem(
-                                        Material.REDSTONE_TORCH_ON,
+                                GUIItem createWorldItem = new GUIItem(
+                                        Material.SKULL_ITEM,
+                                        1,
+                                        (short) 3,
                                         ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "create-world-item-title").toString(),
                                         new ArrayList<>(),
                                         LangCore.getClassMessage(MainGUI.class, "create-world-item-guide-mode"),
                                         player
-                                ));
+                                );
+                                SkullMeta createWorldItemItemMeta = (SkullMeta) createWorldItem.getItemMeta();
+                                SkullCore.applyToSkull(createWorldItemItemMeta, SkullCore.Skull.CREATEWORLDICON);
+                                createWorldItem.setItemMeta(createWorldItemItemMeta);
+                                this.setItem(23, createWorldItem);
                             case 30:
                                 this.setItem(30, new GUIItem(
                                         Material.BOOK,

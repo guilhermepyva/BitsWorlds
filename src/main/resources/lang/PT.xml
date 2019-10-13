@@ -64,7 +64,7 @@
                 <message key="flat-type">Superplano</message>
                 <message key="large-biomes-type">Biomas Grandes</message>
                 <message key="amplified-type">Amplificado</message>
-                <message key="customized-type">Customizado</message>
+                <message key="void-type">Vazio</message>
                 <message key="type-item-guide">aqui você pode definir o tipo do mundo</message>
                 <message key="generator-settings-set-message">Digite as configurações de geração do mundo no bate-papo, digite '!' para cancelar a operação</message>
                 <message key="creating-world-message">Criando mundo...</message>
@@ -106,6 +106,29 @@
                 <message key="making-backup-message">Fazendo backup deste mundo...</message>
                 <message key="maked-backup-message">Backup feito</message>
                 <message key="backup-error-message">Um erro ocorreu enquanto era feito o backup</message>
+                <message key="backup-list-item-guide-mode">aqui você pode ver a lista de backups deste mundo</message>
+                <message key="teleport-self-item-title">Teleportar a si mesmo</message>
+                <message key="teleport-self-guide-mode">isto vai teleportar você para o spawn deste mundo</message>
+                <message key="teleport-other-item-title">Teleportar outro jogador</message>
+                <message key="teleport-other-guide-mode">isto vai teleportar outro jogador (você seleciona quem) para o spawn deste mundo</message>
+                <message key="teleport-set-player-message">Digite o nome do jogador que você quer teleportar para este mundo, digite '!' para cancelar a operação</message>
+                <message key="teleport-not-online-player-message">Este jogador não está online!</message>
+                <message key="player-teleported-message">Jogador %%pn teleportado</message>
+            </class>
+            <class name="ListBackupCmd">
+                <message key="gui-title">Lista de Backups</message>
+                <message key="world">Mundo: %%w</message>
+                <message key="made-in">Feito em: %%t</message>
+                <message key="click">Clique para recuperar o backup e torná-lo um mundo</message>
+                <message key="shift-click">Shift + Clique para deletar o backup</message>
+                <message key="recovering-message">Recuperando backup...</message>
+                <message key="recovered-message">Backup recuperado</message>
+                <message key="error-recovering-message">Um erro ocorreu enquanto o backup era recuperado...</message>
+                <message key="backup-name-already-exists">Um mundo está com o nome deste backup, renomeie-o e depois tente recuperar este backup novamente</message>
+                <message key="deleting-backup">Deletando backup...</message>
+                <message key="deleted-backup">Backup deletado</message>
+                <message key="error-deleting-message">Um erro aconteceu enquanto deletava o backup...</message>
+                <message key="delete-backup-confirmation-message">Você tem certeza de que deseja deletar este backup? digite 'y' para sim ou digite qualquer outra coisa para cancelar</message>
             </class>
         </package>
         <package path="logger">

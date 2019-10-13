@@ -7,6 +7,7 @@ public enum BWPermission {
     MAINCMD_WORLD_LIST("maincmd.world.list"),
     MAINCMD_WORLD_CREATE("maincmd.world.create"),
     MAINCMD_WORLD_INTERACT("maincmd.world.interact"),
+    MAINCMD_BACKUP_LIST("maincmd.backup.list"),
 
     LOGS_SEE("logs.see"),
 
@@ -20,7 +21,12 @@ public enum BWPermission {
     GAMERULE("interaction.gamerule"),
     SAVE("interaction.save"),
     DUPLICATE("interaction.duplicate"),
-    BACKUP("interaction.backup")
+    BACKUP("interaction.backup"),
+    TELEPORT("interaction.teleport.self"),
+    TELEPORT_OTHER_PLAYER("interaction.teleport.other"),
+
+    RECOVER_BACKUP("backup.recover"),
+    DELETE_BACKUP("backup.delete")
 
 
     ;

@@ -51,14 +51,12 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
     public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
         ListWorldGUI worldListGui = (ListWorldGUI) gui;
 
-        if (event.getSlot() <= 35) {
-            if (worldListGui.itemsID.size() - 1 >= event.getSlot() && worldListGui.itemsID.get(event.getSlot()) != null) {
-                InteractWorldCmd interactWorldCmd = new InteractWorldCmd();
-                InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd.getGUI("main", player);
-                interactGui.world = worldListGui.itemsID.get(event.getSlot());
-                player.openGUI(interactGui.init());
-                interactGui.genItems(36);
-            }
+        if (event.getSlot() <= 35 && (worldListGui.itemsID.size() - 1 >= event.getSlot() && worldListGui.itemsID.get(event.getSlot()) != null) && player.hasPermission(BWPermission.MAINCMD_WORLD_INTERACT)) {
+            InteractWorldCmd interactWorldCmd = new InteractWorldCmd();
+            InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd.getGUI("main", player);
+            interactGui.world = worldListGui.itemsID.get(event.getSlot());
+            player.openGUI(interactGui.init());
+            interactGui.genItems(36);
         }
 
         switch (event.getSlot()) {

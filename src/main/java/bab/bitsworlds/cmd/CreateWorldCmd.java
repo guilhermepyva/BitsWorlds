@@ -2,6 +2,7 @@ package bab.bitsworlds.cmd;
 
 import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.ChatInput;
+import bab.bitsworlds.SkullCore;
 import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPermission;
@@ -12,10 +13,13 @@ import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.logger.LogRecorder;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
+import bab.bitsworlds.utils.WorldUtils;
+import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.WorldCreator;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
 import java.sql.Timestamp;
@@ -68,12 +72,15 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
 
                 org.bukkit.WorldCreator bukCreator = new org.bukkit.WorldCreator(createWorldGUI.creator.name);
                 bukCreator.environment(createWorldGUI.creator.environment);
-                bukCreator.type(createWorldGUI.creator.worldType);
+                if (createWorldGUI.creator.worldType == WorldType.VOID)
+                    bukCreator.type(org.bukkit.WorldType.FLAT);
+                else
+                    bukCreator.type(org.bukkit.WorldType.valueOf(createWorldGUI.creator.worldType.name()));
                 bukCreator.generateStructures(createWorldGUI.creator.generateStructures);
                 if (createWorldGUI.creator.seed != null)
                     bukCreator.seed(createWorldGUI.creator.seed);
-                if (createWorldGUI.creator.worldType == WorldType.CUSTOMIZED)
-                    bukCreator.generatorSettings(createWorldGUI.creator.generatorSettings);
+                if (createWorldGUI.creator.worldType == WorldType.VOID)
+                    bukCreator.generatorSettings("2;0;1;");
 
                 player.getBukkitPlayer().closeInventory();
                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "creating-world-message"));
@@ -84,9 +91,13 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
 
                 LogCore.addLog(LogAction.WORLD_CREATED, null, new LogRecorder(player.getBukkitPlayer().getUniqueId()), new Timestamp(System.currentTimeMillis()), world.getUID(), world.getName());
 
-                player.getBukkitPlayer().teleport(world.getSpawnLocation());
-
                 GUICore.updateGUI("listworld_main");
+
+                if (player.hasPermission(BWPermission.MAINCMD_WORLD_INTERACT)) {
+                    InteractWorldCmd.InteractWorldGUI worldGUI = (InteractWorldCmd.InteractWorldGUI) new InteractWorldCmd().getGUI("", player);
+                    worldGUI.world = new BWLoadedWorld(world);
+                    player.openGUI(worldGUI.init());
+                }
 
                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "world-created-message"));
             case 9:
@@ -149,15 +160,20 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
 
                             String input = ChatInput.askPlayer(player);
 
-                            if (new File(Bukkit.getWorldContainer() + "/" + input + "/").exists()) {
+                            if (input.equals("!")) {
+                                player.openGUI(createWorldGUI);
+                                return;
+                            }
+
+                            String worldName = WorldUtils.getValidWorldName(input);
+
+                            if (new File(Bukkit.getWorldContainer() + "/" + input + "/").exists() || worldName.isEmpty()) {
                                 player.openGUI(createWorldGUI);
                                 player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "name-set-unsucess"));
                                 return;
                             }
 
-                            if (!input.equals("!"))
-                                creator.name = input;
-
+                            creator.name = worldName;
                             createWorldGUI.genItems(4, 17);
                             player.openGUI(createWorldGUI);
                         }
@@ -167,45 +183,20 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
             case 30:
             case 31:
             case 32:
-                if (event.getSlot() == 29) {
+            case 33:
+                if (event.getSlot() == 29)
                     createWorldGUI.creator.worldType = WorldType.NORMAL;
-                }
-                else if (event.getSlot() == 30) {
+                else if (event.getSlot() == 30)
                     createWorldGUI.creator.worldType = WorldType.FLAT;
-                }
-                else if (event.getSlot() == 31) {
+                else if (event.getSlot() == 31)
                     createWorldGUI.creator.worldType = WorldType.LARGE_BIOMES;
-                }
-                else if (event.getSlot() == 32) {
+                else if (event.getSlot() == 32)
                     createWorldGUI.creator.worldType = WorldType.AMPLIFIED;
-                }
+                else if (event.getSlot() == 33)
+                    createWorldGUI.creator.worldType = WorldType.VOID;
 
                 createWorldGUI.genItems(4, 29, 30, 31, 32, 33);
 
-                break;
-            case 33:
-                Bukkit.getScheduler().runTaskAsynchronously(
-                        BitsWorlds.plugin,
-                        () -> {
-                            WorldCreator creator = createWorldGUI.creator;
-
-                            player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "generator-settings-set-message"));
-                            player.getBukkitPlayer().closeInventory();
-
-                            String input = ChatInput.askPlayer(player);
-
-                            if ("!".equals(input)) {
-                                player.openGUI(createWorldGUI);
-                                return;
-                            }
-
-                            creator.generatorSettings = input;
-                            creator.worldType = WorldType.CUSTOMIZED;
-
-                            createWorldGUI.genItems(4, 29, 30, 31, 32, 33);
-                            player.openGUI(createWorldGUI);
-                        }
-                );
                 break;
             case 36:
                 if (createWorldGUI.getItem(36) != null)
@@ -243,11 +234,17 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                     else
                         description.add(ChatColor.WHITE + LangCore.getClassMessage(CreateWorldCmd.class, "all-done").toString());
 
-                    this.setItem(4, new GUIItem(
-                            Material.REDSTONE_TORCH_ON,
+                    GUIItem createWorldItem = new GUIItem(
+                            Material.SKULL_ITEM,
+                            1,
+                            (short) 3,
                             ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "gui-title").toString(),
                             description
-                    ));
+                    );
+                    SkullMeta createWorldItemItemMeta = (SkullMeta) createWorldItem.getItemMeta();
+                    SkullCore.applyToSkull(createWorldItemItemMeta, SkullCore.Skull.CREATEWORLDICON);
+                    createWorldItem.setItemMeta(createWorldItemItemMeta);
+                    this.setItem(4, createWorldItem);
                     break;
                 case 9:
                     GUIItem overworlditem = new GUIItem(
@@ -411,14 +408,14 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 33:
                     GUIItem customizedItem = new GUIItem(
-                            Material.WORKBENCH,
-                            ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "customized-type").toString(),
+                            Material.GLASS,
+                            ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "void-type").toString(),
                             new ArrayList<>(),
                             LangCore.getClassMessage(CreateWorldCmd.class, "type-item-guide"),
                             player
                     );
 
-                    if (creator.worldType != null && creator.worldType == WorldType.CUSTOMIZED)
+                    if (creator.worldType != null && creator.worldType == WorldType.VOID)
                         customizedItem.addEffect();
 
                     this.setItem(33, customizedItem);
@@ -445,5 +442,9 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
         @Override
         public void update() {
         }
+    }
+
+    public enum WorldType {
+        NORMAL, FLAT, LARGE_BIOMES, AMPLIFIED, VOID;
     }
 }
