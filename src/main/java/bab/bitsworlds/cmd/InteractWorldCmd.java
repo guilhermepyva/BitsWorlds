@@ -11,6 +11,7 @@ import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
 import bab.bitsworlds.utils.WorldUtils;
 import bab.bitsworlds.world.BWLoadedWorld;
+import bab.bitsworlds.world.BWUnloadedWorld;
 import bab.bitsworlds.world.BWorld;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -58,7 +59,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         InteractWorldGUI interactWorldGUI = (InteractWorldGUI) gui;
 
 
-        if (event.getSlot() == 36) {
+        if (event.getSlot() == 36 && interactWorldGUI.returnItem) {
             player.openGUI(new ListWorldCmd().getGUI("listworld_main", player));
             return;
         }
@@ -286,6 +287,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
                             description.add(ChatColor.GOLD + LangCore.getClassMessage(ListWorldCmd.class, "players-in").setKey("%%c", ChatColor.WHITE + String.valueOf(bukWorld.getPlayers().size())).toString());
                             description.add(ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "status-word").setKey("%%s", ChatColor.GREEN + LangCore.getUtilMessage("loaded-word").toString()).toString());
+                            description.add(ChatColor.GOLD + "UUID: " + ChatColor.WHITE + bukWorld.getUID());
 
                             this.setItem(4, new GUIItem(material, world.getName(), description));
                         break;
@@ -398,7 +400,8 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     case 4:
                         this.setItem(4, new GUIItem(Material.STONE, world.getName(), Arrays.asList(
                                 "",
-                                ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "status-word").setKey("%%s", ChatColor.RED + LangCore.getUtilMessage("unloaded-word").toString()).toString()
+                                ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "status-word").setKey("%%s", ChatColor.RED + LangCore.getUtilMessage("unloaded-word").toString()).toString(),
+                                ChatColor.GOLD + "UUID: " + ChatColor.WHITE + ((BWUnloadedWorld) world).getUUID()
                         )));
                         break;
                     case 16:

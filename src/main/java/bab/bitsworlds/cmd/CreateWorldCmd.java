@@ -85,7 +85,6 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                 player.getBukkitPlayer().closeInventory();
                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "creating-world-message"));
 
-                //TODO FAZER ABRIR UMA INTERFACE DO MUNDO QUANDO ESTIVER PRONTO
                 World world = bukCreator.createWorld();
                 world.save();
 

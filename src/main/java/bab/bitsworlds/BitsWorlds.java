@@ -10,8 +10,13 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.*;
+import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class BitsWorlds extends JavaPlugin {
 

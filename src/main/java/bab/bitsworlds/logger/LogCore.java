@@ -96,8 +96,8 @@ public class LogCore {
         description.add(ChatColor.GOLD + "ID: " + ChatColor.WHITE + log.id);
         description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "date-word").toString() + ChatColor.WHITE + LangCore.getDateByPattern(log.time.toLocalDateTime()));
 
-        if (log.world != null)
-            description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "world-word").setKey("%%w", ChatColor.WHITE + log.worldName + " (" + log.world + ")").toString());
+        if (!log.isGlobal())
+            description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "world-word").setKey("%%w", ChatColor.WHITE + log.worldName + (log.world != null ? " (" + log.world + ")" : "")).toString());
 
         if (log.note != null)
             description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "note-word").setKey("%%n", ChatColor.WHITE + log.note).setKey("%%p", noteRecorder).toString());

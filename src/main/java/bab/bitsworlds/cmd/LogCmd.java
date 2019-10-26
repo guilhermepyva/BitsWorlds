@@ -242,9 +242,9 @@ public class LogCmd implements BWCommand, ImplGUI {
                 if (filter == null)
                     return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, "");
                 else if (filter == Filter.PLUGIN)
-                    return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, " WHERE world IS NULL");
+                    return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, " WHERE worldName IS NULL");
                 else
-                    return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, " WHERE world IS NOT NULL");
+                    return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, " WHERE worldName IS NOT NULL");
             } catch (SQLException e) {
                 e.printStackTrace();
 
