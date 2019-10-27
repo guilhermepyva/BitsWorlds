@@ -147,7 +147,7 @@
                 <message key="global-config-notes-set-title">Notes of the logs value changed</message>
                 <message key="global-config-notes-set-lore">The Notes value in configuration has been changed to %%s</message>
                 <message key="world-created-title">A world has been created</message>
-                <message key="world-created-lore">Um mundo chamado %%s foi criado</message>
+                <message key="world-created-lore">A world called %%s was created</message>
                 <message key="recorder-word">Recorder: %%r</message>
                 <message key="console-word">Console</message>
                 <message key="system-word">System</message>
