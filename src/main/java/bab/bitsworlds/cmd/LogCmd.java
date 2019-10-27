@@ -12,6 +12,7 @@ import bab.bitsworlds.logger.Log;
 import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
+import bab.bitsworlds.world.BWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,6 +25,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class LogCmd implements BWCommand, ImplGUI {
     @Override
@@ -56,24 +58,24 @@ public class LogCmd implements BWCommand, ImplGUI {
             logGUI.filter = Filter.PLUGIN;
 
         if ("world".equals(code))
-            logGUI.filter = Filter.WORLD;
+            logGUI.filter = Filter.WORLDS;
 
         return logGUI.init();
     }
 
     @Override
     public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
-        BWPagedGUI<List<Integer>> pagedGUI = (BWPagedGUI) gui;
+        LogGUI logGUI = (LogGUI) gui;
 
         if (event.getSlot() < 45) {
             if (!LogCore.notes)
                 return;
 
-            if (pagedGUI.itemsID.size() - 1 < event.getSlot())
+            if (logGUI.itemsID.size() - 1 < event.getSlot())
                 return;
 
             Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
-                int logID = pagedGUI.itemsID.get(event.getSlot());
+                int logID = logGUI.itemsID.get(event.getSlot());
 
                 player.getBukkitPlayer().closeInventory();
 
@@ -99,29 +101,39 @@ public class LogCmd implements BWCommand, ImplGUI {
         switch (event.getSlot()) {
             case 45:
                 if (gui.getItem(45) != null) {
+                    if (logGUI.returnItem != null) {
+                        InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) new InteractWorldCmd().getGUI("main", player);
+                        interactGui.world = logGUI.returnItem;
+                        player.openGUI(interactGui.init());
+                        interactGui.genItems(36);
+                        return;
+                    }
                     player.openGUI(new MainGUI().getGUI("main", player));
                 }
                 break;
             case 48:
-                if (pagedGUI.actualPage > 0) {
-                    pagedGUI.actualPage--;
-                    pagedGUI.setupItemPage(50, 48);
-                    pagedGUI.setupItem(0);
+                if (logGUI.actualPage > 0) {
+                    logGUI.actualPage--;
+                    logGUI.setupItemPage(50, 48);
+                    logGUI.setupItem(0);
                 }
                 break;
             case 50:
-                if (pagedGUI.actualPage < pagedGUI.lastPage) {
-                    pagedGUI.actualPage++;
-                    pagedGUI.setupItemPage(50, 48);
-                    pagedGUI.setupItem(0);
+                if (logGUI.actualPage < logGUI.lastPage) {
+                    logGUI.actualPage++;
+                    logGUI.setupItemPage(50, 48);
+                    logGUI.setupItem(0);
                 }
                 break;
         }
     }
 
-    private class LogGUI extends BWPagedGUI<List<Integer>> {
+    public class LogGUI extends BWPagedGUI<List<Integer>> {
         private BWPlayer player;
         public Filter filter;
+        public String worldNameFilter;
+        public UUID worldUIDFilter;
+        public BWorld returnItem;
 
         public LogGUI(String id, int size, String title, ImplGUI guiClass, boolean updatable, BWPlayer player) {
             super(id, size, title, guiClass, updatable);
@@ -243,6 +255,10 @@ public class LogCmd implements BWCommand, ImplGUI {
                     return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, "");
                 else if (filter == Filter.PLUGIN)
                     return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, " WHERE worldName IS NULL");
+                else if (filter == Filter.WORLDNAME)
+                    return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, " WHERE worldName = '" + worldNameFilter + "'");
+                else if (filter == Filter.WORLDUUID)
+                    return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, " WHERE world = '" + worldUIDFilter.toString() + "'");
                 else
                     return SQLDataManager.queryLogs(" LIMIT " + offset + ", " + 45, " WHERE worldName IS NOT NULL");
             } catch (SQLException e) {
@@ -254,7 +270,9 @@ public class LogCmd implements BWCommand, ImplGUI {
     }
 
     public enum Filter {
-        WORLD,
+        WORLDNAME,
+        WORLDUUID,
+        WORLDS,
         PLUGIN
     }
 }

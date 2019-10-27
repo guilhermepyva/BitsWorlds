@@ -107,6 +107,8 @@
                 <message key="maked-backup-message">Backup feito</message>
                 <message key="backup-error-message">Um erro ocorreu enquanto era feito o backup</message>
                 <message key="backup-list-item-guide-mode">aqui você pode ver a lista de backups deste mundo</message>
+                <message key="log-list-item-title">Listar os registros deste mundo</message>
+                <message key="log-list-item-guide-mode">isto vai listar os registros feitos pelo nome deste mundo ou pelo uuid deste mundo</message>
                 <message key="teleport-self-item-title">Teleportar a si mesmo</message>
                 <message key="teleport-self-guide-mode">isto vai teleportar você para o spawn deste mundo</message>
                 <message key="teleport-other-item-title">Teleportar outro jogador</message>

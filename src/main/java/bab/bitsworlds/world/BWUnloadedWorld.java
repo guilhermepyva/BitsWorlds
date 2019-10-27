@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class BWUnloadedWorld implements BWorld {
     private File file;
-    public UUID uuid;
+    private UUID uuid;
 
     @Override
     public String getName() {

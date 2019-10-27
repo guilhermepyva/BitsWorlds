@@ -7,6 +7,7 @@ import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPermission;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.*;
+import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
 import bab.bitsworlds.utils.WorldUtils;
@@ -63,6 +64,32 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
             player.openGUI(new ListWorldCmd().getGUI("listworld_main", player));
             return;
         }
+        else if (event.getSlot() == 24 && player.hasPermission(BWPermission.LOGS_SEE)) {
+            LogCmd.LogGUI logGUI = (LogCmd.LogGUI) new LogCmd().getGUI("", player);
+            BWorld world = interactWorldGUI.world;
+
+            if (world instanceof BWUnloadedWorld) {
+                if (((BWUnloadedWorld) world).getUUID() != null) {
+                    logGUI.filter = LogCmd.Filter.WORLDUUID;
+                    logGUI.worldUIDFilter = ((BWUnloadedWorld) world).getUUID();
+                }
+                else {
+                    logGUI.filter = LogCmd.Filter.WORLDNAME;
+                    logGUI.worldNameFilter = world.getName();
+                }
+            }
+            else {
+                logGUI.filter = LogCmd.Filter.WORLDUUID;
+                logGUI.worldUIDFilter = ((BWLoadedWorld) world).getWorld().getUID();
+            }
+
+            logGUI.returnItem = world;
+
+            player.openGUI(logGUI);
+
+            logGUI.genItems(45);
+            return;
+        }
 
         if (interactWorldGUI.world instanceof BWLoadedWorld)
             switch (event.getSlot()) {
@@ -116,6 +143,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                         player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-saved-message"));
                     }
                     break;
+                case 24:
                 case 25:
                     if (player.hasPermission(BWPermission.MAINCMD_BACKUP_LIST)) {
                         ListBackupCmd.ListBackupGui listBackupGui = (ListBackupCmd.ListBackupGui) new ListBackupCmd().getGUI("", player);
@@ -339,6 +367,16 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             ));
                         }
                         break;
+                    case 24:
+                        if (player.hasPermission(BWPermission.LOGS_SEE)) {
+                            this.setItem(24, new GUIItem(
+                                    Material.BOOK,
+                                    ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "log-list-item-title").toString(),
+                                    new ArrayList<>(),
+                                    LangCore.getClassMessage(InteractWorldCmd.class, "log-list-item-guide-mode"),
+                                    player
+                            ));
+                        }
                     case 25:
                         if (player.hasPermission(BWPermission.MAINCMD_BACKUP_LIST)) {
                             this.setItem(25, new GUIItem(
@@ -422,7 +460,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         @Override
         public BWGUI init() {
             if (world instanceof BWLoadedWorld)
-                genItems(4, 11, 15, 16, 14, 25, 33, 34, 19, 20);
+                genItems(4, 11, 15, 16, 14, 25, 33, 34, 19, 20, 24);
             else
 
                 genItems(4, 16);
