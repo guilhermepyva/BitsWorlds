@@ -24,6 +24,8 @@ public enum BWPermission {
     BACKUP("interaction.backup"),
     TELEPORT("interaction.teleport.self"),
     TELEPORT_OTHER_PLAYER("interaction.teleport.other"),
+    SEE_TIME("interaction.time.see"),
+    SET_TIME("interaction.time.set"),
 
     RECOVER_BACKUP("backup.recover"),
     DELETE_BACKUP("backup.delete")

@@ -8,6 +8,7 @@ import bab.bitsworlds.extensions.BWPermission;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.*;
 import bab.bitsworlds.logger.LogCore;
+import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
 import bab.bitsworlds.utils.WorldUtils;
@@ -19,6 +20,7 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class InteractWorldCmd implements BWCommand, ImplGUI {
     @Override
@@ -432,6 +435,22 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             ));
                         }
                         break;
+                    case 10:
+                        if (player.hasPermission(BWPermission.SEE_TIME)) {
+                            List<String> timeDescription = new ArrayList<>();
+
+                            timeDescription.add("");
+                            timeDescription.add(ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "actual-hour").setKey("%%h",ChatColor.WHITE + WorldUtils.getHours(((BWLoadedWorld) world).getWorld())).toString());
+                            timeDescription.add(ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "actual-tick").setKey("%%t", ChatColor.WHITE + String.valueOf(((BWLoadedWorld) world).getWorld().getTime())).toString());
+
+                            this.setItem(10, new GUIItem(
+                                    Material.WATCH,
+                                    ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "time-item-title").toString(),
+                                    timeDescription,
+                                    LangCore.getClassMessage(InteractWorldCmd.class, player.hasPermission(BWPermission.SET_TIME) ? "time-guide-mode2" : "time-guide-mode1"),
+                                    player
+                            ));
+                        }
                 }
             else
                 switch (item) {
@@ -460,7 +479,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         @Override
         public BWGUI init() {
             if (world instanceof BWLoadedWorld)
-                genItems(4, 11, 15, 16, 14, 25, 33, 34, 19, 20, 24);
+                genItems(4, 11, 15, 16, 14, 25, 33, 34, 19, 20, 24, 10);
             else
 
                 genItems(4, 16);
@@ -639,5 +658,42 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     break;
             }
         }
+    }
+
+    static String actualHours = ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "actual-hour").setKey("%%h","").toString();
+    static String actualTick = ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "actual-tick").setKey("%%t", "").toString();;
+
+    public static void timeUpdater() {
+        Lang actualLang = LangCore.lang;
+
+        Bukkit.getScheduler().runTaskTimer(
+                BitsWorlds.plugin,
+                () -> {
+                    Stream<BWGUI> stream = GUICore.openGUIs.values().stream().filter(bwGui -> bwGui instanceof InteractWorldCmd.InteractWorldGUI);
+
+                    if (LangCore.lang != actualLang) {
+                        actualHours = ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "actual-hour").setKey("%%h","").toString();
+                        actualTick = ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "actual-tick").setKey("%%t", "").toString();
+                    }
+
+                    stream.forEach(
+                            bwGui -> {
+                                if (((InteractWorldGUI) bwGui).world instanceof BWLoadedWorld) {
+                                    ItemStack item = bwGui.getItem(10);
+                                    ItemMeta meta = item.getItemMeta();
+                                    List<String> lore = meta.getLore();
+
+                                    lore.set(1, actualHours + ChatColor.WHITE + WorldUtils.getHours(((BWLoadedWorld) ((InteractWorldGUI) bwGui).world).getWorld()));
+                                    lore.set(2, actualTick + ChatColor.WHITE + ((BWLoadedWorld) ((InteractWorldGUI) bwGui).world).getWorld().getTime());
+
+                                    meta.setLore(lore);
+                                    item.setItemMeta(meta);
+                                }
+                            }
+                    );
+                },
+                0,
+                36
+        );
     }
 }

@@ -12,6 +12,8 @@ import org.bukkit.World;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class WorldUtils {
+    static double minutePerTick = 16.0 + 2.0 / 3.0;
+
     public static List<BWorld> getWorlds() {
         List<BWorld> worlds = new ArrayList<>();
 
@@ -80,5 +84,30 @@ public class WorldUtils {
 
     public static String getValidWorldName(String string) {
         return string.replace("/", "").replace("\\", "").replace(".", "");
+    }
+
+    public static String getHours(World world) {
+        double ticks = (double) world.getTime();
+
+        BigDecimal minutes = new BigDecimal(ticks / minutePerTick + 360).setScale(0, RoundingMode.FLOOR);
+
+        String string = minutes.remainder(new BigDecimal(60)).toString();
+
+        if (string.length() < 2)
+            string = "0" + string;
+
+        BigDecimal hours = minutes.divide(new BigDecimal(60), RoundingMode.FLOOR);
+
+        if (hours.compareTo(new BigDecimal(24)) >= 0)
+            hours = hours.subtract(new BigDecimal(24));
+
+        boolean night = false;
+
+        if (hours.compareTo(new BigDecimal(12)) > 0) {
+            hours = hours.subtract(new BigDecimal(12));
+            night = true;
+        }
+
+        return hours.toString() + ":" + string + (night ? " PM" : " AM");
     }
 }

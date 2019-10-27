@@ -1,6 +1,7 @@
 package bab.bitsworlds;
 
 import bab.bitsworlds.cmd.BitsWorldsCmd;
+import bab.bitsworlds.cmd.InteractWorldCmd;
 import bab.bitsworlds.db.BWSQL;
 import bab.bitsworlds.gui.GUICore;
 import bab.bitsworlds.multilanguage.*;
@@ -43,6 +44,7 @@ public class BitsWorlds extends JavaPlugin {
 
         ChatInput.inputPlayers = new HashMap<>();
 
+        InteractWorldCmd.timeUpdater();
         loadListeners();
         loadCmd();
         loadPrefixes();
@@ -80,6 +82,7 @@ public class BitsWorlds extends JavaPlugin {
 
         getCommand("BitsWorlds").setPermissionMessage(PrefixMessage.permission_message);
         getCommand("BitsWorlds").setExecutor(new BitsWorldsCmd());
+        getCommand("test").setExecutor(new TestCmd());
     }
 
     private void loadListeners() {
