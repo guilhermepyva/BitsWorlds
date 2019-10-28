@@ -87,8 +87,10 @@ public class WorldUtils {
     }
 
     public static String getHours(World world) {
-        double ticks = (double) world.getTime();
+        return getHours(world.getTime());
+    }
 
+    public static String getHours(double ticks) {
         BigDecimal minutes = new BigDecimal(ticks / minutePerTick + 360).setScale(0, RoundingMode.FLOOR);
 
         String string = minutes.remainder(new BigDecimal(60)).toString();

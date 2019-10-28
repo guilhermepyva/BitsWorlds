@@ -121,6 +121,19 @@
                 <message key="time-guide-mode2">here you can see the time of the world and edit it</message>
                 <message key="actual-hour">Actual hour: %%h</message>
                 <message key="actual-tick">Time in ticks: %%t</message>
+                <message key="sunrise">Set to Sunrise</message>
+                <message key="noon">Set to Noon</message>
+                <message key="sunset">Set to Sunset</message>
+                <message key="midnight">Set to Midnight</message>
+                <message key="personalized">Set to custom time</message>
+                <message key="define-tick">Set the time of the world (in ticks) to %%t</message>
+                <message key="defined-to-sunrise">Time set to Sunrise</message>
+                <message key="defined-to-noon">Time set to Noon</message>
+                <message key="defined-to-sunset">Time set to Sunset</message>
+                <message key="defined-to-midnight">Time set to Midnight</message>
+                <message key="defined-to-personalized">Time set to %%t</message>
+                <message key="time-set-message">Type the time you want to set for this world in ticks, use '!' to cancel the operation</message>
+                <message key="time-set-unsucess">The time inserted isn't a valid number</message>
             </class>
             <class name="ListBackupCmd">
                 <message key="gui-title">Backup List</message>

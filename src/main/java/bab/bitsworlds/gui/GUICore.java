@@ -26,7 +26,7 @@ public class GUICore implements Listener {
         if (!check(e.getWhoClicked()))
             return;
 
-        if (e.getClickedInventory().getType() == null || e.getAction() == null) {
+        if (e.getClickedInventory() == null || e.getClickedInventory().getType() == null || e.getAction() == null) {
             e.setCancelled(true);
             return;
         }

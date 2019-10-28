@@ -96,10 +96,17 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
         if (interactWorldGUI.world instanceof BWLoadedWorld)
             switch (event.getSlot()) {
+                case 10:
+                    if (player.hasPermission(BWPermission.SET_TIME)) {
+                        TimeGui timeGui = (TimeGui) new TimeGuiHandler().getGUI("", player);
+                        timeGui.world = interactWorldGUI.world;
+                        player.openGUI(timeGui.init());
+                    }
+                    break;
                 case 11:
                     if (player.hasPermission(BWPermission.GAMERULE)) {
                         GameRuleGui gameRuleGui = (GameRuleGui) new GameRuleHandler().getGUI("", player);
-                        gameRuleGui.world = (BWLoadedWorld) interactWorldGUI.world;
+                        gameRuleGui.world = interactWorldGUI.world;
                         player.openGUI(gameRuleGui.init());
                     }
                     break;
@@ -520,7 +527,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
     }
 
     public class GameRuleGui extends BWGUI {
-        public BWLoadedWorld world;
+        public BWorld world;
         public BWPlayer player;
         public List<String> gamerules;
 
@@ -535,9 +542,9 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                 case 0:
                     gamerules = new ArrayList<>();
                     int i = 0;
-                    for (String gameRule : world.world.getGameRules()) {
+                    for (String gameRule : ((BWLoadedWorld) world).world.getGameRules()) {
                         List<String> description = new ArrayList<>();
-                        String value = world.world.getGameRuleValue(gameRule);
+                        String value = ((BWLoadedWorld) world).world.getGameRuleValue(gameRule);
 
                         boolean addEffect = false;
 
@@ -618,7 +625,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
             if (gameRuleGui.gamerules.size() - 1 >= event.getSlot()) {
                 String gamerule = gameRuleGui.gamerules.get(event.getSlot());
-                String value = gameRuleGui.world.world.getGameRuleValue(gamerule);
+                String value = ((BWLoadedWorld) gameRuleGui.world).world.getGameRuleValue(gamerule);
 
                 if (!value.equals("true") && !value.equals("false")) {
                     Bukkit.getScheduler().runTaskAsynchronously(
@@ -634,7 +641,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                     return;
                                 }
 
-                                gameRuleGui.world.world.setGameRuleValue(gamerule, input);
+                                ((BWLoadedWorld) gameRuleGui.world).world.setGameRuleValue(gamerule, input);
                                 GUICore.updateGUI("interaction_gamerule");
                                 gameRuleGui.genItems(0);
                                 player.openGUI(gameRuleGui);
@@ -642,17 +649,174 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     );
                 } else {
                     boolean boolValue = Boolean.valueOf(value);
-                    gameRuleGui.world.world.setGameRuleValue(gamerule, String.valueOf(!boolValue));
+                    ((BWLoadedWorld) gameRuleGui.world).world.setGameRuleValue(gamerule, String.valueOf(!boolValue));
                     GUICore.updateGUI("interaction_gamerule");
                     gameRuleGui.genItems(0);
                 }
             }
 
+            else if (event.getSlot() == 36) {
+                InteractWorldCmd interactWorldCmd = new InteractWorldCmd();
+                InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd.getGUI("main", player);
+                interactGui.world = gameRuleGui.world;
+                player.openGUI(interactGui.init());
+                interactGui.genItems(36);
+            }
+        }
+    }
+
+    public class TimeGui extends BWGUI {
+        public BWorld world;
+        public BWPlayer player;
+
+        public TimeGui(String id, int size, String title, ImplGUI guiClass, boolean updatable, BWPlayer player) {
+            super(id, size, title, guiClass, updatable);
+            this.player = player;
+        }
+
+        @Override
+        public void setupItem(int item) {
+            switch (item) {
+                case 11:
+                    this.setItem(11, new GUIItem(
+                            Material.STAINED_CLAY,
+                            1,
+                            (short) 1,
+                            ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "sunrise").toString(),
+                            new ArrayList<>()
+                    ));
+                case 12:
+                    this.setItem(12, new GUIItem(
+                            Material.STAINED_CLAY,
+                            1,
+                            (short) 4,
+                            ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "noon").toString(),
+                            new ArrayList<>()
+                    ));
+                case 13:
+                    this.setItem(13, new GUIItem(
+                            Material.STAINED_CLAY,
+                            1,
+                            (short) 2,
+                            ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "sunset").toString(),
+                            new ArrayList<>()
+                    ));
+                case 14:
+                    this.setItem(14, new GUIItem(
+                            Material.STAINED_CLAY,
+                            1,
+                            (short) 11,
+                            ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "midnight").toString(),
+                            new ArrayList<>()
+                    ));
+                case 15:
+                    this.setItem(15, new GUIItem(
+                            Material.NAME_TAG,
+                            ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "personalized").toString(),
+                            new ArrayList<>()
+                    ));
+                case 18:
+                    this.setItem(18, new GUIItem(
+                            Material.SIGN,
+                            ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
+                            Collections.emptyList(),
+                            LangCore.getUtilMessage("back-item-guide-mode"),
+                            player
+                    ));
+                    break;
+            }
+        }
+
+        @Override
+        public BWGUI init() {
+            genItems(11, 12, 13, 14, 15, 18);
+
+            return this;
+        }
+
+        @Override
+        public void update() {
+        }
+    }
+
+    public class TimeGuiHandler implements ImplGUI {
+        @Override
+        public BWGUI getGUI(String code, BWPlayer player) {
+            return new TimeGui(
+                    "interaction_time",
+                    3 * 9,
+                    LangCore.getClassMessage(InteractWorldCmd.class, "time-item-title").toString(),
+                    this,
+                    true,
+                    player
+            );
+        }
+
+        @Override
+        public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
+            TimeGui timeGui = (TimeGui) gui;
+
             switch (event.getSlot()) {
-                case 36:
+                case 11:
+                case 12:
+                case 13:
+                case 14:
+                    long ticks;
+                    String message;
+                    if (event.getSlot() == 11) {
+                        ticks = 0;
+                        message = "defined-to-sunrise";
+                    }
+                    else if (event.getSlot() == 12) {
+                        ticks = 6000;
+                        message = "defined-to-noon";
+                    }
+                    else if (event.getSlot() == 13) {
+                        ticks = 12000;
+                        message = "defined-to-sunset";
+                    }
+                    else {
+                        ticks = 18000;
+                        message = "defined-to-midnight";
+                    }
+
+                    ((BWLoadedWorld) timeGui.world).world.setTime(ticks);
+                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, message));
+                    break;
+                case 15:
+                    Bukkit.getScheduler().runTaskAsynchronously(
+                            BitsWorlds.plugin,
+                            () -> {
+                                player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "time-set-message"));
+                                player.getBukkitPlayer().closeInventory();
+
+                                String input = ChatInput.askPlayer(player);
+
+                                if (input.equals("!")) {
+                                    player.openGUI(timeGui);
+                                    return;
+                                }
+
+                                Long time;
+                                try {
+                                    time = Long.parseLong(input);
+                                } catch (NumberFormatException e) {
+                                    player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "time-set-unsucess"));
+                                    time = null;
+                                }
+
+                                if (time != null) {
+                                    ((BWLoadedWorld) timeGui.world).getWorld().setTime(time);
+                                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "defined-to-personalized").setKey("%%t", String.valueOf(time)));
+                                }
+                                player.openGUI(timeGui.init());
+                            }
+                    );
+                    break;
+                case 18:
                     InteractWorldCmd interactWorldCmd = new InteractWorldCmd();
                     InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd.getGUI("main", player);
-                    interactGui.world = gameRuleGui.world;
+                    interactGui.world = timeGui.world;
                     player.openGUI(interactGui.init());
                     interactGui.genItems(36);
                     break;

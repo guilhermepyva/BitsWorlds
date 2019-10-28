@@ -121,6 +121,19 @@
                 <message key="time-guide-mode2">aqui você pode ver o tempo do mundo e editá-lo</message>
                 <message key="actual-hour">Hora atual: %%h</message>
                 <message key="actual-tick">Tempo em ticks: %%t</message>
+                <message key="sunrise">Definir para Nascer do Sol</message>
+                <message key="noon">Definir para Meio-dia</message>
+                <message key="sunset">Definir para Pôr do Sol</message>
+                <message key="midnight">Definir para Meia-noite</message>
+                <message key="personalized">Definir para tempo personalizado</message>
+                <message key="define-tick">Define o tempo do mundo (em ticks) para %%t</message>
+                <message key="defined-to-sunrise">Tempo definido para Nascer do Sol</message>
+                <message key="defined-to-noon">Tempo definido para Nascer do Sol</message>
+                <message key="defined-to-sunset">Tempo definido para Nascer do Sol</message>
+                <message key="defined-to-midnight">Tempo definido para Nascer do Sol</message>
+                <message key="defined-to-personalized">Tempo definido para %%t</message>
+                <message key="time-set-message">Digite o tempo que deseja definir para este mundo em ticks, use '!' para canelar a operação</message>
+                <message key="time-set-unsucess">O tempo informado não é um número válido</message>
             </class>
             <class name="ListBackupCmd">
                 <message key="gui-title">Lista de Backups</message>
