@@ -7,7 +7,6 @@ import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPermission;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.*;
-import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
@@ -15,6 +14,7 @@ import bab.bitsworlds.utils.WorldUtils;
 import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.BWUnloadedWorld;
 import bab.bitsworlds.world.BWorld;
+import org.apache.commons.lang3.builder.Diff;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class InteractWorldCmd implements BWCommand, ImplGUI {
     @Override
@@ -96,7 +95,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
         if (interactWorldGUI.world instanceof BWLoadedWorld)
             switch (event.getSlot()) {
-                case 10:
+                case 28:
                     if (player.hasPermission(BWPermission.SET_TIME)) {
                         TimeGui timeGui = (TimeGui) new TimeGuiHandler().getGUI("", player);
                         timeGui.world = interactWorldGUI.world;
@@ -104,7 +103,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     }
                     break;
                 case 11:
-                    if (player.hasPermission(BWPermission.GAMERULE)) {
+                    if (player.hasPermission(BWPermission.SEE_GAMERULES)) {
                         GameRuleGui gameRuleGui = (GameRuleGui) new GameRuleHandler().getGUI("", player);
                         gameRuleGui.world = interactWorldGUI.world;
                         player.openGUI(gameRuleGui.init());
@@ -164,6 +163,27 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
                         player.openGUI(listBackupGui.init());
                     }
+                    break;
+                case 29:
+                    if (player.hasPermission(BWPermission.SET_DIFFICULTY)) {
+                        Difficulty difficulty = ((BWLoadedWorld) interactWorldGUI.world).world.getDifficulty();
+                        switch (difficulty) {
+                            case PEACEFUL:
+                                ((BWLoadedWorld) interactWorldGUI.world).world.setDifficulty(Difficulty.EASY);
+                                break;
+                            case EASY:
+                                ((BWLoadedWorld) interactWorldGUI.world).world.setDifficulty(Difficulty.NORMAL);
+                                break;
+                            case NORMAL:
+                                ((BWLoadedWorld) interactWorldGUI.world).world.setDifficulty(Difficulty.HARD);
+                                break;
+                            case HARD:
+                                ((BWLoadedWorld) interactWorldGUI.world).world.setDifficulty(Difficulty.PEACEFUL);
+                                break;
+                        }
+                    }
+
+                    interactWorldGUI.genItems(29);
                     break;
                 case 33:
                     if (player.hasPermission(BWPermission.BACKUP)) {
@@ -330,12 +350,12 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             this.setItem(4, new GUIItem(material, world.getName(), description));
                         break;
                     case 11:
-                        if (player.hasPermission(BWPermission.GAMERULE)) {
+                        if (player.hasPermission(BWPermission.SEE_GAMERULES)) {
                             this.setItem(11, new GUIItem(
                                     Material.ENCHANTED_BOOK,
                                     ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "gamerule-item-title").toString(),
                                     new ArrayList<>(),
-                                    LangCore.getClassMessage(InteractWorldCmd.class, "gamerule-item-guide-mode"),
+                                    LangCore.getClassMessage(InteractWorldCmd.class, player.hasPermission(BWPermission.SET_GAMERULE) ? "gamerule-item-guide-mode2" : "gamerule-item-guide-mode1"),
                                     player
                             ));
                         }
@@ -442,7 +462,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             ));
                         }
                         break;
-                    case 10:
+                    case 28:
                         if (player.hasPermission(BWPermission.SEE_TIME)) {
                             List<String> timeDescription = new ArrayList<>();
 
@@ -450,7 +470,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             timeDescription.add(ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "actual-hour").setKey("%%h",ChatColor.WHITE + WorldUtils.getHours(((BWLoadedWorld) world).getWorld())).toString());
                             timeDescription.add(ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "actual-tick").setKey("%%t", ChatColor.WHITE + String.valueOf(((BWLoadedWorld) world).getWorld().getTime())).toString());
 
-                            this.setItem(10, new GUIItem(
+                            this.setItem(28, new GUIItem(
                                     Material.WATCH,
                                     ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "time-item-title").toString(),
                                     timeDescription,
@@ -458,6 +478,32 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                     player
                             ));
                         }
+                        break;
+                    case 29:
+                        if (player.hasPermission(BWPermission.SEE_DIFFICULTY)) {
+                            List<String> diffucultyDesc = new ArrayList<>();
+
+                            Difficulty worldDifficulty = ((BWLoadedWorld) world).world.getDifficulty();
+
+                            for (Difficulty difficulty : Difficulty.values())
+                                diffucultyDesc.add((worldDifficulty == difficulty ? ChatColor.AQUA : ChatColor.DARK_BLUE) + LangCore.getClassMessage(InteractWorldCmd.class,  difficulty.name().toLowerCase()).toString());
+
+                            if (player.hasPermission(BWPermission.SET_DIFFICULTY)) {
+                                diffucultyDesc.add("");
+                                diffucultyDesc.add(ChatColor.WHITE + LangCore.getClassMessage(InteractWorldCmd.class, "edit-difficulty").toString());
+                            }
+
+                            this.setItem(29, new GUIItem(
+                                    Material.SKULL_ITEM,
+                                    1,
+                                    (short) 4,
+                                    ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "difficulty-item-title").toString(),
+                                    diffucultyDesc,
+                                    LangCore.getClassMessage(InteractWorldCmd.class, player.hasPermission(BWPermission.SET_DIFFICULTY) ? "difficulty-guide-mode2" : "difficulty-guide-mode1"),
+                                    player
+                            ));
+                        }
+                        break;
                 }
             else
                 switch (item) {
@@ -486,7 +532,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         @Override
         public BWGUI init() {
             if (world instanceof BWLoadedWorld)
-                genItems(4, 11, 15, 16, 14, 25, 33, 34, 19, 20, 24, 10);
+                genItems(4, 11, 15, 16, 14, 25, 33, 34, 19, 20, 24, 28, 27, 29);
             else
 
                 genItems(4, 16);
@@ -555,17 +601,19 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
                             if (boolValue) {
                                 description.add(ChatColor.AQUA + LangCore.getUtilMessage("enabled-word").toString());
-                                description.add(ChatColor.BLUE + LangCore.getUtilMessage("disabled-word").toString());
+                                description.add(ChatColor.DARK_BLUE + LangCore.getUtilMessage("disabled-word").toString());
                                 addEffect = true;
 
                             } else {
-                                description.add(ChatColor.BLUE + LangCore.getUtilMessage("enabled-word").toString());
+                                description.add(ChatColor.DARK_BLUE + LangCore.getUtilMessage("enabled-word").toString());
                                 description.add(ChatColor.AQUA + LangCore.getUtilMessage("disabled-word").toString());
                             }
                         }
 
-                        description.add("");
-                        description.add(ChatColor.WHITE + LangCore.getClassMessage(InteractWorldCmd.class, "gamerule-click-to-change-value").toString());
+                        if (player.hasPermission(BWPermission.SET_GAMERULE)) {
+                            description.add("");
+                            description.add(ChatColor.WHITE + LangCore.getClassMessage(InteractWorldCmd.class, "gamerule-click-to-change-value").toString());
+                        }
 
                         GUIItem gameruleItem = new GUIItem(
                                 Material.ENCHANTED_BOOK,
@@ -623,7 +671,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
             GameRuleGui gameRuleGui = (GameRuleGui) gui;
 
-            if (gameRuleGui.gamerules.size() - 1 >= event.getSlot()) {
+            if (gameRuleGui.gamerules.size() - 1 >= event.getSlot() && player.hasPermission(BWPermission.SET_GAMERULE)) {
                 String gamerule = gameRuleGui.gamerules.get(event.getSlot());
                 String value = ((BWLoadedWorld) gameRuleGui.world).world.getGameRuleValue(gamerule);
 
@@ -833,17 +881,15 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         Bukkit.getScheduler().runTaskTimer(
                 BitsWorlds.plugin,
                 () -> {
-                    Stream<BWGUI> stream = GUICore.openGUIs.values().stream().filter(bwGui -> bwGui instanceof InteractWorldCmd.InteractWorldGUI);
-
                     if (LangCore.lang != actualLang) {
                         actualHours = ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "actual-hour").setKey("%%h","").toString();
                         actualTick = ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "actual-tick").setKey("%%t", "").toString();
                     }
 
-                    stream.forEach(
-                            bwGui -> {
-                                if (((InteractWorldGUI) bwGui).world instanceof BWLoadedWorld) {
-                                    ItemStack item = bwGui.getItem(10);
+                    GUICore.openGUIs.forEach(
+                            (bwPlayer, bwGui) -> {
+                                if (bwGui instanceof InteractWorldCmd.InteractWorldGUI && ((InteractWorldGUI) bwGui).world instanceof BWLoadedWorld && bwPlayer.hasPermission(BWPermission.SEE_TIME)) {
+                                    ItemStack item = bwGui.getItem(28);
                                     ItemMeta meta = item.getItemMeta();
                                     List<String> lore = meta.getLore();
 

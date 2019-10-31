@@ -196,9 +196,9 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
                             if (BWSQL.sqlite) {
                                 databaseLore.add(ChatColor.AQUA + "SQLite");
-                                databaseLore.add(ChatColor.BLUE + "MySQL");
+                                databaseLore.add(ChatColor.DARK_BLUE + "MySQL");
                             } else {
-                                databaseLore.add(ChatColor.BLUE + "SQLite");
+                                databaseLore.add(ChatColor.DARK_BLUE + "SQLite");
                                 databaseLore.add(ChatColor.AQUA + "MySQL");
                             }
 
@@ -228,9 +228,9 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
                             if (LogCore.notes) {
                                 noteLogsLore.add(ChatColor.AQUA + LangCore.getUtilMessage("enabled-word").toString());
-                                noteLogsLore.add(ChatColor.BLUE + LangCore.getUtilMessage("disabled-word").toString());
+                                noteLogsLore.add(ChatColor.DARK_BLUE + LangCore.getUtilMessage("disabled-word").toString());
                             } else {
-                                noteLogsLore.add(ChatColor.BLUE + LangCore.getUtilMessage("enabled-word").toString());
+                                noteLogsLore.add(ChatColor.DARK_BLUE + LangCore.getUtilMessage("enabled-word").toString());
                                 noteLogsLore.add(ChatColor.AQUA + LangCore.getUtilMessage("disabled-word").toString());
                             }
 
@@ -385,7 +385,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             if (lang == LangCore.lang)
                 sb.append(ChatColor.AQUA);
             else
-                sb.append(ChatColor.BLUE);
+                sb.append(ChatColor.DARK_BLUE);
 
             sb.append(lang.title);
             countryBannerLore.add(sb.toString());

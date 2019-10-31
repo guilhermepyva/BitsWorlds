@@ -87,7 +87,8 @@
                 <message key="world-cant-be-unloaded">This world can't be unloaded</message>
                 <message key="world-cant-be-loaded">This world can't be loaded</message>
                 <message key="gamerule-item-title">Game Rules</message>
-                <message key="gamerule-item-guide-mode">here you can see and edit the game rules values</message>
+                <message key="gamerule-item-guide-mode1">here you can see the game rules values</message>
+                <message key="gamerule-item-guide-mode2">here you can see and edit the game rules values</message>
                 <message key="gamerule-click-to-change-value">Click to change the value</message>
                 <message key="gamerule-set-message">Type the new value for the gamerule in the chat, type '!' to cancel the operation</message>
                 <message key="value-word">Value: %%v</message>
@@ -134,6 +135,14 @@
                 <message key="defined-to-personalized">Time set to %%t</message>
                 <message key="time-set-message">Type the time you want to set for this world in ticks, use '!' to cancel the operation</message>
                 <message key="time-set-unsucess">The time inserted isn't a valid number</message>
+                <message key="difficulty-item-title">Difficulty</message>
+                <message key="difficulty-item-guide-mode1">here you can see the difficulty of the world</message>
+                <message key="difficulty-item-guide-mode2">here you can see and edit the difficulty of the world</message>
+                <message key="edit-difficulty">Click to edit the difficulty</message>
+                <message key="peaceful">Pacific</message>
+                <message key="easy">Easy</message>
+                <message key="normal">Normal</message>
+                <message key="hard">Hard</message>
             </class>
             <class name="ListBackupCmd">
                 <message key="gui-title">Backup List</message>

@@ -87,7 +87,8 @@
                 <message key="world-cant-be-unloaded">Este mundo não pode ser descarregado</message>
                 <message key="world-cant-be-loaded">Este mundo não pode ser carregado</message>
                 <message key="gamerule-item-title">Regras de Jogo</message>
-                <message key="gamerule-item-guide-mode">aqui você pode ver e editar o valor das regras de jogo</message>
+                <message key="gamerule-item-guide-mode1">aqui você pode ver o valor das regras de jogo</message>
+                <message key="gamerule-item-guide-mode2">aqui você pode ver e editar o valor das regras de jogo</message>
                 <message key="gamerule-click-to-change-value">Clique para alterar o valor</message>
                 <message key="gamerule-set-message">Digite o novo valor para a regra de jogo no bate-papo, use '!' para canelar a operação</message>
                 <message key="value-word">Valor: %%v</message>
@@ -134,6 +135,14 @@
                 <message key="defined-to-personalized">Tempo definido para %%t</message>
                 <message key="time-set-message">Digite o tempo que deseja definir para este mundo em ticks, use '!' para canelar a operação</message>
                 <message key="time-set-unsucess">O tempo informado não é um número válido</message>
+                <message key="difficulty-item-title">Dificuldade</message>
+                <message key="difficulty-item-guide-mode1">aqui você pode ver a dificuldade do mundo</message>
+                <message key="difficulty-item-guide-mode2">aqui você pode ver e editar a dificuldade do mundo</message>
+                <message key="edit-difficulty">Clique para editar a dificuldade</message>
+                <message key="peaceful">Pacífico</message>
+                <message key="easy">Fácil</message>
+                <message key="normal">Normal</message>
+                <message key="hard">Difícil</message>
             </class>
             <class name="ListBackupCmd">
                 <message key="gui-title">Lista de Backups</message>

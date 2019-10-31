@@ -18,7 +18,8 @@ public enum BWPermission {
     UNLOAD("interaction.unload.save"),
     UNLOAD_WITHOUT_SAVE("interaction.unload.nosave"),
     LOAD("interaction.load"),
-    GAMERULE("interaction.gamerule"),
+    SEE_GAMERULES("interaction.gamerule.see"),
+    SET_GAMERULE("interaction.gamerule.set"),
     SAVE("interaction.save"),
     DUPLICATE("interaction.duplicate"),
     BACKUP("interaction.backup"),
@@ -26,6 +27,8 @@ public enum BWPermission {
     TELEPORT_OTHER_PLAYER("interaction.teleport.other"),
     SEE_TIME("interaction.time.see"),
     SET_TIME("interaction.time.set"),
+    SEE_DIFFICULTY("interaction.difficulty.see"),
+    SET_DIFFICULTY("interaction.difficulty.set"),
 
     RECOVER_BACKUP("backup.recover"),
     DELETE_BACKUP("backup.delete")
