@@ -212,6 +212,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
             super(id, size, title, guiClass, updatable);
             this.player = player;
             this.creator = new WorldCreator();
+            this.creator.generateStructures = true;
         }
 
         @Override
