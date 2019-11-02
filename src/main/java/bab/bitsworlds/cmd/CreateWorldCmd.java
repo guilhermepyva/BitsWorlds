@@ -440,6 +440,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
 
         @Override
         public void update() {
+            init();
         }
     }
 

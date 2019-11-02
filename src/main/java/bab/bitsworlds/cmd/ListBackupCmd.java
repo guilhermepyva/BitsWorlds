@@ -234,7 +234,7 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
         @Override
         public void update() {
             this.lastPage = calculateLastPage();
-            genItems(0);
+            init();
 
             this.setupItemPage(41, 39);
         }

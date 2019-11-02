@@ -650,7 +650,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
         @Override
         public void update() {
-            genItems(0);
+            init();
         }
     }
 
@@ -784,6 +784,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
         @Override
         public void update() {
+            init();
         }
     }
 

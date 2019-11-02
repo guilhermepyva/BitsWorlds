@@ -217,7 +217,7 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
         @Override
         public void update() {
             this.lastPage = calculateLastPage();
-            genItems(0, 43, 44);
+            init();
 
             this.setupItemPage(41, 39);
         }

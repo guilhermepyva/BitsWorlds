@@ -223,7 +223,7 @@ public class LogCmd implements BWCommand, ImplGUI {
         @Override
         public void update() {
             this.lastPage = calculateLastPage();
-            setupItem(0);
+            init();
 
             this.setupItemPage(50, 48);
         }
