@@ -451,7 +451,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                         }
                         break;
                     case 20:
-                        if (player.hasPermission(BWPermission.TELEPORT)) {
+                        if (player.hasPermission(BWPermission.TELEPORT_OTHER_PLAYER)) {
                             this.setItem(20, new GUIItem(
                                     Material.GOLD_BARDING,
                                     ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "teleport-other-item-title").toString(),
