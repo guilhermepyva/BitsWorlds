@@ -117,6 +117,9 @@
                 <message key="teleport-set-player-message">Type the player name you wanna teleport to this world, type '!' to cancel the operation</message>
                 <message key="teleport-not-online-player-message">This player isn't online!</message>
                 <message key="player-teleported-message">Player %%pn teleported</message>
+                <message key="teleport-all-item-title">Teleport all players of the server</message>
+                <message key="teleport-all-guide-mode">this will teleport all online players of the server to this world</message>
+                <message key="teleport-all-message">All online players of the server have been teleported to this world</message>
                 <message key="time-item-title">Time</message>
                 <message key="time-guide-mode1">here you can see the time of the world</message>
                 <message key="time-guide-mode2">here you can see the time of the world and edit it</message>

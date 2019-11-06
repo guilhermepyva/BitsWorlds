@@ -117,6 +117,9 @@
                 <message key="teleport-set-player-message">Digite o nome do jogador que você quer teleportar para este mundo, digite '!' para cancelar a operação</message>
                 <message key="teleport-not-online-player-message">Este jogador não está online!</message>
                 <message key="player-teleported-message">Jogador %%pn teleportado</message>
+                <message key="teleport-all-item-title">Teleportar todos os jogadores do servidor</message>
+                <message key="teleport-all-guide-mode">isto vai teleportar todos os jogadores online do servidor para este mundo</message>
+                <message key="teleport-all-message">Todos os jogadores online do servidor foram teleportados para este mundo</message>
                 <message key="time-item-title">Tempo</message>
                 <message key="time-guide-mode1">aqui você pode ver o tempo do mundo</message>
                 <message key="time-guide-mode2">aqui você pode ver o tempo do mundo e editá-lo</message>

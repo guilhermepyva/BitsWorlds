@@ -60,36 +60,101 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
     public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
         InteractWorldGUI interactWorldGUI = (InteractWorldGUI) gui;
 
+        switch (event.getSlot()) {
+            case 36:
+                if (interactWorldGUI.returnItem)
+                    player.openGUI(new ListWorldCmd().getGUI("listworld_main", player));
+                break;
+            case 24:
+                if (player.hasPermission(BWPermission.LOGS_SEE)) {
+                    LogCmd.LogGUI logGUI = (LogCmd.LogGUI) new LogCmd().getGUI("", player);
+                    BWorld world = interactWorldGUI.world;
 
-        if (event.getSlot() == 36 && interactWorldGUI.returnItem) {
-            player.openGUI(new ListWorldCmd().getGUI("listworld_main", player));
-            return;
-        }
-        else if (event.getSlot() == 24 && player.hasPermission(BWPermission.LOGS_SEE)) {
-            LogCmd.LogGUI logGUI = (LogCmd.LogGUI) new LogCmd().getGUI("", player);
-            BWorld world = interactWorldGUI.world;
+                    if (world instanceof BWUnloadedWorld) {
+                        if (((BWUnloadedWorld) world).getUUID() != null) {
+                            logGUI.filter = LogCmd.Filter.WORLDUUID;
+                            logGUI.worldUIDFilter = ((BWUnloadedWorld) world).getUUID();
+                        }
+                        else {
+                            logGUI.filter = LogCmd.Filter.WORLDNAME;
+                            logGUI.worldNameFilter = world.getName();
+                        }
+                    }
+                    else {
+                        logGUI.filter = LogCmd.Filter.WORLDUUID;
+                        logGUI.worldUIDFilter = ((BWLoadedWorld) world).getWorld().getUID();
+                    }
 
-            if (world instanceof BWUnloadedWorld) {
-                if (((BWUnloadedWorld) world).getUUID() != null) {
-                    logGUI.filter = LogCmd.Filter.WORLDUUID;
-                    logGUI.worldUIDFilter = ((BWUnloadedWorld) world).getUUID();
+                    logGUI.returnItem = world;
+
+                    player.openGUI(logGUI);
+
+                    logGUI.genItems(45);
                 }
-                else {
-                    logGUI.filter = LogCmd.Filter.WORLDNAME;
-                    logGUI.worldNameFilter = world.getName();
+                break;
+            case 25:
+                if (player.hasPermission(BWPermission.MAINCMD_BACKUP_LIST)) {
+                    ListBackupCmd.ListBackupGui listBackupGui = (ListBackupCmd.ListBackupGui) new ListBackupCmd().getGUI("", player);
+
+                    listBackupGui.filter = interactWorldGUI.world.getName();
+                    listBackupGui.returnItemWorld = interactWorldGUI.world;
+                    listBackupGui.returnItemFromInteractWorld = interactWorldGUI.returnItem;
+
+                    player.openGUI(listBackupGui.init());
                 }
-            }
-            else {
-                logGUI.filter = LogCmd.Filter.WORLDUUID;
-                logGUI.worldUIDFilter = ((BWLoadedWorld) world).getWorld().getUID();
-            }
+                break;
+            case 33:
+                if (player.hasPermission(BWPermission.BACKUP)) {
+                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "making-backup-message"));
+                    try {
+                        WorldUtils.copyWorld(
+                                interactWorldGUI.world.getName(),
+                                new File(BitsWorlds.plugin.getDataFolder() + "/backups/" + interactWorldGUI.world.getName() + "." + System.currentTimeMillis()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "backup-error-message"));
+                    }
+                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "maked-backup-message"));
+                }
+                break;
+            case 34:
+                if (player.hasPermission(BWPermission.DUPLICATE)) {
+                    Bukkit.getScheduler().runTaskAsynchronously(
+                            BitsWorlds.plugin,
+                            () -> {
+                                player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "duplicate-world-set-name-message"));
+                                player.getBukkitPlayer().closeInventory();
 
-            logGUI.returnItem = world;
+                                String input = ChatInput.askPlayer(player);
 
-            player.openGUI(logGUI);
+                                if (input.equals("!")) {
+                                    player.openGUI(interactWorldGUI);
+                                    return;
+                                }
 
-            logGUI.genItems(45);
-            return;
+                                player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "duplicating-world-message"));
+
+                                String worldName = WorldUtils.getValidWorldName(input);
+                                if (worldName.isEmpty()) {
+                                    player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "name-set-unsucess"));
+                                    player.openGUI(interactWorldGUI);
+                                    return;
+                                }
+
+                                try {
+                                    WorldUtils.copyWorld(interactWorldGUI.world.getName(), new File(Bukkit.getWorldContainer() + "/" + worldName));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "cant-duplicate-world-message"));
+                                }
+
+                                player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "duplicate-world-message"));
+                                GUICore.updateGUI("listworld_main");
+                                player.openGUI(interactWorldGUI);
+                            }
+                    );
+                }
+                break;
         }
 
         if (interactWorldGUI.world instanceof BWLoadedWorld)
@@ -151,18 +216,6 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                         player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-saved-message"));
                     }
                     break;
-                case 24:
-                case 25:
-                    if (player.hasPermission(BWPermission.MAINCMD_BACKUP_LIST)) {
-                        ListBackupCmd.ListBackupGui listBackupGui = (ListBackupCmd.ListBackupGui) new ListBackupCmd().getGUI("", player);
-
-                        listBackupGui.filter = interactWorldGUI.world.getName();
-                        listBackupGui.returnItemWorld = interactWorldGUI.world;
-                        listBackupGui.returnItemFromInteractWorld = interactWorldGUI.returnItem;
-
-                        player.openGUI(listBackupGui.init());
-                    }
-                    break;
                 case 29:
                     if (player.hasPermission(BWPermission.SET_DIFFICULTY)) {
                         Difficulty difficulty = ((BWLoadedWorld) interactWorldGUI.world).world.getDifficulty();
@@ -183,58 +236,6 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     }
 
                     interactWorldGUI.genItems(29);
-                    break;
-                case 33:
-                    if (player.hasPermission(BWPermission.BACKUP)) {
-                        player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "making-backup-message"));
-                        try {
-                            WorldUtils.copyWorld(
-                                    interactWorldGUI.world.getName(),
-                                    new File(BitsWorlds.plugin.getDataFolder() + "/backups/" + interactWorldGUI.world.getName() + "." + System.currentTimeMillis()));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "backup-error-message"));
-                        }
-                        player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "maked-backup-message"));
-                    }
-                    break;
-                case 34:
-                    if (player.hasPermission(BWPermission.DUPLICATE)) {
-                        Bukkit.getScheduler().runTaskAsynchronously(
-                                BitsWorlds.plugin,
-                                () -> {
-                                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "duplicate-world-set-name-message"));
-                                    player.getBukkitPlayer().closeInventory();
-
-                                    String input = ChatInput.askPlayer(player);
-
-                                    if (input.equals("!")) {
-                                        player.openGUI(interactWorldGUI);
-                                        return;
-                                    }
-
-                                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "duplicating-world-message"));
-
-                                    String worldName = WorldUtils.getValidWorldName(input);
-                                    if (worldName.isEmpty()) {
-                                        player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "name-set-unsucess"));
-                                        player.openGUI(interactWorldGUI);
-                                        return;
-                                    }
-
-                                    try {
-                                        WorldUtils.copyWorld(interactWorldGUI.world.getName(), new File(Bukkit.getWorldContainer() + "/" + worldName));
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                        player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "cant-duplicate-world-message"));
-                                    }
-
-                                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "duplicate-world-message"));
-                                    GUICore.updateGUI("listworld_main");
-                                    player.openGUI(interactWorldGUI);
-                                }
-                        );
-                    }
                     break;
                 case 19:
                     if (player.hasPermission(BWPermission.TELEPORT))
@@ -267,7 +268,12 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                 }
                         );
                     break;
-
+                case 21:
+                    if (player.hasPermission(BWPermission.TELEPORT_ALL_PLAYERS)) {
+                        Bukkit.getOnlinePlayers().forEach(target -> target.teleport(((BWLoadedWorld) interactWorldGUI.world).world.getSpawnLocation()));
+                        player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "teleport-all-message"));
+                    }
+                    break;
             }
         else
             switch (event.getSlot()) {
@@ -305,16 +311,60 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
         @Override
         public void setupItem(int item) {
-            if (item == 36) {
-                this.setItem(36, new GUIItem(
-                        Material.SIGN,
-                        ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
-                        Collections.emptyList(),
-                        LangCore.getUtilMessage("back-item-guide-mode"),
-                        player
-                ));
-                returnItem = true;
-                return;
+            switch (item) {
+                case 24:
+                    if (player.hasPermission(BWPermission.LOGS_SEE)) {
+                        this.setItem(24, new GUIItem(
+                                Material.BOOK,
+                                ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "log-list-item-title").toString(),
+                                new ArrayList<>(),
+                                LangCore.getClassMessage(InteractWorldCmd.class, "log-list-item-guide-mode"),
+                                player
+                        ));
+                    }
+                case 25:
+                    if (player.hasPermission(BWPermission.MAINCMD_BACKUP_LIST)) {
+                        this.setItem(25, new GUIItem(
+                                Material.BOOK,
+                                ChatColor.GOLD + LangCore.getClassMessage(ListBackupCmd.class, "gui-title").toString(),
+                                new ArrayList<>(),
+                                LangCore.getClassMessage(InteractWorldCmd.class, "backup-list-item-guide-mode"),
+                                player
+                        ));
+                    }
+                    break;
+                case 33:
+                    if (player.hasPermission(BWPermission.BACKUP)) {
+                        this.setItem(33, new GUIItem(
+                                Material.EYE_OF_ENDER,
+                                ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "backup-item-title").toString(),
+                                new ArrayList<>(),
+                                LangCore.getClassMessage(InteractWorldCmd.class, "backup-item-guide-mode"),
+                                player
+                        ));
+                    }
+                    break;
+                case 34:
+                    if (player.hasPermission(BWPermission.DUPLICATE)) {
+                        this.setItem(34, new GUIItem(
+                                Material.ENDER_PEARL,
+                                ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "duplicate-world-item-title").toString(),
+                                new ArrayList<>(),
+                                LangCore.getClassMessage(InteractWorldCmd.class, "duplicate-world-item-guide-mode"),
+                                player
+                        ));
+                    }
+                    break;
+                case 36:
+                    this.setItem(36, new GUIItem(
+                            Material.SIGN,
+                            ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
+                            Collections.emptyList(),
+                            LangCore.getUtilMessage("back-item-guide-mode"),
+                            player
+                    ));
+                    returnItem = true;
+                    break;
             }
 
             if (world instanceof BWLoadedWorld)
@@ -396,49 +446,6 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             ));
                         }
                         break;
-                    case 24:
-                        if (player.hasPermission(BWPermission.LOGS_SEE)) {
-                            this.setItem(24, new GUIItem(
-                                    Material.BOOK,
-                                    ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "log-list-item-title").toString(),
-                                    new ArrayList<>(),
-                                    LangCore.getClassMessage(InteractWorldCmd.class, "log-list-item-guide-mode"),
-                                    player
-                            ));
-                        }
-                    case 25:
-                        if (player.hasPermission(BWPermission.MAINCMD_BACKUP_LIST)) {
-                            this.setItem(25, new GUIItem(
-                                    Material.BOOK,
-                                    ChatColor.GOLD + LangCore.getClassMessage(ListBackupCmd.class, "gui-title").toString(),
-                                    new ArrayList<>(),
-                                    LangCore.getClassMessage(InteractWorldCmd.class, "backup-list-item-guide-mode"),
-                                    player
-                            ));
-                        }
-                        break;
-                    case 33:
-                        if (player.hasPermission(BWPermission.BACKUP)) {
-                            this.setItem(33, new GUIItem(
-                                    Material.EYE_OF_ENDER,
-                                    ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "backup-item-title").toString(),
-                                    new ArrayList<>(),
-                                    LangCore.getClassMessage(InteractWorldCmd.class, "backup-item-guide-mode"),
-                                    player
-                            ));
-                        }
-                        break;
-                    case 34:
-                        if (player.hasPermission(BWPermission.DUPLICATE)) {
-                            this.setItem(34, new GUIItem(
-                                    Material.ENDER_PEARL,
-                                    ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "duplicate-world-item-title").toString(),
-                                    new ArrayList<>(),
-                                    LangCore.getClassMessage(InteractWorldCmd.class, "duplicate-world-item-guide-mode"),
-                                    player
-                            ));
-                        }
-                        break;
                     case 19:
                         if (player.hasPermission(BWPermission.TELEPORT)) {
                             this.setItem(19, new GUIItem(
@@ -461,6 +468,16 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             ));
                         }
                         break;
+                    case 21:
+                        if (player.hasPermission(BWPermission.TELEPORT_ALL_PLAYERS)) {
+                            this.setItem(21, new GUIItem(
+                                    Material.DIAMOND_BARDING,
+                                    ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "teleport-all-item-title").toString(),
+                                    new ArrayList<>(),
+                                    LangCore.getClassMessage(InteractWorldCmd.class, "teleport-all-guide-mode"),
+                                    player
+                            ));
+                        }
                     case 28:
                         if (player.hasPermission(BWPermission.SEE_TIME)) {
                             List<String> timeDescription = new ArrayList<>();
@@ -524,17 +541,18 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             ));
                             break;
                         }
-
                 }
         }
 
         @Override
         public BWGUI init() {
             if (world instanceof BWLoadedWorld)
-                genItems(4, 11, 15, 16, 14, 25, 33, 34, 19, 20, 24, 28, 27, 29);
+                genItems(4, 11, 15, 16, 14, 25, 33, 34, 19, 20, 21,  24, 28, 27, 29);
             else
 
-                genItems(4, 16);
+                genItems(4, 16, 24, 25, 33, 34  );
+
+
 
             return this;
         }
