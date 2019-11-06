@@ -146,6 +146,13 @@
                 <message key="easy">Fácil</message>
                 <message key="normal">Normal</message>
                 <message key="hard">Difícil</message>
+                <message key="delete-world-item-title">Deletar Mundo</message>
+                <message key="delete-world-item-description">%%redAtenção: %%whiteEsta ação não pode ser desfeita</message>
+                <message key="delete-world-item-guide-mode">isto vai deletar o mundo permanentemente</message>
+                <message key="delete-world-confirmation-message">Você tem certeza de que deseja deletar este mundo? digite 'y' para sim ou digite qualquer outra coisa para cancelar</message>
+                <message key="deleting-world">Deletando mundo...</message>
+                <message key="deleted-world">Mundo deletado</message>
+                <message key="error-deleting-message">Um erro aconteceu enquanto deletava o mundo...</message>
             </class>
             <class name="ListBackupCmd">
                 <message key="gui-title">Lista de Backups</message>

@@ -30,6 +30,8 @@ public enum BWPermission {
     SET_TIME("interaction.time.set"),
     SEE_DIFFICULTY("interaction.difficulty.see"),
     SET_DIFFICULTY("interaction.difficulty.set"),
+    DELETE_WORLD("interaction.deleteworld"),
+    RENAME_WORLD("interaction.renameworld"),
 
     RECOVER_BACKUP("backup.recover"),
     DELETE_BACKUP("backup.delete")

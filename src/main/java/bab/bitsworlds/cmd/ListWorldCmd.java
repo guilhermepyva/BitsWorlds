@@ -152,6 +152,7 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
                         this.itemsID.add(i, world);
                         i++;
                     }
+                    break;
                 case 36:
                     this.setItem(36, new GUIItem(
                             Material.SIGN,
@@ -161,7 +162,6 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
                             player
                     ));
                     break;
-
                 case 39:
                     this.setItem(39, new GUIItem(
                             Material.ARROW,

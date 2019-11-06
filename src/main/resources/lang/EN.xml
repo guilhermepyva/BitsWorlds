@@ -146,6 +146,13 @@
                 <message key="easy">Easy</message>
                 <message key="normal">Normal</message>
                 <message key="hard">Hard</message>
+                <message key="delete-world-item-title">Delete World</message>
+                <message key="delete-world-item-description">%%redAttention: %%whiteThis action cannot be undone.</message>
+                <message key="delete-world-item-guide-mode">this will delete the world permanently</message>
+                <message key="delete-world-confirmation-message">Are you sure you want to delete this world? type 'y' to yes or type anything else to cancel</message>
+                <message key="deleting-world">Deleting world...</message>
+                <message key="deleted-world">World deleted</message>
+                <message key="error-deleting-message">An error occurred while deleting the world</message>
             </class>
             <class name="ListBackupCmd">
                 <message key="gui-title">Backup List</message>
@@ -159,7 +166,7 @@
                 <message key="backup-name-already-exists">A world is with this backup name, raname it and then try to recover this backup again</message>
                 <message key="deleting-backup">Deleting backup...</message>
                 <message key="deleted-backup">Backup deleted</message>
-                <message key="error-deleting-message">An error occurred while deleting the backup.An error occurred while deleting the backup...</message>
+                <message key="error-deleting-message">An error occurred while deleting the backup</message>
                 <message key="delete-backup-confirmation-message">Are you sure you want to delete this backup? type 'y' to yes or type anything else to cancel</message>
             </class>
         </package>

@@ -14,6 +14,10 @@ public class BWUnloadedWorld implements BWorld {
         return file.getName();
     }
 
+    public File getFile() {
+        return file;
+    }
+
     public BWUnloadedWorld(File file) {
         this.file = file;
     }

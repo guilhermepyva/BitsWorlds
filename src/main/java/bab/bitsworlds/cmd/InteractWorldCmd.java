@@ -14,6 +14,7 @@ import bab.bitsworlds.utils.WorldUtils;
 import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.BWUnloadedWorld;
 import bab.bitsworlds.world.BWorld;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
@@ -62,8 +63,25 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
         switch (event.getSlot()) {
             case 36:
-                if (interactWorldGUI.returnItem)
-                    player.openGUI(new ListWorldCmd().getGUI("listworld_main", player));
+                if (interactWorldGUI.returnItem) {
+                    ListWorldCmd listWorldCmd = new ListWorldCmd();
+
+                    if (!player.hasPermission(listWorldCmd.getPermission())) {
+                        player.sendMessage(PrefixMessage.permission_message);
+
+                        player.getBukkitPlayer().closeInventory();
+
+                        return;
+                    }
+
+                    BWGUI listWorldGui = listWorldCmd.getGUI("listworld_main",  player);
+
+                    player.openGUI(listWorldGui);
+
+                    listWorldGui.genItems(36);
+
+                    break;
+                }
                 break;
             case 24:
                 if (player.hasPermission(BWPermission.LOGS_SEE)) {
@@ -295,6 +313,54 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                         player.openGUI(interactWorldGUI);
                         break;
                     }
+                    case 10:
+                        if (player.hasPermission(BWPermission.DELETE_WORLD)) {
+                            Bukkit.getScheduler().runTaskAsynchronously(
+                                    BitsWorlds.plugin,
+                                    () -> {
+                                        player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "delete-world-confirmation-message"));
+                                        player.getBukkitPlayer().closeInventory();
+
+                                        String input = ChatInput.askPlayer(player);
+
+                                        boolean deleted = false;
+
+                                        if (input.equalsIgnoreCase("y")) {
+                                            player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "deleting-world"));
+                                            try {
+                                                FileUtils.deleteDirectory(((BWUnloadedWorld) interactWorldGUI.world).getFile());
+                                            } catch (IOException e) {
+                                                player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "error-deleting-message"));
+                                                e.printStackTrace();
+                                            }
+                                            player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "deleted-world"));
+                                            deleted = true;
+                                        }
+
+                                        if (interactWorldGUI.returnItem && deleted) {
+                                            ListWorldCmd listWorldCmd = new ListWorldCmd();
+
+                                            if (!player.hasPermission(listWorldCmd.getPermission())) {
+                                                player.sendMessage(PrefixMessage.permission_message);
+
+                                                player.getBukkitPlayer().closeInventory();
+
+                                                return;
+                                            }
+
+                                            BWGUI listWorldGui = listWorldCmd.getGUI("listworld_main",  player);
+
+                                            player.openGUI(listWorldGui);
+
+                                            listWorldGui.genItems(36);
+                                        }
+                                        else if (!deleted) {
+                                            player.openGUI(interactWorldGUI);
+                                        }
+                                    }
+                            );
+                        }
+                        break;
             }
     }
 
@@ -541,16 +607,28 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             ));
                             break;
                         }
+                    case 10:
+                        if (player.hasPermission(BWPermission.DELETE_WORLD)) {
+                            this.setItem(10, new GUIItem(
+                                    Material.REDSTONE_BLOCK,
+                                    ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "delete-world-item-title").toString(),
+                                    new ArrayList<>(Arrays.asList("", LangCore.getClassMessage(InteractWorldCmd.class, "delete-world-item-description").setKey("%%red", ChatColor.RED.toString()).setKey("%%white", ChatColor.WHITE.toString()).toString())),
+                                    LangCore.getClassMessage(InteractWorldCmd.class, "delete-world-item-guide-mode"),
+                                    player
+                            ));
+                        }
+                    case 19:
+
                 }
         }
 
         @Override
         public BWGUI init() {
             if (world instanceof BWLoadedWorld)
-                genItems(4, 11, 15, 16, 14, 25, 33, 34, 19, 20, 21,  24, 28, 27, 29);
+                genItems(4, 11, 15, 16, 14, 25, 33, 34, 19, 20, 21, 24, 28, 27, 29);
             else
 
-                genItems(4, 16, 24, 25, 33, 34  );
+                genItems(4, 16, 24, 25, 33, 34, 10, 19);
 
 
 

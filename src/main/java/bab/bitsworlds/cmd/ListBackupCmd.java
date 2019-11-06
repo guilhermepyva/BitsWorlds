@@ -79,7 +79,7 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
 
                                     String input = ChatInput.askPlayer(player);
 
-                                    if (input.equals("y")) {
+                                    if (input.equalsIgnoreCase("y")) {
                                         player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(getClass(), "deleting-backup"));
                                         try {
                                             FileUtils.deleteDirectory(backup.file);
