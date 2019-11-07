@@ -166,7 +166,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
 
                             String worldName = WorldUtils.getValidWorldName(input);
 
-                            if (new File(Bukkit.getWorldContainer() + "/" + input + "/").exists() || worldName.isEmpty()) {
+                            if (worldName.isEmpty() || new File(Bukkit.getWorldContainer() + "/" + worldName + "/").exists()) {
                                 player.openGUI(createWorldGUI);
                                 player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "name-set-unsucess"));
                                 return;

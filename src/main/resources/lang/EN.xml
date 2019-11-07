@@ -3,6 +3,8 @@
     <package path="bab.bitsworlds">
         <class name="BitsWorlds">
             <message key="permission-message">You don't have sufficient permissions to run this command</message>
+            <message key="cmd-description">Main Command</message>
+            <message key="cmd-usage">%%cmd &lt;arguments...&gt;</message>
         </class>
         <package path="cmd">
             <class name="BitsWorldsCmd">
@@ -26,8 +28,6 @@
                 <message key="log-notes-updated">The log notes are now %%s</message>
                 <message key="config-use">Use %%cmd</message>
                 <message key="invalid-arg">%%arg %%prefixColoris an invalid argument, the valid arguments are %%args</message>
-                <message key="back-item-title">Back</message>
-                <message key="back-item-guide-mode">back to the main menu</message>
             </class>
             <class name="LogCmd">
                 <message key="gui-title">Logs</message>
@@ -153,6 +153,12 @@
                 <message key="deleting-world">Deleting world...</message>
                 <message key="deleted-world">World deleted</message>
                 <message key="error-deleting-message">An error occurred while deleting the world</message>
+                <message key="rename-world-item-title">Rename world</message>
+                <message key="rename-world-item-guide-mode">this will rename the world</message>
+                <message key="renaming-world-message">Renaming world...</message>
+                <message key="renamed-world-message">World renamed</message>
+                <message key="cant-rename-world-message">An error occurred while renaming the world...</message>
+                <message key="rename-world-set-name-message">Type the new name for the world in the chat, type '!' to cancel the operation</message>
             </class>
             <class name="ListBackupCmd">
                 <message key="gui-title">Backup List</message>

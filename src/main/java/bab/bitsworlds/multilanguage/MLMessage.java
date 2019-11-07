@@ -53,7 +53,7 @@ public class MLMessage {
      * @param langMessage that will be appended
      */
     public void appendLangMessage(LangMessage langMessage) {
-        boolean anyMatch = messages.stream().anyMatch( message -> message.checkLang(langMessage));
+        boolean anyMatch = messages.stream().anyMatch(message -> message.checkLang(langMessage));
 
         if (anyMatch)
             throw new RuntimeException("An MLMessage can't have more than two Lang Messages of the same language");

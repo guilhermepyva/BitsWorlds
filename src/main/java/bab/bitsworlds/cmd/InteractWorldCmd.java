@@ -153,7 +153,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "duplicating-world-message"));
 
                                 String worldName = WorldUtils.getValidWorldName(input);
-                                if (worldName.isEmpty()) {
+                                if (worldName.isEmpty() || new File(Bukkit.getWorldContainer() + "/" + worldName + "/").exists()) {
                                     player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "name-set-unsucess"));
                                     player.openGUI(interactWorldGUI);
                                     return;
@@ -361,6 +361,47 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             );
                         }
                         break;
+                case 19:
+                    if (player.hasPermission(BWPermission.RENAME_WORLD)) {
+                        Bukkit.getScheduler().runTaskAsynchronously(
+                                BitsWorlds.plugin,
+                                () -> {
+                                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "rename-world-set-name-message"));
+                                    player.getBukkitPlayer().closeInventory();
+
+                                    String input = ChatInput.askPlayer(player);
+
+                                    if (input.equals("!")) {
+                                        player.openGUI(interactWorldGUI);
+                                        return;
+                                    }
+
+                                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "renaming-world-message"));
+
+                                    String worldName = WorldUtils.getValidWorldName(input);
+                                    if (worldName.isEmpty() || new File(Bukkit.getWorldContainer() + "/" + worldName + "/").exists()) {
+                                        player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "name-set-unsucess"));
+                                        player.openGUI(interactWorldGUI);
+                                        return;
+                                    }
+
+                                    File newFile = WorldUtils.renameWorld(((BWUnloadedWorld) interactWorldGUI.world).getFile(), worldName);
+
+                                    if (newFile == null) {
+                                        player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "cant-rename-world-message"));
+                                        player.openGUI(interactWorldGUI);
+                                        return;
+                                    }
+
+                                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "renamed-world-message").setKey("%%n", worldName));
+                                    GUICore.updateGUI("listworld_main");
+                                    interactWorldGUI.world = new BWUnloadedWorld(newFile);
+                                    interactWorldGUI.update();
+                                    player.openGUI(interactWorldGUI);
+                                }
+                        );
+                    }
+                    break;
             }
     }
 
@@ -544,6 +585,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                     player
                             ));
                         }
+                        break;
                     case 28:
                         if (player.hasPermission(BWPermission.SEE_TIME)) {
                             List<String> timeDescription = new ArrayList<>();
@@ -617,8 +659,18 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                     player
                             ));
                         }
+                        break;
                     case 19:
-
+                        if (player.hasPermission(BWPermission.RENAME_WORLD)) {
+                            this.setItem(19, new GUIItem(
+                                    Material.NAME_TAG,
+                                    ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "rename-world-item-title").toString(),
+                                    new ArrayList<>(),
+                                    LangCore.getClassMessage(InteractWorldCmd.class, "rename-world-item-guide-mode"),
+                                    player
+                            ));
+                        }
+                        break;
                 }
         }
 

@@ -153,6 +153,12 @@
                 <message key="deleting-world">Deletando mundo...</message>
                 <message key="deleted-world">Mundo deletado</message>
                 <message key="error-deleting-message">Um erro aconteceu enquanto deletava o mundo...</message>
+                <message key="rename-world-item-title">Renomear mundo</message>
+                <message key="rename-world-guide-mode">isto vai alterar o nome do mundo atual</message>
+                <message key="renaming-world-message">Renomeando o mundo...</message>
+                <message key="renamed-world-message">Mundo renomeado para %%n</message>
+                <message key="cant-rename-world-message">Um erro ocorreu enquanto o mundo era renomeado...</message>
+                <message key="rename-world-set-name-message">Digite o novo nome para o mundo no bate-papo, use '!' para canelar a operação</message>
             </class>
             <class name="ListBackupCmd">
                 <message key="gui-title">Lista de Backups</message>

@@ -1,7 +1,5 @@
 package bab.bitsworlds.utils;
 
-import bab.bitsworlds.BitsWorlds;
-import bab.bitsworlds.world.BWBackup;
 import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.BWUnloadedWorld;
 import bab.bitsworlds.world.BWorld;
@@ -10,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -111,5 +108,12 @@ public class WorldUtils {
         }
 
         return hours.toString() + ":" + string + (night ? " PM" : " AM");
+    }
+
+    public static File renameWorld(File world, String newName) {
+        File file = new File(world.getParent() + "/" + newName);
+        if (world.renameTo(new File(world.getParent() + "/" + newName)))
+            return file;
+        return null;
     }
 }
