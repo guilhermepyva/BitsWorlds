@@ -219,6 +219,10 @@
                 <message key="plugin-log-item-guide-mode">here you can see the plugin logs made by the Plugin Configuration or other</message>
                 <message key="world-log-item-title">World Logs</message>
                 <message key="world-log-item-guide-mode">here you can see the world logs</message>
+                <message key="interact-word-by-name-item-title">Interact with world by it's name</message>
+                <message key="interact-word-by-name-item-guide-mode">you will be asked to insert the world name you want to interact with</message>
+                <message key="insert-world-name-to-interact-to">Please insert the world name you want to interact with in the chat, type '!' to cancel the operation</message>
+                <message key="invalid-world-name">This world name is invalid or the world doesn't exists</message>
             </class>
             <class name="GUICore">
                 <message key="guide-mode-words">Guide Mode</message>

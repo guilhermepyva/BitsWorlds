@@ -1,14 +1,15 @@
 package bab.bitsworlds.gui;
 
 import bab.bitsworlds.BitsWorlds;
+import bab.bitsworlds.ChatInput;
 import bab.bitsworlds.SkullCore;
-import bab.bitsworlds.cmd.ConfigCmd;
-import bab.bitsworlds.cmd.CreateWorldCmd;
-import bab.bitsworlds.cmd.ListWorldCmd;
-import bab.bitsworlds.cmd.LogCmd;
+import bab.bitsworlds.cmd.*;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
+import bab.bitsworlds.utils.WorldUtils;
+import bab.bitsworlds.world.BWorld;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.io.File;
 import java.util.*;
 
 public class MainGUI implements ImplGUI {
@@ -76,8 +78,8 @@ public class MainGUI implements ImplGUI {
 
                                 this.setItem(8, guideModeItem);
                                 break;
-                            case 19:
-                                this.setItem(19, new GUIItem(
+                            case 0:
+                                this.setItem(0, new GUIItem(
                                         Material.REDSTONE,
                                         ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "config-item-title").toString(),
                                         new ArrayList<>(),
@@ -86,6 +88,14 @@ public class MainGUI implements ImplGUI {
                                 ));
 
                                 break;
+                            case 19:
+                                this.setItem(19, new GUIItem(
+                                        Material.NAME_TAG,
+                                        ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "interact-word-by-name-item-title").toString(),
+                                        new ArrayList<>(),
+                                        LangCore.getClassMessage(MainGUI.class, "interact-word-by-name-item-guide-mode"),
+                                        player
+                                ));
                             case 21:
                                 GUIItem listworlditem = new GUIItem(
                                         Material.SKULL_ITEM,
@@ -153,7 +163,7 @@ public class MainGUI implements ImplGUI {
 
                     @Override
                     public BWGUI init() {
-                        genItems(4, 8, 19, 21, 23, 30, 31, 32);
+                        genItems(4, 8, 0, 21, 23, 30, 31, 32, 19);
 
                         return this;
                     }
@@ -171,7 +181,7 @@ public class MainGUI implements ImplGUI {
 
                 gui.init();
                 break;
-            case 19:
+            case 0:
                 ConfigCmd configCmd = new ConfigCmd();
 
                 if (!player.hasPermission(configCmd.getPermission())) {
@@ -187,6 +197,55 @@ public class MainGUI implements ImplGUI {
 
                 configCmdGUI.genItems(27);
 
+                break;
+            case 19:
+                Bukkit.getScheduler().runTaskAsynchronously(
+                        BitsWorlds.plugin,
+                        () -> {
+                            player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(MainGUI.class, "insert-world-name-to-interact-to"));
+                            player.getBukkitPlayer().closeInventory();
+
+                            String input = ChatInput.askPlayer(player);
+                            if (input.equals("!")) {
+                                player.openGUI(gui);
+                                return;
+                            }
+
+                            String worldName = WorldUtils.getValidWorldName(input);
+
+                            if (worldName.isEmpty()) {
+                                player.openGUI(gui);
+                                player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "invalid-world-name"));
+                                return;
+                            }
+
+                            List<BWorld> unloadedWorlds = WorldUtils.getUnloadedWorlds();
+                            List<BWorld> loadedWorlds = WorldUtils.getLoadedWorlds();
+
+                            Optional<BWorld> world = unloadedWorlds.stream().filter(bWorld -> bWorld.getName().equals(worldName)).findFirst();
+                            if (!world.isPresent()) {
+                                world = unloadedWorlds.stream().filter(bWorld -> bWorld.getName().equalsIgnoreCase(worldName)).findFirst();
+                            }
+                            if (!world.isPresent()) {
+                                world = loadedWorlds.stream().filter(bWorld -> bWorld.getName().equals(worldName)).findFirst();
+                            }
+                            if (!world.isPresent()) {
+                                world = loadedWorlds.stream().filter(bWorld -> bWorld.getName().equalsIgnoreCase(worldName)).findFirst();
+                            }
+
+                            if (world.isPresent()) {
+                                InteractWorldCmd interactWorldCmd = new InteractWorldCmd();
+                                InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd.getGUI("main", player);
+                                interactGui.world = world.get();
+                                player.openGUI(interactGui.init());
+                                interactGui.genItems(36);
+                                return;
+                            }
+
+                            player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(MainGUI.class, "invalid-world-name"));
+                            player.openGUI(gui);
+                        }
+                );
                 break;
             case 21:
                 ListWorldCmd listWorldCmd = new ListWorldCmd();
