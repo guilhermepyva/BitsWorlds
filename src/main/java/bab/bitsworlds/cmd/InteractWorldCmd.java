@@ -623,7 +623,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                     (short) 4,
                                     ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "difficulty-item-title").toString(),
                                     diffucultyDesc,
-                                    LangCore.getClassMessage(InteractWorldCmd.class, player.hasPermission(BWPermission.SET_DIFFICULTY) ? "difficulty-guide-mode2" : "difficulty-guide-mode1"),
+                                    LangCore.getClassMessage(InteractWorldCmd.class, player.hasPermission(BWPermission.SET_DIFFICULTY) ? "difficulty-item-guide-mode2" : "difficulty-item-guide-mode1"),
                                     player
                             ));
                         }
