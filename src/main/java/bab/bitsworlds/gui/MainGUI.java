@@ -8,6 +8,7 @@ import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
 import bab.bitsworlds.utils.WorldUtils;
+import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.BWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -51,6 +52,16 @@ public class MainGUI implements ImplGUI {
                                 SkullCore.applyToSkull(meta, SkullCore.Skull.BWICON);
                                 icon.setItemMeta(meta);
                                 this.setItem(4, icon);
+                                break;
+                            case 7:
+                                this.setItem(7, new GUIItem(
+                                        Material.STAINED_GLASS_PANE,
+                                        ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "interact-with-actual-world-item-title").toString(),
+                                        new ArrayList<>(),
+                                        LangCore.getClassMessage(MainGUI.class, "interact-with-actual-world-tem-guide-mode"),
+                                        player
+                                ));
+
                                 break;
                             case 8:
                                 List<String> guideItemLore = new ArrayList<>();
@@ -163,7 +174,7 @@ public class MainGUI implements ImplGUI {
 
                     @Override
                     public BWGUI init() {
-                        genItems(4, 8, 0, 21, 23, 30, 31, 32, 19);
+                        genItems(4, 8, 0, 21, 23, 30, 31, 32, 19, 7);
 
                         return this;
                     }
@@ -176,6 +187,13 @@ public class MainGUI implements ImplGUI {
     @Override
     public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
         switch (event.getSlot()) {
+            case 7:
+                InteractWorldCmd interactWorldCmd = new InteractWorldCmd();
+                InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd.getGUI("main", player);
+                interactGui.world = new BWLoadedWorld(player.getBukkitPlayer().getWorld());
+                player.openGUI(interactGui.init());
+                interactGui.genItems(36);
+                break;
             case 8:
                 GUICore.alternateGuideMode(player);
 
@@ -234,11 +252,11 @@ public class MainGUI implements ImplGUI {
                             }
 
                             if (world.isPresent()) {
-                                InteractWorldCmd interactWorldCmd = new InteractWorldCmd();
-                                InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd.getGUI("main", player);
-                                interactGui.world = world.get();
-                                player.openGUI(interactGui.init());
-                                interactGui.genItems(36);
+                                InteractWorldCmd interactWorldCmd1 = new InteractWorldCmd();
+                                InteractWorldCmd.InteractWorldGUI interactGui1 = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd1.getGUI("main", player);
+                                interactGui1.world = world.get();
+                                player.openGUI(interactGui1.init());
+                                interactGui1.genItems(36);
                                 return;
                             }
 

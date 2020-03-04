@@ -223,6 +223,8 @@
                 <message key="interact-word-by-name-item-guide-mode">you will be asked to insert the world name you want to interact with</message>
                 <message key="insert-world-name-to-interact-to">Please insert the world name you want to interact with in the chat, type '!' to cancel the operation</message>
                 <message key="invalid-world-name">This world name is invalid or the world doesn't exists</message>
+                <message key="interact-with-actual-world-item-title">Interact with actual world</message>
+                <message key="interact-with-actual-world-tem-guide-mode">open the panel to interact with the actual world</message>
             </class>
             <class name="GUICore">
                 <message key="guide-mode-words">Guide Mode</message>
