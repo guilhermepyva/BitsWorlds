@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -40,6 +41,7 @@ public class BitsWorlds extends JavaPlugin {
         ChatInput.inputPlayers = new HashMap<>();
 
         InteractWorldCmd.timeUpdater();
+        new File(BitsWorlds.plugin.getDataFolder() + "/backups/").mkdirs();
         loadListeners();
         loadCmd();
         loadPrefixes();
