@@ -6,10 +6,7 @@ import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPermission;
 import bab.bitsworlds.extensions.BWPlayer;
-import bab.bitsworlds.gui.BWGUI;
-import bab.bitsworlds.gui.BWPagedGUI;
-import bab.bitsworlds.gui.GUIItem;
-import bab.bitsworlds.gui.ImplGUI;
+import bab.bitsworlds.gui.*;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
 import bab.bitsworlds.utils.BackupUtils;
@@ -130,6 +127,11 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
 
         switch (event.getSlot()) {
             case 36:
+                if (listBackupGui.returnToMainGui) {
+                    player.openGUI(new MainGUI().getGUI("main", player));
+                    return;
+                }
+
                 if (player.hasPermission(BWPermission.MAINCMD_WORLD_INTERACT) && listBackupGui.returnItemWorld != null) {
                     InteractWorldCmd.InteractWorldGUI interactWorldGUI = (InteractWorldCmd.InteractWorldGUI) new InteractWorldCmd().getGUI("", player);
                     interactWorldGUI.world = listBackupGui.returnItemWorld;
@@ -158,6 +160,7 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
     public class ListBackupGui extends BWPagedGUI<List<BWBackup>> {
         public String filter;
         public boolean filterIgnoreCase;
+        public boolean returnToMainGui;
         public BWorld returnItemWorld;
         public boolean returnItemFromInteractWorld;
         BWPlayer player;
@@ -227,7 +230,7 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
             this.actualPage = 0;
             genItems(0);
 
-            if (returnItemWorld != null)
+            if (returnItemWorld != null || returnToMainGui)
                 setupItem(36);
 
             this.setupItemPage(41, 39);

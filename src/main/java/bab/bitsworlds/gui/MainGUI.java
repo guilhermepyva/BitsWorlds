@@ -334,6 +334,7 @@ public class MainGUI implements ImplGUI {
 
                             listBackupGui.filter = worldName;
                             listBackupGui.filterIgnoreCase = true;
+                            listBackupGui.returnToMainGui = true;
 
                             player.openGUI(listBackupGui.init());
                         }
