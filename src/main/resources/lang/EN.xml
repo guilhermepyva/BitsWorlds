@@ -225,6 +225,9 @@
                 <message key="invalid-world-name">This world name is invalid or the world doesn't exists</message>
                 <message key="interact-with-actual-world-item-title">Interact with actual world</message>
                 <message key="interact-with-actual-world-tem-guide-mode">open the panel to interact with the actual world</message>
+                <message key="list-backups-by-name-item-title">List backups by a backup name</message>
+                <message key="list-backups-by-name-item-guide-mode">you will be asked to insert the backup name (the same name of the world of the backup) you want to list</message>
+                <message key="insert-world-name-to-list-backups">Please insert the backup name you want to list in the chat, type '!' to cancel the operation</message>
             </class>
             <class name="GUICore">
                 <message key="guide-mode-words">Guide Mode</message>

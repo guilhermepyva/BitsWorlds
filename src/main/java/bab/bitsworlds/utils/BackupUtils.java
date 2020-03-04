@@ -23,8 +23,8 @@ public class BackupUtils {
         return list;
     }
 
-    public static List<BWBackup> getBackupsByWorld(String worldName) {
-        return getBackups().stream().filter(bwBackup -> bwBackup.worldName.equals(worldName)).collect(Collectors.toList());
+    public static List<BWBackup> getBackupsByWorld(String worldName, boolean ignoreCase) {
+        return getBackups().stream().filter(bwBackup -> ignoreCase ? bwBackup.worldName.equalsIgnoreCase(worldName) : bwBackup.worldName.equals(worldName)).collect(Collectors.toList());
     }
 
     public static void recoverBackup(File backup) throws IOException {

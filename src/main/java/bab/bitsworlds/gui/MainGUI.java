@@ -137,6 +137,15 @@ public class MainGUI implements ImplGUI {
                                 SkullCore.applyToSkull(createWorldItemItemMeta, SkullCore.Skull.CREATEWORLDICON);
                                 createWorldItem.setItemMeta(createWorldItemItemMeta);
                                 this.setItem(23, createWorldItem);
+                            case 25:
+                                this.setItem(25, new GUIItem(
+                                        Material.ENCHANTED_BOOK,
+                                        ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "list-backups-by-name-item-title").toString(),
+                                        new ArrayList<>(),
+                                        LangCore.getClassMessage(MainGUI.class, "list-backups-by-name-item-guide-mode"),
+                                        player
+                                ));
+                                break;
                             case 30:
                                 this.setItem(30, new GUIItem(
                                         Material.BOOK,
@@ -174,7 +183,7 @@ public class MainGUI implements ImplGUI {
 
                     @Override
                     public BWGUI init() {
-                        genItems(4, 8, 0, 21, 23, 30, 31, 32, 19, 7);
+                        genItems(4, 8, 0, 21, 23, 30, 31, 32, 19, 7, 25);
 
                         return this;
                     }
@@ -299,6 +308,36 @@ public class MainGUI implements ImplGUI {
                 player.openGUI(createWorldGui);
 
                 createWorldGui.genItems(36);
+                break;
+            case 25:
+                Bukkit.getScheduler().runTaskAsynchronously(
+                        BitsWorlds.plugin,
+                        () -> {
+                            player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(MainGUI.class, "insert-world-name-to-list-backups"));
+                            player.getBukkitPlayer().closeInventory();
+
+                            String input = ChatInput.askPlayer(player);
+                            if (input.equals("!")) {
+                                player.openGUI(gui);
+                                return;
+                            }
+
+                            String worldName = WorldUtils.getValidWorldName(input);
+
+                            if (worldName.isEmpty()) {
+                                player.openGUI(gui);
+                                player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "invalid-world-name"));
+                                return;
+                            }
+
+                            ListBackupCmd.ListBackupGui listBackupGui = (ListBackupCmd.ListBackupGui) new ListBackupCmd().getGUI("", player);
+
+                            listBackupGui.filter = worldName;
+                            listBackupGui.filterIgnoreCase = true;
+
+                            player.openGUI(listBackupGui.init());
+                        }
+                );
                 break;
             case 30:
             case 31:

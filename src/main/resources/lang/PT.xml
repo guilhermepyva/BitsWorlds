@@ -225,6 +225,9 @@
                 <message key="invalid-world-name">O nome deste mundo é inválido ou o mundo não existe</message>
                 <message key="interact-with-actual-world-item-title">Interagir com mundo atual</message>
                 <message key="interact-with-actual-world-tem-guide-mode">abre o painel de interação do mundo atual</message>
+                <message key="list-backups-by-name-item-title">Listar backups por um nome</message>
+                <message key="list-backups-by-name-item-guide-mode">você vai ser requisitado para inserir o nome do backup (o mesmo nome do mundo do backup) que você quer listar</message>
+                <message key="insert-world-name-to-list-backups">Por favor insira o nome do backup que você quer listar no bate-papo, digite '!' para cancelar esta operação</message>
             </class>
             <class name="GUICore">
                 <message key="guide-mode-words">Modo Guia</message>

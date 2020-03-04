@@ -130,7 +130,7 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
 
         switch (event.getSlot()) {
             case 36:
-                if (player.hasPermission(BWPermission.MAINCMD_WORLD_INTERACT)) {
+                if (player.hasPermission(BWPermission.MAINCMD_WORLD_INTERACT) && listBackupGui.returnItemWorld != null) {
                     InteractWorldCmd.InteractWorldGUI interactWorldGUI = (InteractWorldCmd.InteractWorldGUI) new InteractWorldCmd().getGUI("", player);
                     interactWorldGUI.world = listBackupGui.returnItemWorld;
                     player.openGUI(interactWorldGUI.init());
@@ -157,6 +157,7 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
 
     public class ListBackupGui extends BWPagedGUI<List<BWBackup>> {
         public String filter;
+        public boolean filterIgnoreCase;
         public BWorld returnItemWorld;
         public boolean returnItemFromInteractWorld;
         BWPlayer player;
@@ -224,7 +225,10 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
         public BWGUI init() {
             this.lastPage = calculateLastPage();
             this.actualPage = 0;
-            genItems(0, 36);
+            genItems(0);
+
+            if (returnItemWorld != null)
+                setupItem(36);
 
             this.setupItemPage(41, 39);
 
@@ -264,14 +268,14 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
             if (filter == null)
                 return BackupUtils.getBackups();
             else
-                return BackupUtils.getBackupsByWorld(filter);
+                return BackupUtils.getBackupsByWorld(filter, filterIgnoreCase);
         }
 
         public int countByFilter() {
             if (filter == null)
                 return BackupUtils.getBackups().size();
             else
-                return BackupUtils.getBackupsByWorld(filter).size();
+                return BackupUtils.getBackupsByWorld(filter, filterIgnoreCase).size();
         }
     }
 }
