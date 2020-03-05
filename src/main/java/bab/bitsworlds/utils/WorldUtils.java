@@ -116,4 +116,17 @@ public class WorldUtils {
             return file;
         return null;
     }
+
+    public static boolean isDefaultWorld(World world) {
+        World defaultWorld = Bukkit.getWorlds().get(0);
+
+        if (world.getUID().equals(defaultWorld.getUID()))
+            return true;
+
+        else if (Bukkit.getAllowNether() && Bukkit.getWorld(defaultWorld.getName() + "_nether").getUID().equals(world.getUID()))
+            return true;
+
+        else return Bukkit.getAllowEnd() && Bukkit.getWorld(defaultWorld.getName() + "_the_end").getUID().equals(world.getUID());
+
+    }
 }

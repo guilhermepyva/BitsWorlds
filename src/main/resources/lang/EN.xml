@@ -159,6 +159,7 @@
                 <message key="renamed-world-message">World renamed</message>
                 <message key="cant-rename-world-message">An error occurred while renaming the world...</message>
                 <message key="rename-world-set-name-message">Type the new name for the world in the chat, type '!' to cancel the operation</message>
+                <message key="unloading-world-message1">The world you were is being unloaded, you have been teleported to the default world</message>
             </class>
             <class name="ListBackupCmd">
                 <message key="gui-title">Backup List</message>
