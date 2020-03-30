@@ -192,7 +192,9 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
                         this.setItem(i, new GUIItem(
                                 Material.EYE_OF_ENDER,
                                 backup.toString(),
-                                description
+                                description,
+                                LangCore.getClassMessage(ListBackupCmd.class, "backup-item-guide-mode"),
+                                player
                         ));
                         this.itemsID.add(i, backup);
                         i++;

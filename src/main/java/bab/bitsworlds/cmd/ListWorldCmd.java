@@ -140,7 +140,7 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
                             description.add(ChatColor.GOLD + LangCore.getClassMessage(ListWorldCmd.class, "players-in").setKey("%%c", ChatColor.WHITE + String.valueOf(bukWorld.getPlayers().size())).toString());
                             description.add(ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "status-word").setKey("%%s", ChatColor.GREEN + LangCore.getUtilMessage("loaded-word").toString()).toString());
 
-                            this.setItem(i, new GUIItem(material, world.getName(), description));
+                            this.setItem(i, new GUIItem(material, world.getName(), description, LangCore.getClassMessage(ListWorldCmd.class, "world-item-guide-mode"), player));
                         }
                         else {
                             this.setItem(i, new GUIItem(Material.STONE, world.getName(), Arrays.asList(

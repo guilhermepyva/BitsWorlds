@@ -41,6 +41,7 @@
                 <message key="players-in">Jogadores: %%c</message>
                 <message key="loaded-worlds-filter-item-title">Filtrar por mundos carregados</message>
                 <message key="unloaded-worlds-filter-item-title">Filtrar por mundos descarregados</message>
+                <message key="world-item-guide-mode">Clique neste item para interagir com o mundo e controlar coisas como gamerules, backups, carregar mundo, etc...</message>
             </class>
             <class name="CreateWorldCmd">
                 <message key="gui-title">Criar mundo</message>
@@ -167,6 +168,7 @@
                 <message key="made-in">Feito em: %%t</message>
                 <message key="click">Clique para recuperar o backup e torná-lo um mundo</message>
                 <message key="shift-click">Shift + Clique para deletar o backup</message>
+                <message key="backup-item-guide-mode">Recuperar o mundo irá fazer com que ele se torne um mundo normal, sendo possível carregá-lo</message>
                 <message key="recovering-message">Recuperando backup...</message>
                 <message key="recovered-message">Backup recuperado</message>
                 <message key="error-recovering-message">Um erro ocorreu enquanto o backup era recuperado...</message>

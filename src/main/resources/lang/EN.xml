@@ -41,6 +41,7 @@
                 <message key="players-in">Players: %%c</message>
                 <message key="loaded-worlds-filter-item-title">Filter by loaded worlds</message>
                 <message key="unloaded-worlds-filter-item-title">Filter by unloaded worlds</message>
+                <message key="world-item-guide-mode">Click in this item to interact with the world and control things like gamerules, backups, load world, etc...</message>
             </class>
             <class name="CreateWorldCmd">
                 <message key="gui-title">Create world</message>
@@ -167,6 +168,7 @@
                 <message key="made-in">Made in: %%t</message>
                 <message key="click">Click to recover the backup and make it a world</message>
                 <message key="shift-click">Shift + Click to delete the backup</message>
+                <message key="backup-item-guide-mode">Recover the backup will make it turn into a real world, being possible to load it</message>
                 <message key="recovering-message">Recovering backup...</message>
                 <message key="recovered-message">Backup recovered</message>
                 <message key="error-recovering-message">An error occurred while recovering the backup...</message>
