@@ -22,7 +22,7 @@ public class BWBackup {
     }
 
     public static BWBackup getBackup(File file, String string) {
-        String[] properties = string.split("\\.");
+        String[] properties = string.replace(".zip", "").split("\\.");
         if (properties.length < 2) {
             return null;
         }
@@ -30,6 +30,8 @@ public class BWBackup {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i <= properties.length - 2; i++) {
+            if (properties[i].equals("zip"))
+                continue;
             sb.append(properties[i]);
         }
 
@@ -39,7 +41,7 @@ public class BWBackup {
 
         long timestamp;
         try {
-            timestamp = Long.parseLong(properties[properties.length -1]);
+            timestamp = Long.parseLong(properties[properties.length - 1]);
         } catch (NumberFormatException e) {
             return null;
         }

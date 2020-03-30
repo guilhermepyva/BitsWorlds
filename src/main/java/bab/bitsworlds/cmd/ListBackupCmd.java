@@ -96,7 +96,7 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
                 else {
                     if (player.hasPermission(BWPermission.RECOVER_BACKUP)) {
                         player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(ListBackupCmd.class, "recovering-message"));
-                        if (new File(Bukkit.getWorldContainer() + "/" + backup.file.getName()).exists()) {
+                        if (new File(Bukkit.getWorldContainer() + "/" + backup.file.getName().replace(".zip", "")).exists()) {
                             player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(ListBackupCmd.class, "backup-name-already-exists"));
                             return;
                         }
@@ -105,9 +105,10 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
                         } catch (IOException e) {
                             player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(ListBackupCmd.class, "error-recovering-message"));
                             e.printStackTrace();
+                            return;
                         }
 
-                        if (!(new File(Bukkit.getWorldContainer() + "/" + backup.file.getName()).exists())) {
+                        if (!(new File(Bukkit.getWorldContainer() + "/" + backup.file.getName().replace(".zip", "")).exists())) {
                             player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(ListBackupCmd.class, "error-recovering-message"));
                             return;
                         }
@@ -116,7 +117,7 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
                         if (player.hasPermission(BWPermission.MAINCMD_WORLD_INTERACT)) {
                             InteractWorldCmd cmd = new InteractWorldCmd();
                             InteractWorldCmd.InteractWorldGUI interactWorldGUI = (InteractWorldCmd.InteractWorldGUI) cmd.getGUI("", player);
-                            interactWorldGUI.world = new BWUnloadedWorld(new File(Bukkit.getWorldContainer() + "/" + backup.file.getName()));
+                            interactWorldGUI.world = new BWUnloadedWorld(new File(Bukkit.getWorldContainer() + "/" + backup.file.getName().replace(".zip", "")));
                             player.openGUI(interactWorldGUI.init());
                         }
                     }

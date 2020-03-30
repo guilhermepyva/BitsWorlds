@@ -10,6 +10,7 @@ import bab.bitsworlds.gui.*;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
+import bab.bitsworlds.utils.BackupUtils;
 import bab.bitsworlds.utils.WorldUtils;
 import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.BWUnloadedWorld;
@@ -126,9 +127,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                 if (player.hasPermission(BWPermission.BACKUP)) {
                     player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "making-backup-message"));
                     try {
-                        WorldUtils.copyWorld(
-                                interactWorldGUI.world.getName(),
-                                new File(BitsWorlds.plugin.getDataFolder() + "/backups/" + interactWorldGUI.world.getName() + "." + System.currentTimeMillis()));
+                        BackupUtils.makeBackup(interactWorldGUI.world.getName());
                     } catch (IOException e) {
                         e.printStackTrace();
                         player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "backup-error-message"));
@@ -205,7 +204,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
                         Location defaultWorldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
 
-                        Bukkit.getOnlinePlayers().forEach(
+                        Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.getWorld().getUID().equals(((BWLoadedWorld) interactWorldGUI.world).world.getUID())).forEach(
                                 onlinePlayer -> {
                                     onlinePlayer.teleport(defaultWorldSpawn);
 
@@ -241,7 +240,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
                         Location defaultWorldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
 
-                        Bukkit.getOnlinePlayers().forEach(
+                        Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.getWorld().getUID().equals(((BWLoadedWorld) interactWorldGUI.world).world.getUID())).forEach(
                                 onlinePlayer -> {
                                     onlinePlayer.teleport(defaultWorldSpawn);
 
