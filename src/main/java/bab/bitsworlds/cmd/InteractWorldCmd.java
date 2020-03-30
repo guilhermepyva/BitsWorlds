@@ -748,15 +748,21 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         public void update() {
             updateGui();
 
-            GUICore.openGUIs.values().stream()
+            new ArrayList<>(GUICore.openGUIs.values()).stream()
                     .filter(
                             gui -> {
-                                if (!(gui instanceof InteractWorldGUI))
+                                if (!(gui instanceof InteractWorldGUI) && !(gui instanceof GameRuleGui) && !(gui instanceof TimeGui))
                                     return false;
 
-                                return ((InteractWorldGUI) gui).world.getName().equals(this.world.getName());
+                                return !(gui instanceof InteractWorldGUI) || ((InteractWorldGUI) gui).world.getName().equals(this.world.getName());
                             }
-                    ).forEach(gui -> ((InteractWorldGUI) gui).update(this.world));
+                    ).forEach(
+                            gui -> {
+                                if (gui instanceof InteractWorldGUI)
+                                    ((InteractWorldGUI) gui).update(this.world);
+                                else gui.update();
+                            }
+            );
         }
 
         public void update(BWorld world) {
@@ -854,6 +860,15 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
         @Override
         public void update() {
+            if (!Bukkit.getWorlds().contains(world)) {
+                InteractWorldCmd interactWorldCmd = new InteractWorldCmd();
+                InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd.getGUI("main", player);
+                interactGui.world = WorldUtils.getUnloadedWorld(world.getName());
+                player.openGUI(interactGui.init());
+                interactGui.genItems(36);
+                player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-unloaded"));
+                return;
+            }
             init();
         }
     }
@@ -988,6 +1003,15 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
         @Override
         public void update() {
+            if (!Bukkit.getWorlds().contains(world)) {
+                InteractWorldCmd interactWorldCmd = new InteractWorldCmd();
+                InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd.getGUI("main", player);
+                interactGui.world = WorldUtils.getUnloadedWorld(world.getName());;
+                player.openGUI(interactGui.init());
+                interactGui.genItems(36);
+                player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-unloaded"));
+                return;
+            }
             init();
         }
     }

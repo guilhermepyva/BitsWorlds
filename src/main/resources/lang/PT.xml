@@ -162,6 +162,7 @@
                 <message key="cant-rename-world-message">Um erro ocorreu enquanto o mundo era renomeado...</message>
                 <message key="rename-world-set-name-message">Digite o novo nome para o mundo no bate-papo, use '!' para canelar a operação</message>
                 <message key="unloading-world-message1">O mundo em que você estava está sendo descarregado, você foi teleportado para o mundo padrão</message>
+                <message key="world-unloaded">O mundo com o qual você estava interagindo foi descarregado</message>
             </class>
             <class name="ListBackupCmd">
                 <message key="gui-title">Lista de Backups</message>
