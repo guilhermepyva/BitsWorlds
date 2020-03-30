@@ -29,6 +29,6 @@ public class Log {
     }
 
     public boolean isGlobal() {
-        return world == null;
+        return worldName == null;
     }
 }

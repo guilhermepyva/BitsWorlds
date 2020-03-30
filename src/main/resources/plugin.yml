@@ -10,3 +10,5 @@ commands:
     permission: bitsworlds.maincmd
     permission-message: You do not have sufficient permissions to run this command
     usage: /BitsWorlds <arguments...>
+  test:
+    description: a

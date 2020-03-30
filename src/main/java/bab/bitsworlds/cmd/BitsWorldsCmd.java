@@ -50,6 +50,18 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
             case "LOG":
                 bwcmd = new LogCmd();
                 break;
+            case "LIST":
+            case "LISTAR":
+            case "LISTA":
+            case "LISTER":
+                bwcmd = new ListWorldCmd();
+                break;
+            case "CREATE":
+            case "CRIAR":
+            case "CREER":
+            case "CREAR":
+                bwcmd = new CreateWorldCmd();
+                break;
             default:
                 bwSender.sendMessage(
                         PrefixMessage.warn.getPrefix(),
@@ -76,6 +88,9 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
         List<String> list = new ArrayList<>();
 
         BWCommand configCmd = new ConfigCmd();
+        LogCmd logCmd = new LogCmd();
+        ListWorldCmd listWorldCmd = new ListWorldCmd();
+        CreateWorldCmd createWorldCmd = new CreateWorldCmd();
         BWCommandSender bwSender = new BWCommandSender(sender);
 
         if (args.length == 1) {
@@ -97,6 +112,41 @@ public class BitsWorldsCmd implements CommandExecutor, TabCompleter {
 
             if (bwSender.hasPermission(configCmd.getPermission()))
                 list.add("config");
+
+            if (bwSender.hasPermission(logCmd.getPermission()))
+                list.add("log");
+
+            if (bwSender.hasPermission(listWorldCmd.getPermission()))
+                switch (LangCore.lang) {
+                    case EN:
+                        list.add("list");
+                        break;
+                    case PT:
+                        list.add("listar");
+                        break;
+                    case SP:
+                        list.add("lista");
+                        break;
+                    case FR:
+                        list.add("lister");
+                        break;
+                }
+
+            if (bwSender.hasPermission(createWorldCmd.getPermission()))
+                switch (LangCore.lang) {
+                    case EN:
+                        list.add("create");
+                        break;
+                    case PT:
+                        list.add("criar");
+                        break;
+                    case FR:
+                        list.add("creer");
+                        break;
+                    case SP:
+                        list.add("crear");
+                        break;
+                }
         }
 
         else if (args.length >= 2) {

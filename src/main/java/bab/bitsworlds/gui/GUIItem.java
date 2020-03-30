@@ -18,6 +18,10 @@ public class GUIItem extends ItemStack {
         super(material);
     }
 
+    public GUIItem(Material material, int amout, short damage) {
+        super(material, amout, damage);
+    }
+
     public GUIItem(Material material, String title, List<String> description) {
         super(material);
 
@@ -29,8 +33,31 @@ public class GUIItem extends ItemStack {
         this.setItemMeta(meta);
     }
 
+    public GUIItem(Material material, int amout, short damage, String title, List<String> description) {
+        super(material, amout, damage);
+
+        ItemMeta meta = this.getItemMeta();
+
+        meta.setLore(description);
+        meta.setDisplayName(title);
+
+        this.setItemMeta(meta);
+    }
+
     public GUIItem(Material material, String title, List<String> description, MLMessage guideModeMessage, BWPlayer player) {
         this(material, title, description);
+
+        ItemMeta meta = this.getItemMeta();
+
+        if (meta.getLore() == null)
+            meta.setLore(new ArrayList<>());
+        meta.setLore(addGuideLore(guideModeMessage, player, meta.getLore()));
+
+        this.setItemMeta(meta);
+    }
+
+    public GUIItem(Material material, int amount, short damage, String title, List<String> description, MLMessage guideModeMessage, BWPlayer player) {
+        this(material, amount, damage, title, description);
 
         ItemMeta meta = this.getItemMeta();
 

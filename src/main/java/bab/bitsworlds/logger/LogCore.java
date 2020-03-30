@@ -18,8 +18,14 @@ import java.util.List;
 import java.util.UUID;
 
 public class LogCore {
+    public static boolean notes;
+
     public static void addLog(LogAction action, Object data, LogRecorder recorder, Timestamp time) {
         addLog(action, data, recorder, null, null, time, null, null);
+    }
+
+    public static void addLog(LogAction action, Object data, LogRecorder recorder, Timestamp time, UUID world, String worldName) {
+        addLog(action, data, recorder, null, null, time, world, worldName);
     }
 
     public static void addLog(LogAction action, Object data, LogRecorder recorder, String note, LogRecorder noteRecorder, Timestamp time, UUID world, String worldName) {
@@ -32,7 +38,7 @@ public class LogCore {
         });
 
         //TODO MEXER NISSO QND OS LOGS DOS MUNDOS ESTIVEREM PRONTOS
-        GUICore.updateGUI("global_logs");
+        GUICore.updateGUI("main_logs");
     }
 
     public static GUIItem getItemFromLog(Log log) {
@@ -50,6 +56,14 @@ public class LogCore {
                 description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "global-config-databasetype-set-lore").setKey("%%db", ChatColor.WHITE + ((Boolean) log.data ? "SQLite" : "MySQL")).toString());
 
                 break;
+            case GLOBAL_CONFIG_NOTESSET:
+                title = title + LangCore.getClassMessage(LogCore.class, "global-config-notes-set-title").toString();
+                description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "global-config-notes-set-lore").setKey("%%s", ChatColor.WHITE + log.data.toString()).toString());
+
+                break;
+            case WORLD_CREATED:
+                title = title + LangCore.getClassMessage(LogCore.class, "world-created-title").toString();
+                description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "world-created-lore").setKey("%%s", ChatColor.WHITE + log.worldName + ChatColor.GOLD).toString());
         }
 
         String recorder = null;
@@ -82,8 +96,8 @@ public class LogCore {
         description.add(ChatColor.GOLD + "ID: " + ChatColor.WHITE + log.id);
         description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "date-word").toString() + ChatColor.WHITE + LangCore.getDateByPattern(log.time.toLocalDateTime()));
 
-        if (log.world != null)
-            description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "world-word").setKey(ChatColor.WHITE + "%%w", log.worldName + " (" + log.world + ")").toString());
+        if (!log.isGlobal())
+            description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "world-word").setKey("%%w", ChatColor.WHITE + log.worldName + (log.world != null ? " (" + log.world + ")" : "")).toString());
 
         if (log.note != null)
             description.add(ChatColor.GOLD + LangCore.getClassMessage(LogCore.class, "note-word").setKey("%%n", ChatColor.WHITE + log.note).setKey("%%p", noteRecorder).toString());

@@ -1,10 +1,10 @@
 package bab.bitsworlds.db;
 
-import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.logger.Log;
 import bab.bitsworlds.logger.LogAction;
 import bab.bitsworlds.logger.LogRecorder;
 import bab.bitsworlds.multilanguage.Lang;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +19,7 @@ public class SQLDataManager {
         PreparedStatement statement = BWSQL.dbCon.prepareStatement("INSERT INTO log(action, data, recorder_type, recorder_uuid, note, note_appender_uuid, time, world, worldname) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         statement.setString(1, log.action.name());
-        statement.setString(2, log.data.toString());
+        statement.setString(2, log.data == null ? null : log.data.toString());
         statement.setString(3, log.recorder.type.name());
         statement.setString(4, log.recorder.uuid != null ? log.recorder.uuid.toString() : null);
         statement.setString(5, log.note);
@@ -39,10 +39,10 @@ public class SQLDataManager {
         stm.execute("UPDATE log SET note = '" + note + "', note_appender_uuid = '" + note_appender + "' WHERE id = " + id);
     }
 
-    public static List<Log> queryLogs(String additional) throws SQLException {
+    public static List<Log> queryLogs(String additional, String where) throws SQLException {
         Statement stm = BWSQL.dbCon.createStatement();
 
-        ResultSet result = stm.executeQuery("SELECT * FROM log ORDER BY id DESC" + additional);
+        ResultSet result = stm.executeQuery("SELECT * FROM log" + where +" ORDER BY id DESC" + additional);
 
         List<Log> list = new ArrayList<>();
 
@@ -83,6 +83,13 @@ public class SQLDataManager {
                 break;
             case GLOBAL_CONFIG_LANGUAGESET:
                 data = Lang.valueOf(resultSet.getString("data"));
+                break;
+            case GLOBAL_CONFIG_NOTESSET:
+                data = Boolean.valueOf(resultSet.getString("data"));
+                break;
+            case WORLD_CREATED:
+                data =  resultSet.getString("data");
+                break;
         }
 
         LogRecorder noteRecorder = null;

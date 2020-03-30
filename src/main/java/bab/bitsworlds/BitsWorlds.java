@@ -1,7 +1,7 @@
 package bab.bitsworlds;
 
 import bab.bitsworlds.cmd.BitsWorldsCmd;
-import bab.bitsworlds.config.BWConfig;
+import bab.bitsworlds.cmd.InteractWorldCmd;
 import bab.bitsworlds.db.BWSQL;
 import bab.bitsworlds.gui.GUICore;
 import bab.bitsworlds.multilanguage.*;
@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -28,6 +29,8 @@ public class BitsWorlds extends JavaPlugin {
 
         loadConfigs();
 
+        SkullCore.loadSkulls();
+
         BWSQL.connect();
         BWSQL.setupDB();
 
@@ -37,6 +40,8 @@ public class BitsWorlds extends JavaPlugin {
 
         ChatInput.inputPlayers = new HashMap<>();
 
+        InteractWorldCmd.timeUpdater();
+        new File(BitsWorlds.plugin.getDataFolder() + "/backups/").mkdirs();
         loadListeners();
         loadCmd();
         loadPrefixes();
@@ -74,6 +79,7 @@ public class BitsWorlds extends JavaPlugin {
 
         getCommand("BitsWorlds").setPermissionMessage(PrefixMessage.permission_message);
         getCommand("BitsWorlds").setExecutor(new BitsWorldsCmd());
+        getCommand("test").setExecutor(new TestCmd());
     }
 
     private void loadListeners() {

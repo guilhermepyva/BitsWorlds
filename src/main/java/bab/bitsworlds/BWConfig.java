@@ -1,9 +1,12 @@
-package bab.bitsworlds.config;
+package bab.bitsworlds;
 
 import bab.bitsworlds.BitsWorlds;
+import bab.bitsworlds.cmd.LogCmd;
 import bab.bitsworlds.db.BWSQL;
+import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -38,6 +41,8 @@ public class BWConfig {
                 }
 
                 break;
+            case "log-notes":
+                LogCore.notes = Boolean.getBoolean(value.toString());
         }
     }
 }

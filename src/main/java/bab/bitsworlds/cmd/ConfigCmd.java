@@ -7,6 +7,7 @@ import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPermission;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.*;
+import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
@@ -132,83 +133,140 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             commandSender.sendMessage(PrefixMessage.info.getPrefix(),
                     LangCore.getClassMessage(this.getClass(), "database-updated").setKey("%%db", ChatColor.BOLD + dbTypeString));
         }
+
+        else if (strings[1].equalsIgnoreCase("notes")) {
+            if (strings.length == 2) {
+                commandSender.sendMessage(PrefixMessage.warn.getPrefix(),
+                        LangCore.getClassMessage(getClass(), "config-use")
+                                .setKey("%%cmd", ChatColor.BOLD + "/BitsWorlds" + ChatColor.ITALIC + " config notes <true|false>"));
+                return;
+            }
+
+            boolean notes;
+
+            if (strings[2].equalsIgnoreCase("true"))
+                notes = true;
+            else if (strings[2].equalsIgnoreCase("false"))
+                notes = false;
+            else {
+                commandSender.sendMessage(PrefixMessage.error.getPrefix(),
+                        LangCore.getClassMessage(getClass(), "invalid-arg")
+                                .setKey("%%arg", ChatColor.ITALIC + strings[2])
+                                .setKey("%%args", "<true|false>")
+                                .setKey("%%prefixColor", PrefixMessage.error.getDefaultChatColor().toString()));
+                return;
+            }
+
+            BWTaskResponse response = new BWConfigTask(BWConfigTask.ConfigTask.NoteLogsSet, notes, commandSender instanceof BWPlayer ? ((BWPlayer) commandSender).getBukkitPlayer().getUniqueId() : null).execute();
+
+            if (response.getCode() == 0 && response instanceof BWTask.BWExceptionResponse) {
+                commandSender.reportExceptionResponse((BWTask.BWExceptionResponse) response);
+                return;
+            }
+
+            if (response.getCode() == 1) {
+                commandSender.sendMessage(PrefixMessage.warn.getPrefix(),
+                        LangCore.getClassMessage(getClass(), "log-notes-config-already")
+                                .setKey("%%prefixColor", PrefixMessage.warn.getDefaultChatColor().toString()));
+                return;
+            }
+
+            commandSender.sendMessage(PrefixMessage.info.getPrefix(),
+                    LangCore.getClassMessage(this.getClass(), "log-notes-updated").setKey("%%s", ChatColor.BOLD + String.valueOf(notes)));
+        }
     }
 
     public BWGUI getGUI(String code, BWPlayer player) {
+        if ("config_main".equals(code)) {
+            return new BWGUI(
+                    "config_main",
+                    4 * 9,
+                    LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").toString(),
+                    this,
+                    true
+            ) {
+                @Override
+                public void setupItem(int item) {
+                    switch (item) {
+                        case 0:
+                            updateCountryBannerItem(this, player);
+                            break;
+                        case 1:
+                            List<String> databaseLore = new ArrayList<>();
 
-        switch (code) {
-            case "config_main":
-                return new BWGUI(
-                        "config_main",
-                        4*9,
-                        LangCore.getClassMessage(this.getClass(), "gui-title").setKey("%%name", "BitsWorlds").toString(),
-                        this,
-                        true
-                ) {
-                    @Override
-                    public void setupItem(int item) {
-                        switch (item) {
-                            case 0:
-                                updateCountryBannerItem(this, player);
-                                break;
-                            case 1:
-                                List<String> databaseLore = new ArrayList<>();
+                            if (BWSQL.sqlite) {
+                                databaseLore.add(ChatColor.AQUA + "SQLite");
+                                databaseLore.add(ChatColor.DARK_BLUE + "MySQL");
+                            } else {
+                                databaseLore.add(ChatColor.DARK_BLUE + "SQLite");
+                                databaseLore.add(ChatColor.AQUA + "MySQL");
+                            }
 
-                                if (BWSQL.sqlite) {
-                                    databaseLore.add(ChatColor.AQUA + "SQLite");
-                                    databaseLore.add(ChatColor.BLUE + "MySQL");
-                                }
-                                else {
-                                    databaseLore.add(ChatColor.BLUE + "SQLite");
-                                    databaseLore.add(ChatColor.AQUA + "MySQL");
-                                }
+                            databaseLore.add("");
+                            databaseLore.addAll(GUIItem.loreJumper(
+                                    LangCore.getClassMessage(ConfigCmd.class, "database-item-lore").setKey("%%file", ChatColor.ITALIC + "config.yml").toString(),
+                                    ChatColor.WHITE.toString(),
+                                    ChatColor.WHITE + "" + ChatColor.BOLD + LangCore.getUtilMessage("warn-word").toString().toUpperCase() + ": "
+                            ));
 
+                            if (BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") != BWSQL.sqlite) {
                                 databaseLore.add("");
-                                databaseLore.addAll(GUIItem.loreJumper(
-                                        LangCore.getClassMessage(ConfigCmd.class, "database-item-lore").setKey("%%file", ChatColor.ITALIC + "config.yml").toString(),
-                                        ChatColor.WHITE.toString(),
-                                        ChatColor.WHITE + "" + ChatColor.BOLD + LangCore.getUtilMessage("warn-word").toString().toUpperCase() + ": "
-                                ));
+                                databaseLore.add(ChatColor.YELLOW + LangCore.getClassMessage(ConfigCmd.class, "database-item-need-restart").toString());
+                            }
 
-                                if (BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") != BWSQL.sqlite) {
-                                    databaseLore.add("");
-                                    databaseLore.add(ChatColor.YELLOW + LangCore.getClassMessage(ConfigCmd.class, "database-item-need-restart").toString());
-                                }
+                            this.setItem(1, new GUIItem(
+                                    Material.ANVIL,
+                                    ChatColor.AQUA + "" + ChatColor.BOLD + LangCore.getClassMessage(ConfigCmd.class, "database-item-title").toString(),
+                                    databaseLore,
+                                    LangCore.getClassMessage(ConfigCmd.class, "database-config-guide-mode"),
+                                    player
+                            ));
 
-                                this.setItem(1, new GUIItem(
-                                        Material.ANVIL,
-                                        ChatColor.AQUA + "" + ChatColor.BOLD + LangCore.getClassMessage(ConfigCmd.class, "database-item-title").toString(),
-                                        databaseLore,
-                                        LangCore.getClassMessage(ConfigCmd.class, "database-config-guide-mode"),
-                                        player
-                                ));
+                            break;
+                        case 2:
+                            List<String> noteLogsLore = new ArrayList<>();
 
-                                break;
-                            case 27:
-                                this.setItem(27, new GUIItem(
-                                        Material.SIGN,
-                                        ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
-                                        Collections.emptyList(),
-                                        LangCore.getUtilMessage("back-item-guide-mode"),
-                                        player
-                                ));
+                            if (LogCore.notes) {
+                                noteLogsLore.add(ChatColor.AQUA + LangCore.getUtilMessage("enabled-word").toString());
+                                noteLogsLore.add(ChatColor.DARK_BLUE + LangCore.getUtilMessage("disabled-word").toString());
+                            } else {
+                                noteLogsLore.add(ChatColor.DARK_BLUE + LangCore.getUtilMessage("enabled-word").toString());
+                                noteLogsLore.add(ChatColor.AQUA + LangCore.getUtilMessage("disabled-word").toString());
+                            }
 
-                                break;
-                        }
+                            this.setItem(2, new GUIItem(
+                                    Material.PAPER,
+                                    ChatColor.AQUA.toString() + ChatColor.BOLD + LangCore.getClassMessage(ConfigCmd.class, "log-notes-item-title").toString(),
+                                    noteLogsLore,
+                                    LangCore.getClassMessage(ConfigCmd.class, "log-notes-item-guide-mode"),
+                                    player
+                            ));
+
+                        case 27:
+                            this.setItem(27, new GUIItem(
+                                    Material.SIGN,
+                                    ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
+                                    Collections.emptyList(),
+                                    LangCore.getUtilMessage("back-item-guide-mode"),
+                                    player
+                            ));
+
+                            break;
                     }
+                }
 
-                    @Override
-                    public void update() {
-                        init();
-                    }
+                @Override
+                public void update() {
+                    init();
+                }
 
-                    @Override
-                    public BWGUI init() {
-                        genItems(0, 1);
+                @Override
+                public BWGUI init() {
+                    genItems(0, 1, 2);
 
-                        return this;
-                    }
-                };
+                    return this;
+                }
+            }.init();
         }
 
         throw new NullPointerException("No GUI with id " + code + " found");
@@ -245,12 +303,26 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                     return;
                 }
 
+                player.sendMessage(PrefixMessage.info.getPrefix(),
+                        LangCore.getClassMessage(this.getClass(), "database-updated").setKey("%%db", ChatColor.BOLD + (BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") ? "SQLite" : "MySQL")));
+
+                break;
+            case 2:
+                response = new BWConfigTask(BWConfigTask.ConfigTask.NoteLogsSet, !LogCore.notes, player.getBukkitPlayer().getUniqueId()).execute();
+
+                if (response.getCode() == 0 && response instanceof BWTask.BWExceptionResponse) {
+                    player.reportExceptionResponse((BWTask.BWExceptionResponse) response);
+                    return;
+                }
+
+                GUICore.updateAllGUIs();
+
                 if (gui.getItem(27) != null) {
                     GUICore.openGUIs.get(player).genItems(27);
                 }
 
                 player.sendMessage(PrefixMessage.info.getPrefix(),
-                        LangCore.getClassMessage(this.getClass(), "database-updated").setKey("%%db", ChatColor.BOLD + (BitsWorlds.plugin.getConfig().getString("db").equalsIgnoreCase("sqlite") ? "SQLite" : "MySQL")));
+                        LangCore.getClassMessage(this.getClass(), "log-notes-updated").setKey("%%s", ChatColor.BOLD + String.valueOf(LogCore.notes)));
 
                 break;
             case 27:
@@ -313,7 +385,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             if (lang == LangCore.lang)
                 sb.append(ChatColor.AQUA);
             else
-                sb.append(ChatColor.BLUE);
+                sb.append(ChatColor.DARK_BLUE);
 
             sb.append(lang.title);
             countryBannerLore.add(sb.toString());
@@ -333,7 +405,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
         List<String> list = null;
 
         if (args.length == 2) {
-            list = Arrays.asList("language", "db");
+            list = Arrays.asList("language", "db", "notes");
         }
 
         else if (args.length == 3) {
@@ -343,6 +415,10 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
             else if (args[1].equalsIgnoreCase("db")) {
                 list = Arrays.asList("MYSQL", "SQLITE");
+            }
+
+            else if (args[1].equalsIgnoreCase("notes")) {
+                list = Arrays.asList("true", "false");
             }
         }
 

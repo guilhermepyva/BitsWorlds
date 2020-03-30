@@ -1,6 +1,7 @@
 package bab.bitsworlds.task.tasks;
 
 import bab.bitsworlds.BitsWorlds;
+import bab.bitsworlds.cmd.LogCmd;
 import bab.bitsworlds.logger.LogAction;
 import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.logger.LogRecorder;
@@ -28,6 +29,8 @@ public class BWConfigTask extends BWTask {
 
     @Override
     protected BWTaskResponse run() {
+        FileConfiguration config = BitsWorlds.plugin.getConfig();
+
         switch (task) {
             case LanguageSet:
                 Lang lang = (Lang) data;
@@ -37,7 +40,7 @@ public class BWConfigTask extends BWTask {
                 }
 
                 LangCore.lang = lang;
-                BitsWorlds.plugin.getConfig().set("language", LangCore.lang.name());
+                config.set("language", LangCore.lang.name());
                 BitsWorlds.plugin.saveConfig();
 
                 LogCore.addLog(LogAction.GLOBAL_CONFIG_LANGUAGESET, LangCore.lang.name(), new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
@@ -45,7 +48,6 @@ public class BWConfigTask extends BWTask {
                 return new DefaultResponse(2);
             case DatabaseTypeSet:
                 boolean sqlite = (boolean) data;
-                FileConfiguration config = BitsWorlds.plugin.getConfig();
 
                 if ((sqlite && config.getString("db").equalsIgnoreCase("sqlite")) || !sqlite && config.getString("db").equalsIgnoreCase("mysql")) {
                     return new DefaultResponse(1);
@@ -59,6 +61,18 @@ public class BWConfigTask extends BWTask {
                 LogCore.addLog(LogAction.GLOBAL_CONFIG_DATABASETYPESET, type, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
 
                 return new DefaultResponse(2);
+            case NoteLogsSet:
+                boolean notes = (boolean) data;
+
+                if (notes == LogCore.notes)
+                    return new DefaultResponse(1);
+
+                config.set("log-notes", notes);
+                LogCore.notes = notes;
+
+                LogCore.addLog(LogAction.GLOBAL_CONFIG_NOTESSET, notes, new LogRecorder(player), new Timestamp(System.currentTimeMillis()));
+
+                return new DefaultResponse(2);
         }
 
         return null;
@@ -66,6 +80,7 @@ public class BWConfigTask extends BWTask {
 
     public enum ConfigTask {
         LanguageSet,
-        DatabaseTypeSet
+        DatabaseTypeSet,
+        NoteLogsSet
     }
 }
