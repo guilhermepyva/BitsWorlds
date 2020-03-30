@@ -193,38 +193,59 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 16:
                     if (player.hasPermission(BWPermission.UNLOAD_WITHOUT_SAVE)) {
-                        player.getBukkitPlayer().closeInventory();
-                        player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloading-world-message").setKey("%%s", interactWorldGUI.world.getName()));
+                        Bukkit.getScheduler().runTaskAsynchronously(
+                                BitsWorlds.plugin,
+                                () -> {
+                                    player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unload-world-without-save-confirmation-message"));
+                                    player.getBukkitPlayer().closeInventory();
 
-                        if (WorldUtils.isDefaultWorld(((BWLoadedWorld) interactWorldGUI.world).getWorld())) {
-                            player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-cant-be-unloaded"));
-                            player.openGUI(interactWorldGUI);
-                            return;
-                        }
+                                    String input = ChatInput.askPlayer(player);
 
-                        Location defaultWorldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
+                                    boolean unloaded = false;
 
-                        Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.getWorld().getUID().equals(((BWLoadedWorld) interactWorldGUI.world).world.getUID())).forEach(
-                                onlinePlayer -> {
-                                    onlinePlayer.teleport(defaultWorldSpawn);
+                                    if (input.equalsIgnoreCase("y")) {
+                                        player.getBukkitPlayer().closeInventory();
+                                        player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloading-world-message").setKey("%%s", interactWorldGUI.world.getName()));
 
-                                    if (!onlinePlayer.getUniqueId().equals(player.getBukkitPlayer().getUniqueId()))
-                                        new BWPlayer(onlinePlayer).sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloading-world-message1"));
+                                        if (WorldUtils.isDefaultWorld(((BWLoadedWorld) interactWorldGUI.world).getWorld())) {
+                                            player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-cant-be-unloaded"));
+                                            player.openGUI(interactWorldGUI);
+                                            return;
+                                        }
+
+                                        Location defaultWorldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
+
+                                        Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.getWorld().getUID().equals(((BWLoadedWorld) interactWorldGUI.world).world.getUID())).forEach(
+                                                onlinePlayer -> {
+                                                    onlinePlayer.teleport(defaultWorldSpawn);
+
+                                                    if (!onlinePlayer.getUniqueId().equals(player.getBukkitPlayer().getUniqueId()))
+                                                        new BWPlayer(onlinePlayer).sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloading-world-message1"));
+                                                }
+                                        );
+
+                                        Bukkit.unloadWorld(((BWLoadedWorld) interactWorldGUI.world).world, false);
+
+                                        if (Bukkit.getWorld(interactWorldGUI.world.getName()) != null) {
+                                            player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-cant-be-unloaded"));
+                                            player.openGUI(interactWorldGUI);
+                                            return;
+                                        }
+
+                                        unloaded = true;
+                                    }
+
+                                    if (unloaded) {
+                                        player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloaded-world-message").setKey("%%s", interactWorldGUI.world.getName()));
+                                        interactWorldGUI.world = WorldUtils.getUnloadedWorld(interactWorldGUI.world.getName());
+                                        interactWorldGUI.update();
+                                        player.openGUI(interactWorldGUI);
+                                    }
+                                    else if (!unloaded) {
+                                        player.openGUI(interactWorldGUI);
+                                    }
                                 }
                         );
-
-                        Bukkit.unloadWorld(((BWLoadedWorld) interactWorldGUI.world).world, false);
-
-                        if (Bukkit.getWorld(interactWorldGUI.world.getName()) != null) {
-                            player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-cant-be-unloaded"));
-                            player.openGUI(interactWorldGUI);
-                            return;
-                        }
-
-                        player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloaded-world-message").setKey("%%s", interactWorldGUI.world.getName()));
-                        interactWorldGUI.world = WorldUtils.getUnloadedWorld(interactWorldGUI.world.getName());
-                        interactWorldGUI.update();
-                        player.openGUI(interactWorldGUI);
                     }
                     break;
                 case 15:

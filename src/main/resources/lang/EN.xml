@@ -77,6 +77,7 @@
                 <message key="unload-without-save-item-warn-prefix">WARNING: </message>
                 <message key="unload-without-save-item-warn">Changes made in the world will be discarded and irreversible.</message>
                 <message key="unload-without-save-item-guide-mode">this will unload the world and will discard the changes made in it</message>
+                <message key="unload-world-without-save-confirmation-message">Are you sure you want to unload this world without saving? type 'y' to yes or type anything else to cancel</message>
                 <message key="unload-item-title">Unload world and save</message>
                 <message key="unload-item-guide-mode">this will unload the world and will save the changes made in it</message>
                 <message key="unloading-world-message">Unloading world %%s...</message>

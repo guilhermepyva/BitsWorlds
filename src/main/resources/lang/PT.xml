@@ -77,6 +77,7 @@
                 <message key="unload-without-save-item-warn-prefix">AVISO: </message>
                 <message key="unload-without-save-item-warn">As mudanças feitas no mundo serão descartadas e irreversíveis</message>
                 <message key="unload-without-save-item-guide-mode">isto vai descarregar o mundo e descartar as mudanças feitas nele</message>
+                <message key="unload-world-without-save-confirmation-message">Você tem certeza de que deseja descarregar este mundo sem salvar? digite 'y' para sim ou digite qualquer outra coisa para cancelar</message>
                 <message key="unload-item-title">Descarregar mundo e salvar</message>
                 <message key="unload-item-guide-mode">isto vai descarregar o mundo e salvar as mudanças feitas nele</message>
                 <message key="unloading-world-message">Descarregando mundo %%s...</message>
