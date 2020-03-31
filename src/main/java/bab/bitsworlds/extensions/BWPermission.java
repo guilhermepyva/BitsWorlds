@@ -10,10 +10,8 @@ public enum BWPermission {
     MAINCMD_BACKUP_LIST("maincmd.backup.list"),
 
     LOGS_SEE("logs.see"),
-
     LOGS_NOTE_ADD("logs.note.add"),
     LOGS_NOTE_MODIFY("logs.note.modify"),
-
 
     UNLOAD("interaction.unload.save"),
     UNLOAD_WITHOUT_SAVE("interaction.unload.nosave"),
