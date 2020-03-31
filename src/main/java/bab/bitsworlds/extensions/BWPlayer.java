@@ -32,7 +32,7 @@ public class BWPlayer extends BWCommandSender {
     }
 
     public void openGUI(BWGUI gui) {
-        this.getBukkitPlayer().openInventory(gui);
+        this.getBukkitPlayer().openInventory(gui.inventory);
         GUICore.openGUIs.put(this, gui);
     }
 

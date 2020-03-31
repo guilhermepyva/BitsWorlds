@@ -1,7 +1,8 @@
 package bab.bitsworlds.gui;
 
-import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftInventoryCustom;
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +10,8 @@ import java.util.Map;
 /**
  * Class to work with Bukkit windows
  */
-public abstract class BWGUI extends CraftInventoryCustom implements Cloneable {
-
+public abstract class BWGUI implements Cloneable {
+    public Inventory inventory;
     public String id;
     public Map<Property, Object> properties;
     private ImplGUI guiClass;
@@ -27,7 +28,7 @@ public abstract class BWGUI extends CraftInventoryCustom implements Cloneable {
     }
 
     public BWGUI(String id, int size, String title, ImplGUI guiClass, boolean updatable) {
-        super(null, size, ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + title);
+        inventory = Bukkit.createInventory(null, size, title);
         this.properties = new HashMap<>();
         this.guiClass = guiClass;
         this.id = id;
@@ -36,6 +37,14 @@ public abstract class BWGUI extends CraftInventoryCustom implements Cloneable {
         for (Property property : Property.values()) {
             properties.put(property, property.defaultProperty);
         }
+    }
+
+    public void setItem(int slot, ItemStack itemStack) {
+        inventory.setItem(slot, itemStack);
+    }
+
+    public ItemStack getItem(int slot) {
+        return inventory.getItem(slot);
     }
 
     public void setProperty(Property property, Object value) {

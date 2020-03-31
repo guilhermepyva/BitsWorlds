@@ -6,7 +6,6 @@ import bab.bitsworlds.db.BWSQL;
 import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
