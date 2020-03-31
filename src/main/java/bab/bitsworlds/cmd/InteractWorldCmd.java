@@ -11,12 +11,11 @@ import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
 import bab.bitsworlds.utils.BackupUtils;
+import bab.bitsworlds.utils.FileUtils;
 import bab.bitsworlds.utils.WorldUtils;
 import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.BWUnloadedWorld;
 import bab.bitsworlds.world.BWorld;
-import com.avaje.ebeaninternal.server.lib.sql.Prefix;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
@@ -71,7 +70,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     if (!player.hasPermission(listWorldCmd.getPermission())) {
                         player.sendMessage(PrefixMessage.permission_message);
 
-                        player.getBukkitPlayer().closeInventory();
+                        player.closeInventory();
 
                         return;
                     }
@@ -141,7 +140,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             BitsWorlds.plugin,
                             () -> {
                                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "duplicate-world-set-name-message"));
-                                player.getBukkitPlayer().closeInventory();
+                                player.closeInventory();
 
                                 String input = ChatInput.askPlayer(player);
 
@@ -187,7 +186,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                 case 11:
                     if (player.hasPermission(BWPermission.SEE_GAMERULES)) {
                         GameRuleGui gameRuleGui = (GameRuleGui) new GameRuleHandler().getGUI("", player);
-                        gameRuleGui.world = interactWorldGUI.world;
+                        gameRuleGui.world = (BWLoadedWorld) interactWorldGUI.world;
                         player.openGUI(gameRuleGui.init());
                     }
                     break;
@@ -197,60 +196,60 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                 BitsWorlds.plugin,
                                 () -> {
                                     player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unload-world-without-save-confirmation-message"));
-                                    player.getBukkitPlayer().closeInventory();
+                                    player.closeInventory();
 
                                     String input = ChatInput.askPlayer(player);
 
-                                    boolean unloaded = false;
+                                    Bukkit.getScheduler().runTask(BitsWorlds.plugin, () -> {
+                                        boolean unloaded = false;
 
-                                    if (input.equalsIgnoreCase("y")) {
-                                        player.getBukkitPlayer().closeInventory();
-                                        player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloading-world-message").setKey("%%s", interactWorldGUI.world.getName()));
+                                        if (input.equalsIgnoreCase("y")) {
+                                            player.closeInventory();
+                                            player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloading-world-message").setKey("%%s", interactWorldGUI.world.getName()));
 
-                                        if (WorldUtils.isDefaultWorld(((BWLoadedWorld) interactWorldGUI.world).getWorld())) {
-                                            player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-cant-be-unloaded"));
-                                            player.openGUI(interactWorldGUI);
-                                            return;
+                                            if (WorldUtils.isDefaultWorld(((BWLoadedWorld) interactWorldGUI.world).getWorld())) {
+                                                player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-cant-be-unloaded"));
+                                                player.openGUI(interactWorldGUI);
+                                                return;
+                                            }
+
+                                            Location defaultWorldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
+
+                                            Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.getWorld().getUID().equals(((BWLoadedWorld) interactWorldGUI.world).world.getUID())).forEach(
+                                                    onlinePlayer -> {
+                                                        onlinePlayer.teleport(defaultWorldSpawn);
+
+                                                        if (!onlinePlayer.getUniqueId().equals(player.getBukkitPlayer().getUniqueId()))
+                                                            new BWPlayer(onlinePlayer).sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloading-world-message1"));
+                                                    }
+                                            );
+
+                                            Bukkit.unloadWorld(((BWLoadedWorld) interactWorldGUI.world).world, false);
+
+                                            if (Bukkit.getWorld(interactWorldGUI.world.getName()) != null) {
+                                                player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-cant-be-unloaded"));
+                                                player.openGUI(interactWorldGUI);
+                                                return;
+                                            }
+
+                                            unloaded = true;
                                         }
 
-                                        Location defaultWorldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
-
-                                        Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.getWorld().getUID().equals(((BWLoadedWorld) interactWorldGUI.world).world.getUID())).forEach(
-                                                onlinePlayer -> {
-                                                    onlinePlayer.teleport(defaultWorldSpawn);
-
-                                                    if (!onlinePlayer.getUniqueId().equals(player.getBukkitPlayer().getUniqueId()))
-                                                        new BWPlayer(onlinePlayer).sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloading-world-message1"));
-                                                }
-                                        );
-
-                                        Bukkit.unloadWorld(((BWLoadedWorld) interactWorldGUI.world).world, false);
-
-                                        if (Bukkit.getWorld(interactWorldGUI.world.getName()) != null) {
-                                            player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-cant-be-unloaded"));
+                                        if (unloaded) {
+                                            player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloaded-world-message").setKey("%%s", interactWorldGUI.world.getName()));
+                                            interactWorldGUI.world = WorldUtils.getUnloadedWorld(interactWorldGUI.world.getName());
+                                            interactWorldGUI.update();
                                             player.openGUI(interactWorldGUI);
-                                            return;
                                         }
-
-                                        unloaded = true;
-                                    }
-
-                                    if (unloaded) {
-                                        player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloaded-world-message").setKey("%%s", interactWorldGUI.world.getName()));
-                                        interactWorldGUI.world = WorldUtils.getUnloadedWorld(interactWorldGUI.world.getName());
-                                        interactWorldGUI.update();
-                                        player.openGUI(interactWorldGUI);
-                                    }
-                                    else if (!unloaded) {
-                                        player.openGUI(interactWorldGUI);
-                                    }
+                                        else player.openGUI(interactWorldGUI);
+                                    });
                                 }
                         );
                     }
                     break;
                 case 15:
                     if (player.hasPermission(BWPermission.UNLOAD)) {
-                        player.getBukkitPlayer().closeInventory();
+                        player.closeInventory();
                         player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloading-world-message").setKey("%%s", interactWorldGUI.world.getName()));
 
                         if (WorldUtils.isDefaultWorld(((BWLoadedWorld) interactWorldGUI.world).getWorld())) {
@@ -261,27 +260,29 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
                         Location defaultWorldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
 
-                        Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.getWorld().getUID().equals(((BWLoadedWorld) interactWorldGUI.world).world.getUID())).forEach(
-                                onlinePlayer -> {
-                                    onlinePlayer.teleport(defaultWorldSpawn);
+                        Bukkit.getScheduler().runTask(BitsWorlds.plugin, () -> {
+                            Bukkit.getOnlinePlayers().stream().filter(player1 -> player1.getWorld().getUID().equals(((BWLoadedWorld) interactWorldGUI.world).world.getUID())).forEach(
+                                    onlinePlayer -> {
+                                        onlinePlayer.teleport(defaultWorldSpawn);
 
-                                    if (!onlinePlayer.getUniqueId().equals(player.getBukkitPlayer().getUniqueId()))
-                                        new BWPlayer(onlinePlayer).sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloading-world-message1"));
-                                }
-                        );
+                                        if (!onlinePlayer.getUniqueId().equals(player.getBukkitPlayer().getUniqueId()))
+                                            new BWPlayer(onlinePlayer).sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloading-world-message1"));
+                                    }
+                            );
 
-                        Bukkit.unloadWorld(((BWLoadedWorld) interactWorldGUI.world).world, true);
+                            Bukkit.unloadWorld(((BWLoadedWorld) interactWorldGUI.world).world, true);
 
-                        if (Bukkit.getWorld(interactWorldGUI.world.getName()) != null) {
-                            player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-cant-be-unloaded"));
+                            if (Bukkit.getWorld(interactWorldGUI.world.getName()) != null) {
+                                player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "world-cant-be-unloaded"));
+                                player.openGUI(interactWorldGUI);
+                                return;
+                            }
+
+                            player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloaded-world-message").setKey("%%s", interactWorldGUI.world.getName()));
+                            interactWorldGUI.world = WorldUtils.getUnloadedWorld(interactWorldGUI.world.getName());
+                            interactWorldGUI.update();
                             player.openGUI(interactWorldGUI);
-                            return;
-                        }
-
-                        player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "unloaded-world-message").setKey("%%s", interactWorldGUI.world.getName()));
-                        interactWorldGUI.world = WorldUtils.getUnloadedWorld(interactWorldGUI.world.getName());
-                        interactWorldGUI.update();
-                        player.openGUI(interactWorldGUI);
+                        });
                     }
                     break;
                 case 14:
@@ -322,7 +323,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                 BitsWorlds.plugin,
                                 () -> {
                                     player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "teleport-set-player-message"));
-                                    player.getBukkitPlayer().closeInventory();
+                                    player.closeInventory();
 
                                     String input = ChatInput.askPlayer(player);
 
@@ -354,7 +355,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
             switch (event.getSlot()) {
                 case 16:
                     if (player.hasPermission(BWPermission.LOAD)) {
-                        player.getBukkitPlayer().closeInventory();
+                        player.closeInventory();
                         player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "loading-world-message").setKey("%%s", interactWorldGUI.world.getName()));
                         World world = Bukkit.createWorld(new WorldCreator(interactWorldGUI.world.getName()));
 
@@ -376,7 +377,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                     BitsWorlds.plugin,
                                     () -> {
                                         player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "delete-world-confirmation-message"));
-                                        player.getBukkitPlayer().closeInventory();
+                                        player.closeInventory();
 
                                         String input = ChatInput.askPlayer(player);
 
@@ -385,8 +386,8 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                         if (input.equalsIgnoreCase("y")) {
                                             player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "deleting-world"));
                                             try {
-                                                FileUtils.deleteDirectory(((BWUnloadedWorld) interactWorldGUI.world).getFile());
-                                            } catch (IOException e) {
+                                                FileUtils.delete(((BWUnloadedWorld) interactWorldGUI.world).getFile());
+                                            } catch (SecurityException e) {
                                                 player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "error-deleting-message"));
                                                 e.printStackTrace();
                                             }
@@ -400,20 +401,19 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                             if (!player.hasPermission(listWorldCmd.getPermission())) {
                                                 player.sendMessage(PrefixMessage.permission_message);
 
-                                                player.getBukkitPlayer().closeInventory();
+                                                player.closeInventory();
 
                                                 return;
                                             }
 
                                             BWGUI listWorldGui = listWorldCmd.getGUI("listworld_main",  player);
 
-                                            player.openGUI(listWorldGui);
+                                            player.closeInventory();
 
                                             listWorldGui.genItems(36);
                                         }
-                                        else if (!deleted) {
-                                            player.openGUI(interactWorldGUI);
-                                        }
+                                        else if (!deleted)
+                                            player.closeInventory();
                                     }
                             );
                         }
@@ -424,12 +424,12 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                 BitsWorlds.plugin,
                                 () -> {
                                     player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "rename-world-set-name-message"));
-                                    player.getBukkitPlayer().closeInventory();
+                                    player.closeInventory();
 
                                     String input = ChatInput.askPlayer(player);
 
                                     if (input.equals("!")) {
-                                        player.openGUI(interactWorldGUI);
+                                        player.closeInventory();
                                         return;
                                     }
 
@@ -438,7 +438,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                     String worldName = WorldUtils.getValidWorldName(input);
                                     if (worldName.isEmpty() || new File(Bukkit.getWorldContainer() + "/" + worldName + "/").exists()) {
                                         player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "name-set-unsucess"));
-                                        player.openGUI(interactWorldGUI);
+                                        player.closeInventory();
                                         return;
                                     }
 
@@ -446,7 +446,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
                                     if (newFile == null) {
                                         player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "cant-rename-world-message"));
-                                        player.openGUI(interactWorldGUI);
+                                        player.closeInventory();
                                         return;
                                     }
 
@@ -454,7 +454,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                     GUICore.updateGUI("listworld_main");
                                     interactWorldGUI.world = new BWUnloadedWorld(newFile);
                                     interactWorldGUI.update();
-                                    player.openGUI(interactWorldGUI);
+                                    player.closeInventory();
                                 }
                         );
                     }
@@ -783,7 +783,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
     }
 
     public class GameRuleGui extends BWGUI {
-        public BWorld world;
+        public BWLoadedWorld world;
         public BWPlayer player;
         public List<String> gamerules;
 
@@ -860,7 +860,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
 
         @Override
         public void update() {
-            if (!Bukkit.getWorlds().contains(world)) {
+            if (Bukkit.getWorld(world.getWorld().getUID()) == null) {
                 InteractWorldCmd interactWorldCmd = new InteractWorldCmd();
                 InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd.getGUI("main", player);
                 interactGui.world = WorldUtils.getUnloadedWorld(world.getName());
@@ -899,7 +899,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             BitsWorlds.plugin,
                             () -> {
                                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "gamerule-set-message"));
-                                player.getBukkitPlayer().closeInventory();
+                                player.closeInventory();
 
                                 String input = ChatInput.askPlayer(player);
 
@@ -1065,7 +1065,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             BitsWorlds.plugin,
                             () -> {
                                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "time-set-message"));
-                                player.getBukkitPlayer().closeInventory();
+                                player.closeInventory();
 
                                 String input = ChatInput.askPlayer(player);
 

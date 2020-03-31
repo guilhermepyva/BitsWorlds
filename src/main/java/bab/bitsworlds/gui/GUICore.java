@@ -70,11 +70,11 @@ public class GUICore implements Listener {
     }
 
     public static void updateGUI(String id) {
-        openGUIs.keySet().stream().filter(bwPlayer -> openGUIs.get(bwPlayer).id.equals(id)).forEach(bwPlayer ->  openGUIs.get(bwPlayer).update());
+        new ArrayList<>(openGUIs.keySet()).stream().filter(bwPlayer -> openGUIs.get(bwPlayer).id.equals(id)).forEach(bwPlayer ->  openGUIs.get(bwPlayer).update());
     }
 
     public static void updateAllGUIs() {
-        openGUIs.keySet().forEach(bwPlayer ->  openGUIs.get(bwPlayer).update());
+        new ArrayList<>(openGUIs.keySet()).forEach(bwPlayer ->  openGUIs.get(bwPlayer).update());
     }
 
     public static void updateGUIItem(String id, int... items) {

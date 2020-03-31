@@ -2,7 +2,6 @@ package bab.bitsworlds.utils;
 
 import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.world.BWBackup;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 
 import java.io.*;

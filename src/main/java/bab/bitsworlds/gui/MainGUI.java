@@ -238,7 +238,7 @@ public class MainGUI implements ImplGUI {
                     if (!player.hasPermission(configCmd.getPermission())) {
                         player.sendMessage(PrefixMessage.permission_message);
 
-                        player.getBukkitPlayer().closeInventory();
+                        player.closeInventory();
 
                         return;
                     }
@@ -256,7 +256,7 @@ public class MainGUI implements ImplGUI {
                             BitsWorlds.plugin,
                             () -> {
                                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(MainGUI.class, "insert-world-name-to-interact-to"));
-                                player.getBukkitPlayer().closeInventory();
+                                player.closeInventory();
 
                                 String input = ChatInput.askPlayer(player);
                                 if (input.equals("!")) {
@@ -308,7 +308,7 @@ public class MainGUI implements ImplGUI {
                     if (!player.hasPermission(listWorldCmd.getPermission())) {
                         player.sendMessage(PrefixMessage.permission_message);
 
-                        player.getBukkitPlayer().closeInventory();
+                        player.closeInventory();
 
                         return;
                     }
@@ -328,7 +328,7 @@ public class MainGUI implements ImplGUI {
                     if (!player.hasPermission(createWorldCmd.getPermission())) {
                         player.sendMessage(PrefixMessage.permission_message);
 
-                        player.getBukkitPlayer().closeInventory();
+                        player.closeInventory();
 
                         return;
                     }
@@ -346,7 +346,7 @@ public class MainGUI implements ImplGUI {
                             BitsWorlds.plugin,
                             () -> {
                                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(MainGUI.class, "insert-world-name-to-list-backups"));
-                                player.getBukkitPlayer().closeInventory();
+                                player.closeInventory();
 
                                 String input = ChatInput.askPlayer(player);
                                 if (input.equals("!")) {
@@ -382,7 +382,7 @@ public class MainGUI implements ImplGUI {
                     if (!player.hasPermission(logCmd.getPermission())) {
                         player.sendMessage(PrefixMessage.permission_message);
 
-                        player.getBukkitPlayer().closeInventory();
+                        player.closeInventory();
 
                         return;
                     }

@@ -77,7 +77,7 @@ public class LogCmd implements BWCommand, ImplGUI {
             Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
                 int logID = logGUI.itemsID.get(event.getSlot());
 
-                player.getBukkitPlayer().closeInventory();
+                player.closeInventory();
 
                 player.sendMessage(PrefixMessage.info.getPrefix() + LangCore.getClassMessage(LogCmd.class, "type-note"));
 
@@ -147,9 +147,8 @@ public class LogCmd implements BWCommand, ImplGUI {
                     Bukkit.getScheduler().runTaskAsynchronously(BitsWorlds.plugin, () -> {
                         this.itemsID = new ArrayList<>();
 
-                        for (int i = 0; i < 45; i++) {
+                        for (int i = 0; i < 45; i++)
                             setItem(i, new ItemStack(Material.AIR));
-                        }
 
                         int i = 0;
                         int skipItems = this.actualPage * 45;
