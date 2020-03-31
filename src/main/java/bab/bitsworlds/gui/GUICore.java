@@ -1,11 +1,6 @@
 package bab.bitsworlds.gui;
 
 import bab.bitsworlds.extensions.BWPlayer;
-import bab.bitsworlds.multilanguage.LangCore;
-import bab.bitsworlds.multilanguage.MLMessage;
-import bab.bitsworlds.utils.StringUtils;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -42,11 +37,14 @@ public class GUICore implements Listener {
         BWGUI gui = GUICore.openGUIs.get(player);
 
         if ((Boolean) gui.properties.get(BWGUI.Property.CLICK_SOUND)) {
-            player.getBukkitPlayer().playSound(player.getBukkitPlayer().getLocation(), Sound.CLICK, 1F, 1.25F);
+            try {
+                player.getBukkitPlayer().playSound(player.getBukkitPlayer().getLocation(), Sound.CLICK, 1F, 1.25F);
+            } catch (NoSuchFieldError error) {
+                player.getBukkitPlayer().playSound(player.getBukkitPlayer().getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1F, 1.25F);
+            }
         }
-        if ((Boolean) gui.properties.get(BWGUI.Property.STATUE_ITEMS)) {
+        if ((Boolean) gui.properties.get(BWGUI.Property.STATUE_ITEMS))
             e.setCancelled(true);
-        }
 
         gui.getGUIClass().clickEvent(e, player, gui);
     }
