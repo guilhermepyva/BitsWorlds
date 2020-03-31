@@ -10,12 +10,10 @@ import bab.bitsworlds.gui.*;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
 import bab.bitsworlds.utils.BackupUtils;
-import bab.bitsworlds.utils.WorldUtils;
+import bab.bitsworlds.utils.FileUtils;
 import bab.bitsworlds.world.BWBackup;
 import bab.bitsworlds.world.BWUnloadedWorld;
 import bab.bitsworlds.world.BWorld;
-import bab.bitsworlds.world.WorldCreator;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -72,15 +70,15 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
                                 BitsWorlds.plugin,
                                 () -> {
                                     player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(getClass(), "delete-backup-confirmation-message"));
-                                    player.getBukkitPlayer().closeInventory();
+                                    player.closeInventory();
 
                                     String input = ChatInput.askPlayer(player);
 
                                     if (input.equalsIgnoreCase("y")) {
                                         player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(getClass(), "deleting-backup"));
                                         try {
-                                            FileUtils.deleteDirectory(backup.file);
-                                        } catch (IOException e) {
+                                            FileUtils.delete(backup.file);
+                                        } catch (SecurityException e) {
                                             player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(getClass(), "error-deleting-message"));
                                             e.printStackTrace();
                                         }

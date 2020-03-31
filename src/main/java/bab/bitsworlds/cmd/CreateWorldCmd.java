@@ -82,7 +82,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                 if (createWorldGUI.creator.worldType == WorldType.VOID)
                     bukCreator.generatorSettings("2;0;1;");
 
-                player.getBukkitPlayer().closeInventory();
+                player.closeInventory();
                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "creating-world-message"));
 
                 World world = bukCreator.createWorld();
@@ -119,7 +119,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                             WorldCreator creator = createWorldGUI.creator;
 
                             player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "seed-set-message"));
-                            player.getBukkitPlayer().closeInventory();
+                            player.closeInventory();
 
                             String input = ChatInput.askPlayer(player);
 
@@ -155,7 +155,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                             WorldCreator creator = createWorldGUI.creator;
 
                             player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "name-set-message"));
-                            player.getBukkitPlayer().closeInventory();
+                            player.closeInventory();
 
                             String input = ChatInput.askPlayer(player);
 

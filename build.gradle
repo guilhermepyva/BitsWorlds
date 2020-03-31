@@ -9,7 +9,7 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-version '1.0.1-Alpha'
+version '1.0.2-Alpha'
 
 repositories {
     mavenCentral()

@@ -3,7 +3,6 @@ package bab.bitsworlds.utils;
 import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.BWUnloadedWorld;
 import bab.bitsworlds.world.BWorld;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
@@ -75,7 +74,7 @@ public class WorldUtils {
     }
 
     public static void copyWorld(String world, File to) throws IOException {
-        FileUtils.copyDirectory(new File(Bukkit.getWorldContainer() + "/" + world), to);
+        FileUtils.copyContent(new File(Bukkit.getWorldContainer() + "/" + world), to);
         new File(to + "/uid.dat").delete();
     }
 

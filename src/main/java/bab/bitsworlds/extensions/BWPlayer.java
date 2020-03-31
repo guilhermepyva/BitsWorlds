@@ -1,5 +1,6 @@
 package bab.bitsworlds.extensions;
 
+import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.gui.BWGUI;
 import bab.bitsworlds.gui.GUICore;
 import org.bukkit.Bukkit;
@@ -32,8 +33,18 @@ public class BWPlayer extends BWCommandSender {
     }
 
     public void openGUI(BWGUI gui) {
-        this.getBukkitPlayer().openInventory(gui.inventory);
+        if (!Bukkit.isPrimaryThread())
+            Bukkit.getScheduler().runTask(BitsWorlds.plugin, () -> this.getBukkitPlayer().openInventory(gui.inventory));
+        else
+            this.getBukkitPlayer().openInventory(gui.inventory);
         GUICore.openGUIs.put(this, gui);
+    }
+
+    public void closeInventory() {
+        if (!Bukkit.isPrimaryThread())
+            Bukkit.getScheduler().runTask(BitsWorlds.plugin, () -> this.getBukkitPlayer().closeInventory());
+        else
+            this.getBukkitPlayer().closeInventory();
     }
 
     @Override
