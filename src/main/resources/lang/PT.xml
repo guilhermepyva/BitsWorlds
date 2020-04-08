@@ -68,6 +68,12 @@
                 <message key="void-type">Vazio</message>
                 <message key="type-item-guide">aqui você pode definir o tipo do mundo</message>
                 <message key="generator-settings-set-message">Digite as configurações de geração do mundo no bate-papo, digite '!' para cancelar a operação</message>
+                <message key="custom-generator-pastebin-item-title">Importar gerador customizado pelo Pastebin</message>
+                <message key="custom-generator-pastebin-guide-mode">Aqui você pode importar um gerador customizado para seu mundo a partir do site Pastebin, cole no bate-papo o link do Paste que você gerou para anexá-lo a criação de mundo</message>
+                <message key="custom-generator-pastebin-set">Digite o link do paste no bate-papo, digite '!' para cancelar a operação</message>
+                <message key="custom-generator-pastebin-set-unsucess">O Link que você inseriu não é um link Pastebin válido</message>
+                <message key="custom-generator-pastebin-obtaining">Obtendo o conteúdo do Paste...</message>
+                <message key="custom-generator-pastebin-error">Um erro ocorreu enquanto era obtido o conteúdo do Paste</message>
                 <message key="creating-world-message">Criando mundo...</message>
                 <message key="world-created-message">Mundo criado!</message>
             </class>

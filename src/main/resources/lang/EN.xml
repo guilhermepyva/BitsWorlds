@@ -65,9 +65,16 @@
                 <message key="flat-type">Flat</message>
                 <message key="large-biomes-type">Large Biomes</message>
                 <message key="amplified-type">Amplified</message>
+                <message key="void-type">Void</message>
                 <message key="customized-type">Customized</message>
                 <message key="type-item-guide">here you can set the world type</message>
                 <message key="generator-settings-set-message">Type the generator settings in the chat for the world, type '!' to cancel the operation</message>
+                <message key="custom-generator-pastebin-item-title">Import custom generator from Pastebin</message>
+                <message key="custom-generator-pastebin-guide-mode">Here you can import a custom generator for your world from Pastebin, paste the Paste link you generated into the chat to append it to the world creator</message>
+                <message key="custom-generator-pastebin-set">Type the link of the paste in the chat for the world, type '!' to cancel the operation</message>
+                <message key="custom-generator-pastebin-set-unsucess">The link you inserted isn't a valid pastebin link</message>
+                <message key="custom-generator-pastebin-obtaining">Obtaining content from the paste...</message>
+                <message key="custom-generator-pastebin-error">An error occurred while obtaining the content of the Paste</message>
                 <message key="creating-world-message">Creating world...</message>
                 <message key="world-created-message">World created!</message>
             </class>

@@ -2,6 +2,7 @@ package bab.bitsworlds.cmd;
 
 import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.ChatInput;
+import bab.bitsworlds.EmptyChunkGenerator;
 import bab.bitsworlds.SkullCore;
 import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.extensions.BWCommandSender;
@@ -13,19 +14,20 @@ import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.logger.LogRecorder;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
+import bab.bitsworlds.utils.PastebinUtils;
 import bab.bitsworlds.utils.WorldUtils;
 import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.WorldCreator;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
+import java.net.URL;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class CreateWorldCmd implements BWCommand, ImplGUI {
     @Override
@@ -74,13 +76,19 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                 bukCreator.environment(createWorldGUI.creator.environment);
                 if (createWorldGUI.creator.worldType == WorldType.VOID)
                     bukCreator.type(org.bukkit.WorldType.FLAT);
+                else if (createWorldGUI.creator.worldType == WorldType.CUSTOMIZED_GEN_PATH)
+                    bukCreator.type(org.bukkit.WorldType.CUSTOMIZED);
                 else
                     bukCreator.type(org.bukkit.WorldType.valueOf(createWorldGUI.creator.worldType.name()));
-                bukCreator.generateStructures(createWorldGUI.creator.generateStructures);
                 if (createWorldGUI.creator.seed != null)
                     bukCreator.seed(createWorldGUI.creator.seed);
                 if (createWorldGUI.creator.worldType == WorldType.VOID)
-                    bukCreator.generatorSettings("2;0;1;");
+                    if (BitsWorlds.mcSubVersion >= 13)
+                        bukCreator.generator(new EmptyChunkGenerator());
+                    else
+                        bukCreator.generatorSettings("2;0;1;");
+                else if (createWorldGUI.creator.worldType == WorldType.CUSTOMIZED_GEN_PATH)
+                    bukCreator.generatorSettings(createWorldGUI.creator.generatorSettings);
 
                 player.closeInventory();
                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "creating-world-message"));
@@ -196,6 +204,46 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
 
                 createWorldGUI.genItems(4, 29, 30, 31, 32, 33);
 
+                break;
+            case 39:
+                Bukkit.getScheduler().runTaskAsynchronously(
+                        BitsWorlds.plugin,
+                        () -> {
+                            WorldCreator creator = createWorldGUI.creator;
+
+                            player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "custom-generator-pastebin-set"));
+                            player.closeInventory();
+
+                            String input = ChatInput.askPlayer(player);
+
+                            if (input.equals("!")) {
+                                player.openGUI(createWorldGUI);
+                                return;
+                            }
+
+                            URL pasteLink = PastebinUtils.getURL(input);
+
+                            if (pasteLink == null) {
+                                player.openGUI(createWorldGUI);
+                                player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "custom-generator-pastebin-set-unsucess"));
+                                return;
+                            }
+
+                            player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "custom-generator-pastebin-obtaining"));
+
+                            creator.generatorSettings = PastebinUtils.getStringFromPaste(pasteLink);
+
+                            if (creator.generatorSettings == null) {
+                                player.openGUI(createWorldGUI);
+                                player.sendMessage(PrefixMessage.error.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "name-set-unsucess"));
+                                return;
+                            }
+
+                            creator.worldType = WorldType.CUSTOMIZED_GEN_PATH;
+                            createWorldGUI.genItems(4, 39);
+                            player.openGUI(createWorldGUI);
+                        }
+                );
                 break;
             case 36:
                 if (createWorldGUI.getItem(36) != null)
@@ -420,6 +468,20 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
 
                     this.setItem(33, customizedItem);
                     break;
+                case 39:
+                    GUIItem customGenPath = new GUIItem(
+                            Material.REDSTONE_TORCH_ON,
+                            ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "custom-generator-pastebin-item-title").toString(),
+                            new ArrayList<>(),
+                            LangCore.getClassMessage(CreateWorldCmd.class, "custom-generator-pastebin-guide-mode"),
+                            player
+                    );
+
+                    if (creator.worldType != null && creator.worldType == WorldType.CUSTOMIZED_GEN_PATH)
+                        customGenPath.addEffect();
+
+                    this.setItem(39, customGenPath);
+                    break;
                 case 36:
                     this.setItem(36, new GUIItem(
                             Material.SIGN,
@@ -436,6 +498,9 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
         public BWGUI init() {
             genItems(4, 9, 10, 11, 15, 16, 17, 29, 30, 31, 32, 33);
 
+            if (BitsWorlds.mcSubVersion < 13)
+                genItems(39);
+
             return this;
         }
 
@@ -446,6 +511,6 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
     }
 
     public enum WorldType {
-        NORMAL, FLAT, LARGE_BIOMES, AMPLIFIED, VOID;
+        NORMAL, FLAT, LARGE_BIOMES, AMPLIFIED, VOID, CUSTOMIZED_GEN_PATH
     }
 }

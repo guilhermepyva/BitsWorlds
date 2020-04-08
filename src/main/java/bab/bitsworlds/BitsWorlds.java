@@ -21,9 +21,12 @@ public class BitsWorlds extends JavaPlugin {
 
     public static Plugin plugin;
 
+    public static int mcSubVersion;
+
     @Override
     public void onEnable() {
         plugin = this;
+        mcSubVersion = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].replace("1_", "").replace("v", "").replaceAll("_R\\d", ""));
 
         logger = getLogger();
 

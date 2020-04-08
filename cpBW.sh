@@ -1,1 +1,1 @@
-cp build/libs/BitsWorlds-1.0.2-Alpha.jar Server/plugins
+cp build/libs/BitsWorlds-1.0.2-Alpha-all.jar Server/plugins
