@@ -5,14 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.UUID;
 
-public class BWUnloadedWorld implements BWorld {
+public class BWUnloadedWorld extends BWorld {
     private File file;
     private UUID uuid;
-
-    @Override
-    public String getName() {
-        return file.getName();
-    }
 
     public File getFile() {
         return file;
@@ -20,8 +15,15 @@ public class BWUnloadedWorld implements BWorld {
 
     public BWUnloadedWorld(File file) {
         this.file = file;
+        this.properties = BWorldProperties.getProperties(this);
     }
 
+    @Override
+    public String getName() {
+        return file.getName();
+    }
+
+    @Override
     public UUID getUUID() {
         if (uuid != null)
             return uuid;

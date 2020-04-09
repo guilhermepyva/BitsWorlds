@@ -5,6 +5,8 @@ import bab.bitsworlds.cmd.InteractWorldCmd;
 import bab.bitsworlds.db.BWSQL;
 import bab.bitsworlds.gui.GUICore;
 import bab.bitsworlds.multilanguage.*;
+import bab.bitsworlds.world.BWorldProperties;
+import bab.bitsworlds.world.BWorldPropertiesListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
@@ -13,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class BitsWorlds extends JavaPlugin {
@@ -49,10 +52,15 @@ public class BitsWorlds extends JavaPlugin {
         loadCmd();
         loadPrefixes();
         logger.info("BitsWorlds v" + this.getDescription().getVersion() + " enabled successfully");
+
+        for (File file : Objects.requireNonNull(Bukkit.getWorldContainer().listFiles(File::isDirectory))) {
+
+        }
     }
 
     @Override
     public void onDisable() {
+        BWorldProperties.propertiesCache.values().forEach(BWorldProperties::save);
         BWSQL.disconnect();
     }
 
@@ -90,5 +98,6 @@ public class BitsWorlds extends JavaPlugin {
 
         pm.registerEvents(new GUICore(), this);
         pm.registerEvents(new ChatInput(), this);
+        pm.registerEvents(new BWorldPropertiesListener(), this);
     }
 }

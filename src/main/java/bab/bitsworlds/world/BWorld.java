@@ -1,5 +1,10 @@
 package bab.bitsworlds.world;
 
-public interface BWorld {
-    String getName();
+import java.util.UUID;
+
+public abstract class BWorld {
+    BWorldProperties properties;
+
+    public abstract String getName();
+    public abstract UUID getUUID();
 }
