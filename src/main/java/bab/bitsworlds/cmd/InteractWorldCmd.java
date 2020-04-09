@@ -84,7 +84,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     break;
                 }
                 break;
-            case 24:
+            case 25:
                 if (player.hasPermission(BWPermission.LOGS_SEE)) {
                     LogCmd.LogGUI logGUI = (LogCmd.LogGUI) new LogCmd().getGUI("", player);
                     BWorld world = interactWorldGUI.world;
@@ -111,7 +111,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     logGUI.genItems(45);
                 }
                 break;
-            case 25:
+            case 24:
                 if (player.hasPermission(BWPermission.MAINCMD_BACKUP_LIST)) {
                     ListBackupCmd.ListBackupGui listBackupGui = (ListBackupCmd.ListBackupGui) new ListBackupCmd().getGUI("", player);
 
@@ -476,7 +476,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         @Override
         public void setupItem(int item) {
             switch (item) {
-                case 24:
+                case 25:
                     if (player.hasPermission(BWPermission.LOGS_SEE)) {
                         this.setItem(24, new GUIItem(
                                 Material.BOOK,
@@ -486,7 +486,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                 player
                         ));
                     }
-                case 25:
+                case 24:
                     if (player.hasPermission(BWPermission.MAINCMD_BACKUP_LIST)) {
                         this.setItem(25, new GUIItem(
                                 Material.BOOK,
