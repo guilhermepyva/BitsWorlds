@@ -2,6 +2,7 @@ package bab.bitsworlds;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
@@ -17,7 +18,7 @@ public class SkullCore {
         skulls = new HashMap<>();
 
         for (Skull skull : Skull.values()) {
-            GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+            GameProfile profile = new GameProfile(UUID.randomUUID(), "");
 
             profile.getProperties().put("textures", new Property("textures", new String(Base64.getEncoder().encode(("{textures:{SKIN:{url:\"" + skull.getPath() + "\"}}}").getBytes()))));
 
@@ -26,10 +27,19 @@ public class SkullCore {
     }
 
     public static void applyToSkull(SkullMeta meta, Skull skull) {
+        int version = Integer.parseInt(Bukkit.getBukkitVersion().split("-")[0].split("\\.")[1]);
+        if (version < 20) {
+            applyTexture(meta, skulls.get(skull));
+        } else {
+            SkullMetaDriver.applyTexture(meta, skulls.get(skull));
+        }
+    }
+
+    private static void applyTexture(SkullMeta meta, GameProfile texture) {
         try {
             Field field = meta.getClass().getDeclaredField("profile");
             field.setAccessible(true);
-            field.set(meta, skulls.get(skull));
+            field.set(meta, texture);
         } catch (Exception e) {
             e.printStackTrace();
         }
