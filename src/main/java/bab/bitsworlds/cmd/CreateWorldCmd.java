@@ -19,6 +19,7 @@ import bab.bitsworlds.world.WorldCreator;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
@@ -26,6 +27,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class CreateWorldCmd implements BWCommand, ImplGUI {
     @Override
@@ -80,7 +82,12 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                 if (createWorldGUI.creator.seed != null)
                     bukCreator.seed(createWorldGUI.creator.seed);
                 if (createWorldGUI.creator.worldType == WorldType.VOID)
-                    bukCreator.generatorSettings("2;0;1;");
+                    bukCreator.generator(new ChunkGenerator() {
+                        @Override
+                        public byte[][] generateBlockSections(World world, Random random, int x, int z, BiomeGrid biomes) {
+                            return new byte[world.getMaxHeight() / 16][];
+                        }
+                    });
 
                 player.closeInventory();
                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "creating-world-message"));
