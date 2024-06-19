@@ -49,9 +49,7 @@ public class GUIItem extends ItemStack {
 
         ItemMeta meta = this.getItemMeta();
 
-        if (meta.getLore() == null)
-            meta.setLore(new ArrayList<>());
-        meta.setLore(addGuideLore(guideModeMessage, player, meta.getLore()));
+        meta.setLore(addGuideLore(guideModeMessage, player, new ArrayList<>()));
 
         this.setItemMeta(meta);
     }
@@ -61,9 +59,7 @@ public class GUIItem extends ItemStack {
 
         ItemMeta meta = this.getItemMeta();
 
-        if (meta.getLore() == null)
-            meta.setLore(new ArrayList<>());
-        meta.setLore(addGuideLore(guideModeMessage, player, meta.getLore()));
+        meta.setLore(addGuideLore(guideModeMessage, player, new ArrayList<>()));
 
         this.setItemMeta(meta);
     }

@@ -133,7 +133,7 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
                                     break;
                                 case THE_END:
                                     description.add(ChatColor.GOLD + dimensionWord + ": " + ChatColor.WHITE + LangCore.getUtilMessage("theend").toString());
-                                    material = Material.ENDER_STONE;
+                                    material = Material.LEGACY_ENDER_STONE;
                                     break;
                             }
 
@@ -155,7 +155,7 @@ public class ListWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 36:
                     this.setItem(36, new GUIItem(
-                            Material.SIGN,
+                            Material.LEGACY_SIGN,
                             ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
                             Collections.emptyList(),
                             LangCore.getUtilMessage("back-item-guide-mode"),

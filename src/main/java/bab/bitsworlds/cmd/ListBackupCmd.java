@@ -189,7 +189,7 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
                         if (player.hasPermission(BWPermission.DELETE_BACKUP))
                             description.add(ChatColor.DARK_RED + LangCore.getClassMessage(ListBackupCmd.class, "shift-click").toString());
                         this.setItem(i, new GUIItem(
-                                Material.EYE_OF_ENDER,
+                                Material.LEGACY_EYE_OF_ENDER,
                                 backup.toString(),
                                 description,
                                 LangCore.getClassMessage(ListBackupCmd.class, "backup-item-guide-mode"),
@@ -201,7 +201,7 @@ public class ListBackupCmd implements BWCommand, ImplGUI {
                     break;
                 case 36:
                     this.setItem(36, new GUIItem(
-                            Material.SIGN,
+                            Material.LEGACY_SIGN,
                             ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
                             Collections.emptyList(),
                             LangCore.getUtilMessage("back-item-guide-mode"),

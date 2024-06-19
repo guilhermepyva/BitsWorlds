@@ -500,7 +500,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                 case 33:
                     if (player.hasPermission(BWPermission.BACKUP)) {
                         this.setItem(33, new GUIItem(
-                                Material.EYE_OF_ENDER,
+                                Material.LEGACY_EYE_OF_ENDER,
                                 ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "backup-item-title").toString(),
                                 new ArrayList<>(),
                                 LangCore.getClassMessage(InteractWorldCmd.class, "backup-item-guide-mode"),
@@ -521,7 +521,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 36:
                     this.setItem(36, new GUIItem(
-                            Material.SIGN,
+                            Material.LEGACY_SIGN,
                             ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
                             Collections.emptyList(),
                             LangCore.getUtilMessage("back-item-guide-mode"),
@@ -552,7 +552,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                     break;
                                 case THE_END:
                                     description.add(ChatColor.GOLD + dimensionWord + ": " + ChatColor.WHITE + LangCore.getUtilMessage("theend").toString());
-                                    material = Material.ENDER_STONE;
+                                    material = Material.LEGACY_ENDER_STONE;
                                     break;
                             }
 
@@ -613,7 +613,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     case 19:
                         if (player.hasPermission(BWPermission.TELEPORT)) {
                             this.setItem(19, new GUIItem(
-                                    Material.IRON_BARDING,
+                                    Material.LEGACY_IRON_BARDING,
                                     ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "teleport-self-item-title").toString(),
                                     new ArrayList<>(),
                                     LangCore.getClassMessage(InteractWorldCmd.class, "teleport-self-guide-mode"),
@@ -624,7 +624,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     case 20:
                         if (player.hasPermission(BWPermission.TELEPORT_OTHER_PLAYER)) {
                             this.setItem(20, new GUIItem(
-                                    Material.GOLD_BARDING,
+                                    Material.LEGACY_GOLD_BARDING,
                                     ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "teleport-other-item-title").toString(),
                                     new ArrayList<>(),
                                     LangCore.getClassMessage(InteractWorldCmd.class, "teleport-other-guide-mode"),
@@ -635,7 +635,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     case 21:
                         if (player.hasPermission(BWPermission.TELEPORT_ALL_PLAYERS)) {
                             this.setItem(21, new GUIItem(
-                                    Material.DIAMOND_BARDING,
+                                    Material.LEGACY_DIAMOND_BARDING,
                                     ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "teleport-all-item-title").toString(),
                                     new ArrayList<>(),
                                     LangCore.getClassMessage(InteractWorldCmd.class, "teleport-all-guide-mode"),
@@ -652,7 +652,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             timeDescription.add(ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "actual-tick").setKey("%%t", ChatColor.WHITE + String.valueOf(((BWLoadedWorld) world).getWorld().getTime())).toString());
 
                             this.setItem(28, new GUIItem(
-                                    Material.WATCH,
+                                    Material.LEGACY_WATCH,
                                     ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "time-item-title").toString(),
                                     timeDescription,
                                     LangCore.getClassMessage(InteractWorldCmd.class, player.hasPermission(BWPermission.SET_TIME) ? "time-guide-mode2" : "time-guide-mode1"),
@@ -675,7 +675,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                             }
 
                             this.setItem(29, new GUIItem(
-                                    Material.SKULL_ITEM,
+                                    Material.LEGACY_SKULL_ITEM,
                                     1,
                                     (short) 4,
                                     ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "difficulty-item-title").toString(),
@@ -698,7 +698,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     case 16:
                         if (player.hasPermission(BWPermission.LOAD)) {
                             this.setItem(16, new GUIItem(
-                                    Material.GOLD_HOE,
+                                    Material.LEGACY_GOLD_HOE,
                                     ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "load-world-item-title").toString(),
                                     new ArrayList<>(),
                                     LangCore.getClassMessage(InteractWorldCmd.class, "load-world-item-guide-mode"),
@@ -841,7 +841,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 36:
                     this.setItem(36, new GUIItem(
-                            Material.SIGN,
+                            Material.LEGACY_SIGN,
                             ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
                             Collections.emptyList(),
                             LangCore.getUtilMessage("back-item-guide-mode"),
@@ -946,7 +946,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
             switch (item) {
                 case 11:
                     this.setItem(11, new GUIItem(
-                            Material.STAINED_CLAY,
+                            Material.LEGACY_STAINED_CLAY,
                             1,
                             (short) 1,
                             ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "sunrise").toString(),
@@ -954,7 +954,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     ));
                 case 12:
                     this.setItem(12, new GUIItem(
-                            Material.STAINED_CLAY,
+                            Material.LEGACY_STAINED_CLAY,
                             1,
                             (short) 4,
                             ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "noon").toString(),
@@ -962,7 +962,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     ));
                 case 13:
                     this.setItem(13, new GUIItem(
-                            Material.STAINED_CLAY,
+                            Material.LEGACY_STAINED_CLAY,
                             1,
                             (short) 2,
                             ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "sunset").toString(),
@@ -970,7 +970,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     ));
                 case 14:
                     this.setItem(14, new GUIItem(
-                            Material.STAINED_CLAY,
+                            Material.LEGACY_STAINED_CLAY,
                             1,
                             (short) 11,
                             ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "midnight").toString(),
@@ -984,7 +984,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     ));
                 case 18:
                     this.setItem(18, new GUIItem(
-                            Material.SIGN,
+                            Material.LEGACY_SIGN,
                             ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
                             Collections.emptyList(),
                             LangCore.getUtilMessage("back-item-guide-mode"),

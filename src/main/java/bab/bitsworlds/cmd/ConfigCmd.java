@@ -244,7 +244,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
 
                         case 27:
                             this.setItem(27, new GUIItem(
-                                    Material.SIGN,
+                                    Material.LEGACY_SIGN,
                                     ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
                                     Collections.emptyList(),
                                     LangCore.getUtilMessage("back-item-guide-mode"),
@@ -392,7 +392,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
         }
 
         gui.setItem(0, setCountryBanner(LangCore.lang, new GUIItem(
-                Material.BANNER,
+                Material.LEGACY_BANNER,
                 ChatColor.AQUA + "" + ChatColor.BOLD + LangCore.lang.title,
                 countryBannerLore,
                 LangCore.getClassMessage(ConfigCmd.class, "language-config-guide-mode"),

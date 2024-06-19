@@ -1,8 +1,9 @@
 name: BitsWorlds
 main: bab.bitsworlds.BitsWorlds
 description: A world manager for Minecraft
-version: 1.0.2
+version: 1.0.4
 author: [MrPiva, iHusky_, Mr_Bilbis]
+api-version: 1.20
 commands:
   BitsWorlds:
     description: Main command

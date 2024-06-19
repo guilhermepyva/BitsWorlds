@@ -39,7 +39,7 @@ public class MainGUI implements ImplGUI {
                         switch (item) {
                             case 4:
                                 GUIItem icon = new GUIItem(
-                                        Material.SKULL_ITEM,
+                                        Material.LEGACY_SKULL_ITEM,
                                         1,
                                         (short) 3,
                                         ChatColor.GREEN + "" + ChatColor.BOLD + "BitsWorlds",
@@ -57,7 +57,7 @@ public class MainGUI implements ImplGUI {
                             case 7:
                                 if (player.hasPermission(BWPermission.MAINCMD_WORLD_INTERACT)) {
                                     this.setItem(7, new GUIItem(
-                                            Material.STAINED_GLASS_PANE,
+                                            Material.LEGACY_STAINED_GLASS_PANE,
                                             ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "interact-with-actual-world-item-title").toString(),
                                             new ArrayList<>(),
                                             LangCore.getClassMessage(MainGUI.class, "interact-with-actual-world-tem-guide-mode"),
@@ -118,7 +118,7 @@ public class MainGUI implements ImplGUI {
                             case 21:
                                 if (player.hasPermission(BWPermission.MAINCMD_WORLD_LIST)) {
                                     GUIItem listworlditem = new GUIItem(
-                                            Material.SKULL_ITEM,
+                                            Material.LEGACY_SKULL_ITEM,
                                             1,
                                             (short) 3,
                                             ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "list-world-item-title").toString(),
@@ -136,7 +136,7 @@ public class MainGUI implements ImplGUI {
                             case 23:
                                 if (player.hasPermission(BWPermission.MAINCMD_WORLD_CREATE)) {
                                     GUIItem createWorldItem = new GUIItem(
-                                            Material.SKULL_ITEM,
+                                            Material.LEGACY_SKULL_ITEM,
                                             1,
                                             (short) 3,
                                             ChatColor.GOLD + LangCore.getClassMessage(MainGUI.class, "create-world-item-title").toString(),

@@ -192,7 +192,7 @@ public class LogCmd implements BWCommand, ImplGUI {
                     break;
                 case 45:
                     this.setItem(45, new GUIItem(
-                            Material.SIGN,
+                            Material.LEGACY_SIGN,
                             ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
                             Collections.emptyList(),
                             LangCore.getUtilMessage("back-item-guide-mode"),

@@ -38,7 +38,7 @@ public class GUICore implements Listener {
 
         if ((Boolean) gui.properties.get(BWGUI.Property.CLICK_SOUND)) {
             try {
-                player.getBukkitPlayer().playSound(player.getBukkitPlayer().getLocation(), Sound.CLICK, 1F, 1.25F);
+                player.getBukkitPlayer().playSound(player.getBukkitPlayer().getLocation(), Sound.UI_BUTTON_CLICK, 1F, 1.25F);
             } catch (NoSuchFieldError error) {
                 player.getBukkitPlayer().playSound(player.getBukkitPlayer().getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1F, 1.25F);
             }

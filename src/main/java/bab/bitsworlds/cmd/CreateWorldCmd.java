@@ -82,12 +82,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                 if (createWorldGUI.creator.seed != null)
                     bukCreator.seed(createWorldGUI.creator.seed);
                 if (createWorldGUI.creator.worldType == WorldType.VOID)
-                    bukCreator.generator(new ChunkGenerator() {
-                        @Override
-                        public byte[][] generateBlockSections(World world, Random random, int x, int z, BiomeGrid biomes) {
-                            return new byte[world.getMaxHeight() / 16][];
-                        }
-                    });
+                    bukCreator.generator(new ChunkGenerator() {});
 
                 player.closeInventory();
                 player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(CreateWorldCmd.class, "creating-world-message"));
@@ -242,7 +237,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                         description.add(ChatColor.WHITE + LangCore.getClassMessage(CreateWorldCmd.class, "all-done").toString());
 
                     GUIItem createWorldItem = new GUIItem(
-                            Material.SKULL_ITEM,
+                            Material.LEGACY_SKULL_ITEM,
                             1,
                             (short) 3,
                             ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "gui-title").toString(),
@@ -255,7 +250,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 9:
                     GUIItem overworlditem = new GUIItem(
-                            Material.GRASS,
+                            Material.LEGACY_GRASS,
                             ChatColor.GOLD + LangCore.getUtilMessage("overworld").toString(),
                             new ArrayList<>(),
                             LangCore.getClassMessage(CreateWorldCmd.class, "dimension-guide-mode"),
@@ -283,7 +278,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 11:
                     GUIItem theenditem = new GUIItem(
-                            Material.ENDER_STONE,
+                            Material.LEGACY_ENDER_STONE,
                             ChatColor.GOLD + LangCore.getUtilMessage("theend").toString(),
                             new ArrayList<>(),
                             LangCore.getClassMessage(CreateWorldCmd.class, "dimension-guide-mode"),
@@ -304,7 +299,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                         seedDescription.add(ChatColor.WHITE + creator.seed.toString());
                     }
                     else
-                        material = Material.EMPTY_MAP;
+                        material = Material.LEGACY_EMPTY_MAP;
 
                     GUIItem seedItem = new GUIItem(
                             material,
@@ -329,7 +324,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                     }
 
                     GUIItem doorItem = new GUIItem(
-                            Material.WOOD_DOOR,
+                            Material.LEGACY_WOOD_DOOR,
                             ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "generate-structures-item-title").toString(),
                             doorDescription,
                             LangCore.getClassMessage(CreateWorldCmd.class, "generate-structures-item-guide-mode"),
@@ -348,7 +343,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                         nameDescription.add(ChatColor.WHITE + creator.name);
 
                     this.setItem(17, new GUIItem(
-                            Material.NAME_TAG,
+                            Material.LEGACY_NAME_TAG,
                             ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "name-item-title").toString(),
                             nameDescription,
                             LangCore.getClassMessage(CreateWorldCmd.class, "name-item-guide-mode"),
@@ -357,7 +352,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 29:
                     GUIItem normalItem = new GUIItem(
-                            Material.LONG_GRASS,
+                            Material.LEGACY_LONG_GRASS,
                             1,
                             (short) 1,
                             ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "normal-type").toString(),
@@ -373,7 +368,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 30:
                     GUIItem flatItem = new GUIItem(
-                            Material.DIRT,
+                            Material.LEGACY_DIRT,
                             ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "flat-type").toString(),
                             new ArrayList<>(),
                             LangCore.getClassMessage(CreateWorldCmd.class, "type-item-guide"),
@@ -387,7 +382,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 31:
                     GUIItem largeBiomesItem = new GUIItem(
-                            Material.LEAVES,
+                            Material.LEGACY_LEAVES,
                             ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "large-biomes-type").toString(),
                             new ArrayList<>(),
                             LangCore.getClassMessage(CreateWorldCmd.class, "type-item-guide"),
@@ -401,7 +396,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 32:
                     GUIItem amplifiedItem = new GUIItem(
-                            Material.RED_ROSE,
+                            Material.LEGACY_RED_ROSE,
                             ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "amplified-type").toString(),
                             new ArrayList<>(),
                             LangCore.getClassMessage(CreateWorldCmd.class, "type-item-guide"),
@@ -429,7 +424,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 36:
                     this.setItem(36, new GUIItem(
-                            Material.SIGN,
+                            Material.LEGACY_SIGN,
                             ChatColor.GOLD + LangCore.getUtilMessage("back-item-title").toString(),
                             Collections.emptyList(),
                             LangCore.getUtilMessage("back-item-guide-mode"),

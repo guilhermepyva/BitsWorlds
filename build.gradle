@@ -1,10 +1,10 @@
 plugins {
     id 'java'
-    id 'io.papermc.paperweight.userdev' version '1.5.5' apply false
+    id 'io.papermc.paperweight.userdev' version '1.7.1'
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 tasks.withType(JavaCompile) {
@@ -15,11 +15,12 @@ version '1.0.4-Alpha'
 
 repositories {
     mavenCentral()
+    maven { url = "https://repo.papermc.io/repository/maven-public/" }
 }
 
 dependencies {
-    compileOnly files("$rootDir/Server/spigot-1.8-R0.1-SNAPSHOT.jar")
-    implementation(project(':skull_meta_1_20'))
+    paperweight.paperDevBundle("1.20-R0.1-SNAPSHOT")
+    implementation "io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT"
 }
 
 task uberJar(type: Jar) {
@@ -30,5 +31,11 @@ task uberJar(type: Jar) {
     dependsOn configurations.runtimeClasspath
     from {
         configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+}
+
+tasks.jar {
+    manifest {
+        attributes["paperweight-mappings-namespace"] = "mojang"
     }
 }
