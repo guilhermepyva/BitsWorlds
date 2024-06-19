@@ -158,7 +158,7 @@ public class LogCmd implements BWCommand, ImplGUI {
                             if ((player.hasPermission(BWPermission.LOGS_NOTE_ADD) || player.hasPermission(BWPermission.LOGS_NOTE_MODIFY)) && LogCore.notes) {
                                 ItemMeta logitemeta = logitem.getItemMeta();
 
-                                List<String> logitemlore = logitemeta.getLore();
+                                List<String> logitemlore = new ArrayList<>();
                                 if (log.note == null && player.hasPermission(BWPermission.LOGS_NOTE_ADD)) {
                                     logitemlore.add("");
 

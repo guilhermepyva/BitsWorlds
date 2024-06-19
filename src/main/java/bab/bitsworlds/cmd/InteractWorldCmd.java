@@ -183,13 +183,13 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                         player.openGUI(timeGui.init());
                     }
                     break;
-                case 11:
-                    if (player.hasPermission(BWPermission.SEE_GAMERULES)) {
-                        GameRuleGui gameRuleGui = (GameRuleGui) new GameRuleHandler().getGUI("", player);
-                        gameRuleGui.world = (BWLoadedWorld) interactWorldGUI.world;
-                        player.openGUI(gameRuleGui.init());
-                    }
-                    break;
+//                case 11:
+//                    if (player.hasPermission(BWPermission.SEE_GAMERULES)) {
+//                        GameRuleGui gameRuleGui = (GameRuleGui) new GameRuleHandler().getGUI("", player);
+//                        gameRuleGui.world = (BWLoadedWorld) interactWorldGUI.world;
+//                        player.openGUI(gameRuleGui.init());
+//                    }
+//                    break;
                 case 16:
                     if (player.hasPermission(BWPermission.UNLOAD_WITHOUT_SAVE)) {
                         Bukkit.getScheduler().runTaskAsynchronously(
@@ -782,10 +782,19 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         }
     }
 
-    public class GameRuleGui extends BWGUI {
+    public static class GameRuleGui extends BWPagedGUI {
         public BWLoadedWorld world;
         public BWPlayer player;
         public List<String> gamerules;
+
+        public GameRuleGui(String id, int size, String title, ImplGUI guiClass, boolean updatable) {
+            super(id, size, title, guiClass, updatable);
+        }
+
+        @Override
+        public void setupItemPage(int nextItem, int previousItem) {
+            super.setupItemPage(nextItem, previousItem);
+        }
 
         public GameRuleGui(String id, int size, String title, ImplGUI guiClass, boolean updatable, BWPlayer player) {
             super(id, size, title, guiClass, updatable);
@@ -870,65 +879,6 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                 return;
             }
             init();
-        }
-    }
-
-    public class GameRuleHandler implements ImplGUI {
-        @Override
-        public BWGUI getGUI(String code, BWPlayer player) {
-            return new GameRuleGui(
-                    "interaction_gamerule",
-                    5 * 9,
-                    LangCore.getClassMessage(InteractWorldCmd.class, "gamerule-item-title").toString(),
-                    this,
-                    true,
-                    player
-            );
-        }
-
-        @Override
-        public void clickEvent(InventoryClickEvent event, BWPlayer player, BWGUI gui) {
-            GameRuleGui gameRuleGui = (GameRuleGui) gui;
-
-            if (gameRuleGui.gamerules.size() - 1 >= event.getSlot() && player.hasPermission(BWPermission.SET_GAMERULE)) {
-                String gamerule = gameRuleGui.gamerules.get(event.getSlot());
-                String value = ((BWLoadedWorld) gameRuleGui.world).world.getGameRuleValue(gamerule);
-
-                if (!value.equals("true") && !value.equals("false")) {
-                    Bukkit.getScheduler().runTaskAsynchronously(
-                            BitsWorlds.plugin,
-                            () -> {
-                                player.sendMessage(PrefixMessage.info.getPrefix(), LangCore.getClassMessage(InteractWorldCmd.class, "gamerule-set-message"));
-                                player.closeInventory();
-
-                                String input = ChatInput.askPlayer(player);
-
-                                if (input.equals("!")) {
-                                    player.openGUI(gameRuleGui);
-                                    return;
-                                }
-
-                                ((BWLoadedWorld) gameRuleGui.world).world.setGameRuleValue(gamerule, input);
-                                GUICore.updateGUI("interaction_gamerule");
-                                gameRuleGui.genItems(0);
-                                player.openGUI(gameRuleGui);
-                            }
-                    );
-                } else {
-                    boolean boolValue = Boolean.valueOf(value);
-                    ((BWLoadedWorld) gameRuleGui.world).world.setGameRuleValue(gamerule, String.valueOf(!boolValue));
-                    GUICore.updateGUI("interaction_gamerule");
-                    gameRuleGui.genItems(0);
-                }
-            }
-
-            else if (event.getSlot() == 36) {
-                InteractWorldCmd interactWorldCmd = new InteractWorldCmd();
-                InteractWorldCmd.InteractWorldGUI interactGui = (InteractWorldCmd.InteractWorldGUI) interactWorldCmd.getGUI("main", player);
-                interactGui.world = gameRuleGui.world;
-                player.openGUI(interactGui.init());
-                interactGui.genItems(36);
-            }
         }
     }
 
@@ -1120,7 +1070,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                                 if (bwGui instanceof InteractWorldCmd.InteractWorldGUI && ((InteractWorldGUI) bwGui).world instanceof BWLoadedWorld && bwPlayer.hasPermission(BWPermission.SEE_TIME)) {
                                     ItemStack item = bwGui.getItem(28);
                                     ItemMeta meta = item.getItemMeta();
-                                    List<String> lore = meta.getLore();
+                                    List<String> lore = new ArrayList<>(List.of("", "", ""));
 
                                     lore.set(1, actualHours + ChatColor.WHITE + WorldUtils.getHours(((BWLoadedWorld) ((InteractWorldGUI) bwGui).world).getWorld()));
                                     lore.set(2, actualTick + ChatColor.WHITE + ((BWLoadedWorld) ((InteractWorldGUI) bwGui).world).getWorld().getTime());
