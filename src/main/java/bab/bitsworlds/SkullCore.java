@@ -1,12 +1,13 @@
 package bab.bitsworlds;
 
 import com.destroystokyo.paper.profile.CraftPlayerProfile;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.lang.reflect.Field;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,11 @@ public class SkullCore {
     }
 
     public static void applyToSkull(SkullMeta meta, Skull skull) {
-        int version = Integer.parseInt(Bukkit.getBukkitVersion().split("-")[0].split("\\.")[1]);
+        PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID(), "");
+        profile.getProperties().add(new ProfileProperty("textures", "textures", new String(Base64.getEncoder().encode(("{textures:{SKIN:{url:\"" + skull.getPath() + "\"}}}").getBytes()))));
+
+        meta.setPlayerProfile(profile);
+
         applyTexture(meta, skulls.get(skull));
     }
 

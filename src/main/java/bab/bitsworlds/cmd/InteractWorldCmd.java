@@ -536,7 +536,7 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
                     case 4:
                             World bukWorld = ((BWLoadedWorld) world).getWorld();
                             List<String> description = new ArrayList<>();
-                            Material material = Material.GRASS;
+                            Material material = Material.SHORT_GRASS;
 
                             String dimensionWord = LangCore.getUtilMessage("dimension-word").toString();
 

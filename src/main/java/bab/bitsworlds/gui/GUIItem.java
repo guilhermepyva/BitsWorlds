@@ -67,7 +67,7 @@ public class GUIItem extends ItemStack {
     public void addEffect() {
         ItemMeta meta = this.getItemMeta();
 
-        meta.addEnchant(Enchantment.DAMAGE_ALL, 1, false);
+        meta.addEnchant(Enchantment.SHARPNESS, 1, false);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         this.setItemMeta(meta);

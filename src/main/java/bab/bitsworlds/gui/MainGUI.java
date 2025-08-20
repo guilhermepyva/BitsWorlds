@@ -86,7 +86,7 @@ public class MainGUI implements ImplGUI {
 
                                 ItemMeta guideModeItemItemMeta = guideModeItem.getItemMeta();
 
-                                guideModeItemItemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                                guideModeItemItemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
                                 guideModeItem.setItemMeta(guideModeItemItemMeta);
 

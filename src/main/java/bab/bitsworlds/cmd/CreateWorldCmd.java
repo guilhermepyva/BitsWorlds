@@ -237,7 +237,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                         description.add(ChatColor.WHITE + LangCore.getClassMessage(CreateWorldCmd.class, "all-done").toString());
 
                     GUIItem createWorldItem = new GUIItem(
-                            Material.LEGACY_SKULL_ITEM,
+                            Material.PLAYER_HEAD,
                             1,
                             (short) 3,
                             ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "gui-title").toString(),
@@ -250,7 +250,7 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                     break;
                 case 9:
                     GUIItem overworlditem = new GUIItem(
-                            Material.LEGACY_GRASS,
+                            Material.SHORT_GRASS,
                             ChatColor.GOLD + LangCore.getUtilMessage("overworld").toString(),
                             new ArrayList<>(),
                             LangCore.getClassMessage(CreateWorldCmd.class, "dimension-guide-mode"),

@@ -339,18 +339,18 @@ public class ConfigCmd implements BWCommand, ImplGUI {
             case EN:
                 bannerMeta.setPatterns(Arrays.asList(
                         new Pattern(DyeColor.RED, PatternType.BASE),
-                        new Pattern(DyeColor.WHITE, PatternType.STRIPE_SMALL),
+                        new Pattern(DyeColor.WHITE, PatternType.SMALL_STRIPES),
                         new Pattern(DyeColor.BLUE, PatternType.SQUARE_TOP_LEFT)
                 ));
                 break;
             case PT:
                 bannerMeta.setPatterns(Arrays.asList(
                         new Pattern(DyeColor.GREEN, PatternType.BASE),
-                        new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE),
-                        new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE),
-                        new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS_MIDDLE),
-                        new Pattern(DyeColor.BLUE, PatternType.CIRCLE_MIDDLE),
-                        new Pattern(DyeColor.BLUE, PatternType.CIRCLE_MIDDLE)
+                        new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS),
+                        new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS),
+                        new Pattern(DyeColor.YELLOW, PatternType.RHOMBUS),
+                        new Pattern(DyeColor.BLUE, PatternType.CIRCLE),
+                        new Pattern(DyeColor.BLUE, PatternType.CIRCLE)
                 ));
                 break;
             case FR:
@@ -370,7 +370,7 @@ public class ConfigCmd implements BWCommand, ImplGUI {
                 ));
         }
 
-        bannerMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        bannerMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
         item.setItemMeta(bannerMeta);
         return item;
