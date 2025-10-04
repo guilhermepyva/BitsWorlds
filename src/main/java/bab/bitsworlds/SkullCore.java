@@ -44,7 +44,8 @@ public class SkullCore {
     public enum Skull {
         BWICON("261be940fde0b6cb92e80a5d2a405f34f9ebd76d158b399506f182711ab27777"),
         LISTWORLDICON("160729c4d21bcf0535e0988593f9e19458de35ff7ddb8dcd223fb448d627c0be"),
-        CREATEWORLDICON("f5e629bd7326def31557eeab5fbb11dc8e68109cfce961b817e9f16b53dd49a4");
+        CREATEWORLDICON("f5e629bd7326def31557eeab5fbb11dc8e68109cfce961b817e9f16b53dd49a4"),
+        AUTOLOADWORLDICON("b4518552f4468beedea612b1012ba185fe90c878c58d239b8eefbd49de6f60b4");
 
         private String path;
 

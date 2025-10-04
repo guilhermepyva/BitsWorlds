@@ -163,6 +163,10 @@
                 <message key="rename-world-set-name-message">Type the new name for the world in the chat, type '!' to cancel the operation</message>
                 <message key="unloading-world-message1">The world you were is being unloaded, you have been teleported to the default world</message>
                 <message key="world-unloaded">The world you were interacting has been unloaded</message>
+                <message key="autoload-world">Load world when starting server</message>
+                <message key="autoload-world-guide">Enables or disables automatic server loading at startup</message>
+                <message key="cant-unload-world">This world can't be unloaded on server start</message>
+                <message key="cant-unload-theend-nether">This world can only be unloaded on server start through server configurations (server.properties or spigot.yml)</message>
             </class>
             <class name="ListBackupCmd">
                 <message key="gui-title">Backup List</message>

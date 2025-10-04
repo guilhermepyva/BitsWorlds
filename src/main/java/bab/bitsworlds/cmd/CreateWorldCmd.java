@@ -243,9 +243,11 @@ public class CreateWorldCmd implements BWCommand, ImplGUI {
                             ChatColor.GOLD + LangCore.getClassMessage(CreateWorldCmd.class, "gui-title").toString(),
                             description
                     );
+
                     SkullMeta createWorldItemItemMeta = (SkullMeta) createWorldItem.getItemMeta();
                     SkullCore.applyToSkull(createWorldItemItemMeta, SkullCore.Skull.CREATEWORLDICON);
                     createWorldItem.setItemMeta(createWorldItemItemMeta);
+
                     this.setItem(4, createWorldItem);
                     break;
                 case 9:

@@ -1,9 +1,11 @@
 package bab.bitsworlds.db;
 
+import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.logger.Log;
 import bab.bitsworlds.logger.LogAction;
 import bab.bitsworlds.logger.LogRecorder;
 import bab.bitsworlds.multilanguage.Lang;
+import bab.bitsworlds.world.BWAutoWorldLoad;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -108,5 +110,18 @@ public class SQLDataManager {
                 resultSet.getTimestamp("time"),
                 resultSet.getString("world") != null ? UUID.fromString(resultSet.getString("world")) : null,
                 resultSet.getString("worldName"));
+    }
+
+    public static void getLoadedWorlds() throws SQLException {
+        Statement stm = BWSQL.dbCon.createStatement();
+
+        ResultSet result = stm.executeQuery("SELECT * FROM auto_load_worlds");
+
+        while (result.next()) {
+             BWAutoWorldLoad.autoLoadedWorldsInfo.put(UUID.fromString(result.getString("world")), result.getString("worldName"));
+        }
+
+        result.close();
+        stm.close();
     }
 }

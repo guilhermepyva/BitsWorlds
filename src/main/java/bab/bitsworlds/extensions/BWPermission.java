@@ -30,6 +30,7 @@ public enum BWPermission {
     SET_DIFFICULTY("interaction.difficulty.set"),
     DELETE_WORLD("interaction.deleteworld"),
     RENAME_WORLD("interaction.renameworld"),
+    AUTOLOAD_WORLD("interaction.autoload"),
 
     RECOVER_BACKUP("backup.recover"),
     DELETE_BACKUP("backup.delete")

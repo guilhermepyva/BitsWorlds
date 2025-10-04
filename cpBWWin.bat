@@ -1,0 +1,1 @@
+copy build\libs\BitsWorlds-1.0.4-Alpha-uber.jar Server\plugins

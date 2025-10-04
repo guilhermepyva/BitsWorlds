@@ -1,9 +1,9 @@
 package bab.bitsworlds.utils;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.Objects;
+import java.util.UUID;
 
 public class FileUtils {
     public static void copyContent(File directoryContentToCopy, File directoryToPaste) {
@@ -31,5 +31,12 @@ public class FileUtils {
         }
 
         file.delete();
+    }
+
+    public static UUID getUIDFile(File file) throws IOException {
+        FileInputStream in = new FileInputStream(file);
+        UUID uuid = UUID.nameUUIDFromBytes(in.readAllBytes());
+        in.close();
+        return uuid;
     }
 }

@@ -3,8 +3,10 @@ package bab.bitsworlds;
 import bab.bitsworlds.cmd.BitsWorldsCmd;
 import bab.bitsworlds.cmd.InteractWorldCmd;
 import bab.bitsworlds.db.BWSQL;
+import bab.bitsworlds.db.SQLDataManager;
 import bab.bitsworlds.gui.GUICore;
 import bab.bitsworlds.multilanguage.*;
+import bab.bitsworlds.world.BWAutoWorldLoad;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
@@ -12,7 +14,12 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BitsWorlds extends JavaPlugin {
@@ -45,6 +52,13 @@ public class BitsWorlds extends JavaPlugin {
         loadListeners();
         loadCmd();
         loadPrefixes();
+        try {
+            SQLDataManager.getLoadedWorlds();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "[BitsWorlds] Couldn't get auto-loaded worlds", e);
+        }
+        BWAutoWorldLoad.load();
+
         logger.info("BitsWorlds v" + this.getDescription().getVersion() + " enabled successfully");
     }
 
