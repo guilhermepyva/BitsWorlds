@@ -2,17 +2,20 @@ package bab.bitsworlds.cmd;
 
 import bab.bitsworlds.BitsWorlds;
 import bab.bitsworlds.ChatInput;
+import bab.bitsworlds.SkullCore;
 import bab.bitsworlds.cmd.impl.BWCommand;
 import bab.bitsworlds.extensions.BWCommandSender;
 import bab.bitsworlds.extensions.BWPermission;
 import bab.bitsworlds.extensions.BWPlayer;
 import bab.bitsworlds.gui.*;
+import bab.bitsworlds.logger.LogCore;
 import bab.bitsworlds.multilanguage.Lang;
 import bab.bitsworlds.multilanguage.LangCore;
 import bab.bitsworlds.multilanguage.PrefixMessage;
 import bab.bitsworlds.utils.BackupUtils;
 import bab.bitsworlds.utils.FileUtils;
 import bab.bitsworlds.utils.WorldUtils;
+import bab.bitsworlds.world.BWAutoWorldLoad;
 import bab.bitsworlds.world.BWLoadedWorld;
 import bab.bitsworlds.world.BWUnloadedWorld;
 import bab.bitsworlds.world.BWorld;
@@ -22,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 
 public class InteractWorldCmd implements BWCommand, ImplGUI {
     @Override
@@ -63,6 +68,22 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         InteractWorldGUI interactWorldGUI = (InteractWorldGUI) gui;
 
         switch (event.getSlot()) {
+            case 23:
+                if (!player.hasPermission(BWPermission.AUTOLOAD_WORLD))
+                    return;
+
+                File worldFile = new File(Bukkit.getWorldContainer(), interactWorldGUI.world.getName());
+
+                try {
+                    BWAutoWorldLoad.switchWorld(interactWorldGUI.world, worldFile, FileUtils.getUIDFile(new File(worldFile, "uid.dat")));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    BitsWorlds.logger.log(Level.SEVERE, "Couldn't switch world to auto-load");
+                }
+
+                interactWorldGUI.genItems(23);
+
+                break;
             case 36:
                 if (interactWorldGUI.returnItem) {
                     ListWorldCmd listWorldCmd = new ListWorldCmd();
@@ -476,6 +497,57 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         @Override
         public void setupItem(int item) {
             switch (item) {
+                case 23:
+                    if (!player.hasPermission(BWPermission.AUTOLOAD_WORLD)) {
+                        break;
+                    }
+
+                    boolean anyMatch = BWAutoWorldLoad.worlds
+                            .stream()
+                            .anyMatch(world1 -> world1.getUUID().equals(world.getUUID()));
+
+                    ArrayList<String> autoLoadWorldLore = new ArrayList<>();
+
+                    if (anyMatch || world.getName().equals("world")) {
+                        autoLoadWorldLore.add(ChatColor.AQUA + LangCore.getUtilMessage("enabled-word").toString());
+                        autoLoadWorldLore.add(ChatColor.DARK_BLUE + LangCore.getUtilMessage("disabled-word").toString());
+                    } else {
+                        autoLoadWorldLore.add(ChatColor.DARK_BLUE + LangCore.getUtilMessage("enabled-word").toString());
+                        autoLoadWorldLore.add(ChatColor.AQUA + LangCore.getUtilMessage("disabled-word").toString());
+                    }
+
+                    if (world.getName().equals("world")) {
+                        autoLoadWorldLore.add("");
+                        autoLoadWorldLore.addAll(GUIItem.loreJumper(
+                                LangCore.getClassMessage(InteractWorldCmd.class, "cant-unload-world").toString(),
+                                ChatColor.RED.toString(),
+                                ""
+                        ));
+                    } else if (world.getName().equals("world_nether") || world.getName().equals("world_the_end")) {
+                        autoLoadWorldLore.add("");
+                        autoLoadWorldLore.addAll(GUIItem.loreJumper(
+                                LangCore.getClassMessage(InteractWorldCmd.class, "cant-unload-theend-nether").toString(),
+                                ChatColor.RED.toString(),
+                                ""
+                        ));
+                    }
+
+                    GUIItem guiItem = new GUIItem(
+                            Material.SKULL_ITEM,
+                            1,
+                            (short) 3,
+                            ChatColor.GOLD + LangCore.getClassMessage(InteractWorldCmd.class, "autoload-world").toString(),
+                            autoLoadWorldLore,
+                            LangCore.getClassMessage(InteractWorldCmd.class, "autoload-world-guide"),
+                            player
+                    );
+
+                    SkullMeta autoLoadItemMeta = (SkullMeta) guiItem.getItemMeta();
+                    SkullCore.applyToSkull(autoLoadItemMeta, SkullCore.Skull.AUTOLOADWORLDICON);
+                    guiItem.setItemMeta(autoLoadItemMeta);
+
+                    this.setItem(23, guiItem);
+                    break;
                 case 24:
                     if (player.hasPermission(BWPermission.LOGS_SEE)) {
                         this.setItem(24, new GUIItem(
@@ -734,10 +806,9 @@ public class InteractWorldCmd implements BWCommand, ImplGUI {
         @Override
         public BWGUI init() {
             if (world instanceof BWLoadedWorld)
-                genItems(4, 11, 15, 16, 14, 25, 33, 34, 19, 20, 21, 24, 28, 27, 29);
+                genItems(4, 23, 11, 15, 16, 14, 25, 33, 34, 19, 20, 21, 24, 28, 27, 29);
             else
-
-                genItems(4, 16, 24, 25, 33, 34, 10, 19);
+                genItems(4, 16, 23, 24, 25, 33, 34, 10, 19);
 
 
 

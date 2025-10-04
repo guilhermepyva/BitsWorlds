@@ -51,9 +51,7 @@ public class BWSQL {
     }
 
     public static void setupDB() {
-        try {
-            Statement statement = dbCon.createStatement();
-
+        try (Statement statement = dbCon.createStatement()) {
             statement.execute("CREATE TABLE IF NOT EXISTS log" +
                     "(" +
                     "    id " + (BWSQL.sqlite ? "INTEGER" : "INT") + " PRIMARY KEY " + (BWSQL.sqlite ? "AUTOINCREMENT" : "AUTO_INCREMENT") + "," +
@@ -67,8 +65,11 @@ public class BWSQL {
                     "    world CHARACTER(36)," +
                     "    worldName VARCHAR(200)" +
                     ")" + (BWSQL.sqlite ? ";" : " ENGINE = INNODB;"));
-
-            statement.close();
+            statement.execute("CREATE TABLE IF NOT EXISTS auto_load_worlds" +
+                    "(" +
+                    "   world CHARACTER(36)," +
+                    "   worldName VARCHAR(200)" +
+                    ")" + (BWSQL.sqlite ? ";" : " ENGINE = INNODB;"));
         } catch (SQLException e) {
             e.printStackTrace();
         }

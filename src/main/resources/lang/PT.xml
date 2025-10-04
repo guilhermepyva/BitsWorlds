@@ -163,6 +163,10 @@
                 <message key="rename-world-set-name-message">Digite o novo nome para o mundo no bate-papo, use '!' para canelar a operação</message>
                 <message key="unloading-world-message1">O mundo em que você estava está sendo descarregado, você foi teleportado para o mundo padrão</message>
                 <message key="world-unloaded">O mundo com o qual você estava interagindo foi descarregado</message>
+                <message key="autoload-world">Carregar o mundo ao iniciar o servidor</message>
+                <message key="autoload-world-guide">Ativa ou desativa o carregamento automático do servidor ao inicializar</message>
+                <message key="cant-unload-world">Este mundo não pode ser descarregado ao inicializar</message>
+                <message key="cant-unload-theend-nether">Este mundo só pode ser descarregado ao inicializar através das configurações do servidor (server.propoerties ou spigot.yml)</message>
             </class>
             <class name="ListBackupCmd">
                 <message key="gui-title">Lista de Backups</message>

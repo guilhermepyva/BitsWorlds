@@ -3,6 +3,7 @@ package bab.bitsworlds.world;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Objects;
 import java.util.UUID;
 
 public class BWUnloadedWorld implements BWorld {
@@ -22,6 +23,7 @@ public class BWUnloadedWorld implements BWorld {
         this.file = file;
     }
 
+    @Override
     public UUID getUUID() {
         if (uuid != null)
             return uuid;
@@ -39,5 +41,19 @@ public class BWUnloadedWorld implements BWorld {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o instanceof BWorld that) {
+            return Objects.equals(getName(), that.getName()) && Objects.equals(getUUID(), that.getUUID());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(file.getName(), uuid);
     }
 }
